@@ -1,0 +1,87 @@
+.navbar {
+
+  display: grid;
+
+  grid-template-columns: auto 1fr auto;
+
+  align-items: center;
+
+  height: 90px;
+
+  padding: 0 80px;
+
+  background: linear-gradient(90deg,#1a1a1a,#000000);
+
+  color: white;
+
+  position: absolute;
+  width: 100%;
+
+  z-index: 1000;
+}
+.logo img {
+
+  height: 70px;
+
+  object-fit: contain;
+}
+.menu {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 40px;
+}
+
+.menu a {
+
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+}
+
+.menu a:hover {
+
+  opacity: 0.8;
+}
+.login-link {
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: -3px;
+
+  width: 0%;
+  height: 2px;
+
+  background: white;
+
+  transition: 0.3s;
+}
+
+.login-link:hover::after {
+
+  width: 100%;
+}
+.auth {
+
+  display: flex;
+
+  justify-content: flex-end;
+}

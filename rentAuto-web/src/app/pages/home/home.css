@@ -1,0 +1,64 @@
+.hero {
+
+  height: 500px;
+
+  background-image: url('../../../../public/excellentcars-barcelona-traslados-para-ejecutivos.jpg');
+
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+}
+.hero-logo{
+  width:120px;
+  margin-bottom:20px;
+}
+
+.hero::before {
+
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0,0,0,0.5);
+}
+
+.hero-content {
+
+  position: relative;
+  color: white;
+
+  text-align: center;
+}
+
+.hero h1 {
+
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.hero-btn {
+
+  background: #d6001c;
+  border: none;
+
+  padding: 12px 28px;
+
+  color: white;
+  font-size: 16px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+}
