@@ -1,7 +1,7 @@
 <div class="main">
   <h3>Crear una cuenta</h3>
 
-  <form (submit)="register()">
+  <form (submit)="register()" #form="ngForm">
     <label>Email:</label>
     <input
       type="email"
@@ -28,10 +28,13 @@
       placeholder="Confirma tu contraseña"
       required
     />
+    <p class="error" *ngIf="passwordLongitudError">
+      La contraseña debe tener al menos 6 caracteres
+    </p>
     <p class="error" *ngIf="passwordError">Las contraseñas no coinciden</p>
 
     <div class="wrap">
-      <button type="submit" [disabled]="password !== confirmPassword">Register</button>
+      <button type="submit">Register</button>
     </div>
   </form>
 

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { 
   Auth, 
   signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword 
+  createUserWithEmailAndPassword, 
+  authState
 } from '@angular/fire/auth';
 import { 
   Firestore, 
@@ -10,6 +11,7 @@ import {
   setDoc, 
   serverTimestamp 
 } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -23,6 +25,10 @@ export class AuthService {
 
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password);
+  }
+
+  getCurrentUser(){
+    return authState(this.auth)
   }
 
   async register(email:string,password:string){

@@ -15,12 +15,20 @@ export class Register {
   password = ''
   confirmPassword = ''
   passwordError = false
+  passwordLongitudError = false
 
   constructor(
     private authService: AuthService, 
     private router: Router){}
 
   async register(){
+    if(this.password.length<6){
+      this.passwordLongitudError = true
+      return
+    }
+    this.passwordLongitudError = false
+
+
     if(this.password!== this.confirmPassword){
       this.passwordError = true
       return
@@ -29,7 +37,7 @@ export class Register {
     try{
       await this.authService.register(this.email,this.password)
       alert("Usuario creado")
-      this.router.navigate(['/login'])
+      this.router.navigate(['/home'])
     } catch(error){
       console.error(error);
       alert(error);

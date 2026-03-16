@@ -1,51 +1,66 @@
-.navbar {
+.navbar{
 
-  display: grid;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
 
-  grid-template-columns: auto 1fr auto;
+  align-items:center;
 
-  align-items: center;
+  height:90px;
 
-  height: 90px;
+  padding:0 80px;
 
-  padding: 0 80px;
+  background:linear-gradient(90deg,#1a1a1a,#000000);
 
-  background: linear-gradient(90deg,#1a1a1a,#000000);
-
-  color: white;
-
-  position: absolute;
-  width: 100%;
-
-  z-index: 1000;
 }
-.logo img {
+.logo{
 
-  height: 70px;
+  height:90px;
 
-  object-fit: contain;
+  display:flex;
+  align-items:center;
+
+  overflow:hidden;
+}
+.logo img{
+
+  height:150px;
 }
 .menu {
 
-  display: flex;
+  position: absolute;
 
-  justify-content: center;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
 
   gap: 40px;
 }
 
 .menu a {
 
+  position: relative;
+
   text-decoration: none;
   color: white;
+
   font-weight: 500;
+
+  padding: 6px 4px;
+
+  transition: 0.3s;
 }
 
 .menu a:hover {
 
-  opacity: 0.8;
+  color: #ff3b3b;
 }
-.login-link {
+
+.menu a:hover::after {
+
+  width: 100%;
+}
+.login-link{
 
   position: relative;
 
@@ -54,10 +69,31 @@
   gap: 8px;
 
   color: white;
+
   text-decoration: none;
+
   font-weight: 500;
+
+  transition: 0.3s;
 }
 
+
+.user-email{
+
+  color:white;
+
+  font-weight:500;
+
+  margin-left:10px;
+  margin-right:10px;
+
+}
+
+
+.login-link:hover{
+
+  color:#ff3b3b;
+}
 .login-link::after {
 
   content: "";

@@ -1,18 +1,30 @@
 <nav class="navbar">
   <div class="logo" routerLink="/home">
-    <img src="/logo2.png" />
+    <img src="/logo.png" />
   </div>
 
   <div class="menu">
     <a routerLink="/home">Home</a>
-    <a routerLink="/cars">Cars</a>
-    <a routerLink="/reservations">My Reservations</a>
+    <a routerLink="/cars">Coches</a>
+    <a routerLink="/reservations">Mis reservas</a>
   </div>
 
   <div class="auth">
-    <a routerLink="/login" class="login-link">
-      <span class="material-icons">person</span>
-      Identificarse
-    </a>
+    <ng-container *ngIf="user; else login">
+      <span class="user-email">
+        {{ user.email }}
+      </span>
+      <a routerLink="/profile" class="login-link">
+        <span class="material-icons">person</span>
+        Mi cuenta
+      </a>
+    </ng-container>
+
+    <ng-template #login>
+      <a routerLink="/login" class="login-link">
+        <span class="material-icons">person</span>
+        Identificarse
+      </a>
+    </ng-template>
   </div>
 </nav>
