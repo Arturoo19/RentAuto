@@ -6,41 +6,38 @@ import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule,FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
 export class Register {
-  email = ''
-  password = ''
-  confirmPassword = ''
-  passwordError = false
-  passwordLongitudError = false
+  nombre = '';
+  email = '';
+  password = '';
+  confirmPassword = '';
+  passwordError = false;
+  passwordLongitudError = false;
 
-  constructor(
-    private authService: AuthService, 
-    private router: Router){}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  async register(){
-    if(this.password.length<6){
-      this.passwordLongitudError = true
-      return
+  async register() {
+    if (this.password.length < 6) {
+      this.passwordLongitudError = true;
+      return;
     }
-    this.passwordLongitudError = false
+    this.passwordLongitudError = false;
 
-
-    if(this.password!== this.confirmPassword){
-      this.passwordError = true
-      return
+    if (this.password !== this.confirmPassword) {
+      this.passwordError = true;
+      return;
     }
-    this.passwordError = false
-    try{
-      await this.authService.register(this.email,this.password)
-      alert("Usuario creado")
-      this.router.navigate(['/home'])
-    } catch(error){
-      console.error(error);
-      alert(error);
+    this.passwordError = false;
+
+    try {
+      await this.authService.register(this.email, this.password, this.nombre);
+      this.router.navigate(['/home']);
+    } catch (error) {
+      alert('Error al crear la cuenta');
     }
   }
 }

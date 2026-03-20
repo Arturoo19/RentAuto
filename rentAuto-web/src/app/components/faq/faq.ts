@@ -21,4 +21,7 @@ export class Faq {
   toggle(i: number) {
     this.openIndex = this.openIndex === i ? null : i;
   }
+  openChat() {
+  (window as any).$chatwoot?.toggle('open');
+}
 }

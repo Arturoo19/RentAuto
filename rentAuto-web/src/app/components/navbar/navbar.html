@@ -11,19 +11,21 @@
 
   <div class="auth">
     <ng-container *ngIf="user; else login">
-      <span class="user-email">
-        {{ user.email }}
-      </span>
+      <span class="user-email">{{ user.email }}</span>
       <a routerLink="/profile" class="login-link">
         <span class="material-icons">person</span>
         Mi cuenta
       </a>
+      <button class="logout-btn" (click)="logout()">
+        <span class="material-icons">logout</span>
+        Salir
+      </button>
     </ng-container>
 
     <ng-template #login>
       <a routerLink="/login" class="login-link">
         <span class="material-icons">person</span>
-        Identificarse
+        Iniciar sesión
       </a>
     </ng-template>
   </div>

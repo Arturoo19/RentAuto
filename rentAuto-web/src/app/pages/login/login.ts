@@ -7,25 +7,24 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule,FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login {
-  email = ''
-  password = ''
+  email = '';
+  password = '';
+  loginError = '';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ){}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  async login(){
-    try{
-      await this.authService.login(this.email,this.password)
-      this.router.navigate(['/home'])
-    }catch(error){
-      alert("Error al iniciar sesion")
+  async login() {
+    this.loginError = '';
+    try {
+      await this.authService.login(this.email, this.password);
+      this.router.navigate(['/home']);
+    } catch (error) {
+      this.loginError = 'Email o contraseña incorrectos';
     }
   }
 }

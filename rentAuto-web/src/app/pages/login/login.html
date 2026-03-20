@@ -1,32 +1,37 @@
-<div class="main">
-  <h3>Introduce tus datos para entrar</h3>
-
-  <form (ngSubmit)="login()">
-    <label>Email:</label>
-    <input
-      type="email"
-      [(ngModel)]="email"
-      name="email"
-      placeholder="Introduce tu email"
-      required
-    />
-
-    <label>Contraseña:</label>
-    <input
-      type="password"
-      [(ngModel)]="password"
-      name="password"
-      placeholder="Introduce tu contraseña"
-      required
-    />
-
-    <div class="wrap">
-      <button type="submit">Login</button>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo" routerLink="/home">
+      <img src="/logo.png" alt="RentAuto" />
     </div>
-  </form>
 
-  <p>
-    No estas registrado?
-    <a routerLink="/register">Crear la cuenta</a>
-  </p>
+    <h2>Bienvenido de nuevo</h2>
+    <p class="auth-subtitle">Inicia sesión para gestionar tus reservas</p>
+
+    <form (ngSubmit)="login()">
+      <div class="field">
+        <label>Correo electrónico</label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="tu@email.com" required />
+      </div>
+
+      <div class="field">
+        <label>Contraseña</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <p class="error" *ngIf="loginError">{{ loginError }}</p>
+
+      <button type="submit" class="auth-btn">Iniciar sesión</button>
+    </form>
+
+    <p class="auth-switch">
+      ¿No tienes cuenta?
+      <a routerLink="/register">Regístrate gratis</a>
+    </p>
+  </div>
 </div>

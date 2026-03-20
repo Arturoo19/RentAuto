@@ -1,45 +1,56 @@
-<div class="main">
-  <h3>Crear una cuenta</h3>
-
-  <form (submit)="register()" #form="ngForm">
-    <label>Email:</label>
-    <input
-      type="email"
-      [(ngModel)]="email"
-      name="email"
-      placeholder="Introduce tu email"
-      required
-    />
-
-    <label>Contraseña:</label>
-    <input
-      type="password"
-      name="password"
-      [(ngModel)]="password"
-      placeholder="Introduce tu contraseña"
-      required
-    />
-
-    <label>Confirmar contraseña:</label>
-    <input
-      type="password"
-      name="confirmPassword"
-      [(ngModel)]="confirmPassword"
-      placeholder="Confirma tu contraseña"
-      required
-    />
-    <p class="error" *ngIf="passwordLongitudError">
-      La contraseña debe tener al menos 6 caracteres
-    </p>
-    <p class="error" *ngIf="passwordError">Las contraseñas no coinciden</p>
-
-    <div class="wrap">
-      <button type="submit">Register</button>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo" routerLink="/home">
+      <img src="/logo.png" alt="RentAuto" />
     </div>
-  </form>
 
-  <p>
-    ¿Ya tienes cuenta?
-    <a routerLink="/login">Iniciar sesión</a>
-  </p>
+    <h2>Crear una cuenta</h2>
+    <p class="auth-subtitle">Únete y empieza a alquilar tu coche ideal</p>
+
+    <form (submit)="register()" #form="ngForm">
+      <div class="field">
+        <label>Nombre</label>
+        <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Tu nombre" required />
+      </div>
+
+      <div class="field">
+        <label>Correo electrónico</label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="tu@email.com" required />
+      </div>
+
+      <div class="field">
+        <label>Contraseña</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Mínimo 6 caracteres"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label>Confirmar contraseña</label>
+        <input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          placeholder="Repite tu contraseña"
+          required
+        />
+      </div>
+
+      <p class="error" *ngIf="passwordLongitudError">
+        La contraseña debe tener al menos 6 caracteres
+      </p>
+      <p class="error" *ngIf="passwordError">Las contraseñas no coinciden</p>
+
+      <button type="submit" class="auth-btn">Crear cuenta</button>
+    </form>
+
+    <p class="auth-switch">
+      ¿Ya tienes cuenta?
+      <a routerLink="/login">Iniciar sesión</a>
+    </p>
+  </div>
 </div>

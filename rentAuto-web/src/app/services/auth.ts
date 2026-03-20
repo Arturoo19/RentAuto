@@ -9,9 +9,12 @@ import {
   Firestore, 
   doc, 
   setDoc, 
-  serverTimestamp 
+  serverTimestamp,
+  getDoc 
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { signOut } from '@angular/fire/auth';
+
 
 
 @Injectable({
@@ -26,24 +29,29 @@ export class AuthService {
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
+  logout() {
+    return signOut(this.auth);
+  }
 
   getCurrentUser(){
     return authState(this.auth)
   }
 
-  async register(email:string,password:string){
-    const userCredential = await createUserWithEmailAndPassword(
-      this.auth,email,password
-    )
+  getUserProfile(uid: string) {
+    return getDoc(doc(this.firestore, "users", uid));
+  }
 
-    const user = userCredential.user
+  async register(email: string, password: string, nombre: string) {
+  const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+  const user = userCredential.user;
 
-    await setDoc(doc(this.firestore, "users", user.uid),{
-      email: user.email,
-      role: "customer",
-      createdAt: serverTimestamp()
-    })
-    return user
+  await setDoc(doc(this.firestore, "users", user.uid), {
+    email: user.email,
+    nombre: nombre,
+    role: "customer",
+    createdAt: serverTimestamp()
+  });
+    return user;
   }
 
 }
