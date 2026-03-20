@@ -1,0 +1,33 @@
+<section class="faq-section">
+  <h2 class="faq-title">Preguntas frecuentes</h2>
+  <p class="faq-subtitle">¿No encuentras lo que buscas? Pregúntanos directamente.</p>
+
+  <div class="faq-list">
+    <div
+      class="faq-item"
+      *ngFor="let item of faqs; let i = index"
+      [class.open]="openIndex === i"
+      (click)="toggle(i)"
+    >
+      <div class="faq-question">
+        <span>{{ item.question }}</span>
+        <span class="faq-icon">{{ openIndex === i ? '−' : '+' }}</span>
+      </div>
+      <div class="faq-answer" [style.maxHeight]="openIndex === i ? '300px' : '0'">
+        <p>{{ item.answer }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-bot">
+    <p>¿Tienes más preguntas?</p>
+    <a href="https://t.me/n8npurebabot" target="_blank" class="bot-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+        <path
+          d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"
+        />
+      </svg>
+      Preguntar al bot de Telegram
+    </a>
+  </div>
+</section>

@@ -1,9 +1,46 @@
 <section class="hero">
-  <div class="hero-content">
-    <h1>Alquila el coche perfecto</h1>
+  <div class="hero-container">
+    <!-- LEFT -->
+    <div class="hero-left">
+      <h1>Alquila tu coche fácil</h1>
+      <p>Encuentra el mejor coche para tu viaje</p>
+    </div>
 
-    <p>Encuentra los mejores coches para tu viaje</p>
+    <!-- RIGHT -->
+    <div class="search-box">
+      <label>Recoger en</label>
+      <input type="text" placeholder="Ciudad o aeropuerto" />
 
-    <button routerLink="/cars" class="hero-btn">Buscar coches</button>
+      <div class="dates">
+        <div>
+          <label>Desde</label>
+          <input type="date" />
+        </div>
+
+        <div>
+          <label>Hasta</label>
+          <input type="date" />
+        </div>
+      </div>
+
+      <div class="checkbox">
+        <span>Tengo un código de descuento</span>
+        <input type="checkbox" [(ngModel)]="promoActive" name="promoCheck" />
+      </div>
+
+      <div *ngIf="promoActive" class="promo-input">
+        <input
+          type="text"
+          [(ngModel)]="promoCode"
+          name="promoCode"
+          placeholder="Introduce tu código"
+        />
+      </div>
+
+      <button class="search-btn">Buscar</button>
+    </div>
   </div>
 </section>
+<app-cars-carusel></app-cars-carusel>
+<app-noticias></app-noticias>
+<app-faq></app-faq>

@@ -1,0 +1,98 @@
+.faq-section {
+  background: #0d0d0d;
+  padding: 80px 120px;
+}
+
+.faq-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.faq-subtitle {
+  color: rgba(255,255,255,0.4);
+  font-size: 15px;
+  margin-bottom: 48px;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 860px;
+}
+
+.faq-item {
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  overflow: hidden;
+}
+
+.faq-item.open {
+  border-color: rgba(213, 0, 28, 0.4);
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  user-select: none;
+}
+
+.faq-icon {
+  font-size: 22px;
+  color: #d6001c;
+  line-height: 1;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.faq-answer p {
+  padding: 0 24px 20px;
+  color: rgba(255,255,255,0.55);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* TELEGRAM BOT */
+.faq-bot {
+  margin-top: 56px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.faq-bot p {
+  color: rgba(255,255,255,0.45);
+  font-size: 15px;
+}
+
+.bot-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #229ED9;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+
+.bot-btn:hover {
+  opacity: 0.85;
+}

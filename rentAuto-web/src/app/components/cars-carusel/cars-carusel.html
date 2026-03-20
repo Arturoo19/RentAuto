@@ -1,0 +1,47 @@
+<section class="carousel-section">
+  <h2 class="carousel-title">Coches más populares</h2>
+
+  <div class="carousel-wrapper">
+    <button class="carousel-btn prev" (click)="prev()">&#8592;</button>
+
+    <div class="carousel-track-container">
+      <div
+        class="carousel-track"
+        [style.transform]="'translateX(-' + currentIndex * cardWidth + 'px)'"
+      >
+        <div class="car-card" *ngFor="let car of cars">
+          <div class="car-image">
+            <img [src]="car.image" [alt]="car.name" />
+            <span class="car-badge">{{ car.category }}</span>
+          </div>
+          <div class="car-info">
+            <h3>{{ car.name }}</h3>
+            <div class="car-specs">
+              <span>🪑 {{ car.seats }} plazas</span>
+              <span>⚙️ {{ car.transmission }}</span>
+              <span>❄️ {{ car.ac }}</span>
+            </div>
+            <div class="car-footer">
+              <div class="car-price">
+                <span class="price">{{ car.price }}€</span>
+                <span class="per-day">/día</span>
+              </div>
+              <button class="reserve-btn" routerLink="/cars">Reservar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="carousel-btn next" (click)="next()">&#8594;</button>
+  </div>
+
+  <div class="carousel-dots">
+    <span
+      class="dot"
+      *ngFor="let dot of dots; let i = index"
+      [class.active]="i === currentIndex"
+      (click)="goTo(i)"
+    ></span>
+  </div>
+</section>

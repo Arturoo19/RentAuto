@@ -1,64 +1,142 @@
 .hero {
+  height: 600px;
 
-  height: 500px;
-
-  background-image: url('../../../../public/excellentcars-barcelona-traslados-para-ejecutivos.jpg');
+  background-image: url('/excellentcars-barcelona-traslados-para-ejecutivos.jpg');
 
   background-size: cover;
   background-position: center;
 
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  position: relative;
-}
-.hero-logo{
-  width:120px;
-  margin-bottom:20px;
 }
 
-.hero::before {
+.hero-container {
+  width: 100%;
+  max-width: 1200px;
 
-  content: "";
+  margin: 0 auto;
 
-  position: absolute;
-  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  background: rgba(0,0,0,0.5);
+  gap: 40px;
 }
 
-.hero-content {
-
-  position: relative;
+/* LEFT */
+.hero-left {
   color: white;
-
-  text-align: center;
+  max-width: 600px;
+  animation: fadeInLeft 1s ease;
 }
 
-.hero h1 {
+.hero-left h1 {
+  font-size: 56px;
+  font-weight: 800;
 
-  font-size: 48px;
-  margin-bottom: 10px;
+  background: linear-gradient(90deg, #c50000, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.hero p {
-
+.hero-left p {
   font-size: 20px;
+  opacity: 0.9;
+}
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* RIGHT BOX */
+.search-box {
+  background: white;
+
+  padding: 25px;
+  border-radius: 10px;
+
+  width: 500px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.search-box label {
+  font-weight: 600;
+  display: block;
+  margin-top: 10px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+/* dates */
+.dates {
+  display: flex;
+  gap: 15px;
   margin-bottom: 20px;
 }
+.dates div {
+  flex: 1; 
+}
+.dates div {
+  flex: 1; 
+}
 
-.hero-btn {
+/* radio */
+.radio-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+/* button */
+.search-btn {
+  width: 100%;
+  margin-top: 20px;
+
+  padding: 12px;
 
   background: #d6001c;
-  border: none;
-
-  padding: 12px 28px;
-
   color: white;
-  font-size: 16px;
 
+  border: none;
   border-radius: 6px;
 
+  font-weight: bold;
   cursor: pointer;
+}
+
+.search-btn:hover {
+  background: #b80018;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+
+  margin-top: 5px;
+}
+
+.checkbox span {
+  font-size: 16px;
+  color: #000000;
+}
+.promo-input {
+  margin-top: 10px;
+}
+
+.promo-input input {
+  border: 1px solid #000000;
 }

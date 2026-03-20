@@ -1,0 +1,195 @@
+.carousel-section {
+  background: #0d0d0d;
+  padding: 80px 0;
+}
+
+.carousel-title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 48px;
+  letter-spacing: -0.5px;
+}
+
+.carousel-title span {
+  color: #d6001c;
+}
+
+/* WRAPPER */
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 40px;
+}
+
+.carousel-track-container {
+  width: 960px;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* CARD */
+.car-card {
+  min-width: 300px;
+  background: #1a1a1a;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.car-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(213, 0, 28, 0.4);
+}
+
+.car-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  background: #111;
+}
+
+.car-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.car-card:hover .car-image img {
+  transform: scale(1.05);
+}
+
+.car-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #d6001c;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.car-info {
+  padding: 20px;
+}
+
+.car-info h3 {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.car-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.car-specs span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.car-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.car-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price {
+  font-size: 26px;
+  font-weight: 800;
+  color: #d6001c;
+}
+
+.per-day {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+}
+
+.reserve-btn {
+  background: transparent;
+  border: 1px solid #d6001c;
+  color: #d6001c;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reserve-btn:hover {
+  background: #d6001c;
+  color: white;
+}
+
+/* BUTTONS */
+.carousel-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.carousel-btn:hover {
+  border-color: #d6001c;
+  color: #d6001c;
+}
+
+/* DOTS */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dot.active {
+  background: #d6001c;
+  width: 24px;
+  border-radius: 4px;
+}

@@ -1,0 +1,17 @@
+<section class="news-section">
+  <h2 class="news-title">Noticias</h2>
+
+  <div class="news-grid">
+    <div class="news-card" *ngFor="let item of news; let i = index" [class.reverse]="i % 2 !== 0">
+      <div class="news-image">
+        <img [src]="item.image" [alt]="item.title" />
+      </div>
+      <div class="news-content">
+        <span class="news-tag">{{ item.tag }}</span>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+        <a class="news-link" href="#">Leer más →</a>
+      </div>
+    </div>
+  </div>
+</section>
