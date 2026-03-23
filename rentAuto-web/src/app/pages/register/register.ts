@@ -18,9 +18,12 @@ export class Register {
   passwordError = false;
   passwordLongitudError = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-  async register() {
+  register() {
     if (this.password.length < 6) {
       this.passwordLongitudError = true;
       return;
@@ -33,11 +36,14 @@ export class Register {
     }
     this.passwordError = false;
 
-    try {
-      await this.authService.register(this.email, this.password, this.nombre);
-      this.router.navigate(['/home']);
-    } catch (error) {
-      alert('Error al crear la cuenta');
-    }
+    // правильний порядок: nombre, email, password
+    this.authService.register(this.nombre, this.email, this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        alert('Error al crear la cuenta');
+      },
+    });
   }
 }

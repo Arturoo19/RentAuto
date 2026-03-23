@@ -1,44 +1,37 @@
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
-import { User } from 'firebase/auth';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [RouterModule, CommonModule],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css'
+  styleUrl: './navbar.css',
 })
-export class Navbar {
+export class Navbar implements OnInit {
+  user: any = null;
 
-  user: User | null = null;
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.authService.getCurrentUser().subscribe(async (user) => {
-      this.user = user;
+  ngOnInit() {
+    // зчитуємо юзера при старті
+    this.user = this.authService.getCurrentUser();
 
-      if (user) {
-        const profile = await this.authService.getUserProfile(user.uid);
-        const data = profile.data() as any;
-
-        (window as any).$chatwoot?.setUser(user.uid, {
-          email: user.email,
-          name: data?.nombre || user.email
-        });
-      }
+    // оновлюємо юзера після кожної навігації
+    // тобто після логіну коли Angular переходить на іншу сторінку
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+      this.user = this.authService.getCurrentUser();
     });
   }
 
   logout() {
-    const chatwoot = (window as any).$chatwoot;
-    if (chatwoot) {
-      chatwoot.reset();
-    }
-
-    this.authService.logout().then(() => {
-      this.router.navigate(['/home']);
-    });
+    this.user = null;
+    this.authService.logout();
   }
 }

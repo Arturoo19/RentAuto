@@ -13,19 +13,19 @@ export class Noticias {
       title: 'Nuevas incorporaciones a nuestro catálogo',
       description: 'Ampliamos nuestra selección con nuevos modelos cuidadosamente revisados para ofrecer más opciones, mayor calidad y la confianza que nos caracteriza.',
       tag: 'Novedades',
-      image: '/news/new-cars.jpg'
+      image: '/noticias/noticia1.jpeg'
     },
     {
       title: 'Vehículos destacados de la semana',
       description: 'Descubre los modelos más buscados y mejor valorados por nuestros clientes esta semana.',
       tag: 'Destacados',
-      image: '/news/featured.jpg'
+      image: '/noticias/noticia2.webp'
     },
     {
       title: 'Consejos para tu próximo viaje en coche',
       description: 'Te damos los mejores consejos para que tu viaje sea cómodo, seguro y sin imprevistos.',
       tag: 'Consejos',
-      image: '/news/tips.jpg'
+      image: '/noticias/noticia3.webp'
     },
   ];
 }

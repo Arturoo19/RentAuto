@@ -1,57 +1,48 @@
 import { Injectable } from '@angular/core';
-import { 
-  Auth, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  authState
-} from '@angular/fire/auth';
-import { 
-  Firestore, 
-  doc, 
-  setDoc, 
-  serverTimestamp,
-  getDoc 
-} from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { signOut } from '@angular/fire/auth';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
-
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
+  private apiUrl = 'http://localhost:3000/auth';
 
   constructor(
-    private auth: Auth, 
-    private firestore:Firestore) {}
+    private http: HttpClient,
+    private router: Router,
+  ) {}
+
+  register(name: string, email: string, password: string) {
+    return this.http.post(`${this.apiUrl}/register`, { name, email, password });
+  }
 
   login(email: string, password: string) {
-    return signInWithEmailAndPassword(this.auth, email, password);
+    return this.http
+      .post<{ token: string; user: any }>(`${this.apiUrl}/login`, { email, password })
+      .pipe(
+        tap((res) => {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }),
+      );
   }
+
   logout() {
-    return signOut(this.auth);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
   }
 
-  getCurrentUser(){
-    return authState(this.auth)
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
-  getUserProfile(uid: string) {
-    return getDoc(doc(this.firestore, "users", uid));
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 
-  async register(email: string, password: string, nombre: string) {
-  const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-  const user = userCredential.user;
-
-  await setDoc(doc(this.firestore, "users", user.uid), {
-    email: user.email,
-    nombre: nombre,
-    role: "customer",
-    createdAt: serverTimestamp()
-  });
-    return user;
+  getCurrentUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
   }
-
 }

@@ -9,22 +9,27 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.css',
 })
 export class Login {
   email = '';
   password = '';
   loginError = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-  async login() {
+  login() {
     this.loginError = '';
-    try {
-      await this.authService.login(this.email, this.password);
-      this.router.navigate(['/home']);
-    } catch (error) {
-      this.loginError = 'Email o contraseña incorrectos';
-    }
+    this.authService.login(this.email, this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.loginError = 'Email o contraseña incorrectos';
+      },
+    });
   }
 }
