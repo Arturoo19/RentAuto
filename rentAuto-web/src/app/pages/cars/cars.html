@@ -1,1 +1,35 @@
-<app-cars-carusel></app-cars-carusel>
+<div class="cars-page">
+  <div class="cars-header">
+    <h1>Nuestros coches</h1>
+    <button *ngIf="esAdmin" routerLink="/admin/cars/new" class="btn-add">+ Añadir coche</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando...</div>
+
+  <div class="cars-grid" *ngIf="!loading">
+    <div class="car-card" *ngFor="let car of cars">
+      <img [src]="car.imageUrl || '/car-placeholder.png'" [alt]="car.brand + ' ' + car.model" />
+      <div class="car-info">
+        <h3>{{ car.brand }} {{ car.model }}</h3>
+        <p class="year">{{ car.year }}</p>
+        <p class="price">{{ car.pricePerDay }}€ / día</p>
+        <p class="status available">Disponible</p>
+      </div>
+      <div class="car-actions">
+        <button
+          class="btn-rent"
+          [routerLink]="['/reservar', car.id]"
+          [queryParams]="{ startDate: startDate, endDate: endDate }"
+        >
+          Reservar
+        </button>
+        <div *ngIf="esAdmin" class="admin-actions">
+          <button class="btn-edit" [routerLink]="['/admin/cars/edit', car.id]">Editar</button>
+          <button class="btn-delete" (click)="deleteCar(car.id)">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="!loading && cars.length === 0" class="no-cars">No hay coches disponibles</p>
+</div>

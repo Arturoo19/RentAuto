@@ -1,0 +1,143 @@
+.reservations-page {
+  padding: 40px 80px;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.reservations-page h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: #111;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: #666;
+  font-size: 18px;
+}
+
+.empty {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.btn-explore {
+  background: #d6001c;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-explore:hover {
+  background: #b0001a;
+}
+
+.rentals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rental-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.rental-card:hover {
+  transform: translateY(-2px);
+}
+
+.rental-car-img img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.rental-info {
+  flex: 1;
+}
+
+.rental-info h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #111;
+}
+
+.rental-dates {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #555;
+  font-size: 14px;
+  margin: 0 0 4px;
+}
+
+.rental-dates .material-icons {
+  font-size: 16px;
+}
+
+.rental-days {
+  color: #888;
+  font-size: 13px;
+  margin: 0;
+}
+
+.rental-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.rental-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-active {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-pending {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+.status-completed {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-cancelled {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.rental-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #d6001c;
+  margin: 0;
+}

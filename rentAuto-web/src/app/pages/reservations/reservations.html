@@ -1,1 +1,38 @@
-<p>reservations works!</p>
+<div class="reservations-page">
+  <h1>Mis reservas</h1>
+
+  <div *ngIf="loading" class="loading">Cargando...</div>
+
+  <div *ngIf="!loading && rentals.length === 0" class="empty">
+    <p>No tienes reservas todavía</p>
+    <a routerLink="/cars" class="btn-explore">Ver coches disponibles</a>
+  </div>
+
+  <div class="rentals-list" *ngIf="!loading && rentals.length > 0">
+    <div class="rental-card" *ngFor="let rental of rentals">
+      <div class="rental-car-img">
+        <img
+          [src]="rental.car?.imageUrl || '/car-placeholder.png'"
+          [alt]="rental.car?.brand + ' ' + rental.car?.model"
+        />
+      </div>
+
+      <div class="rental-info">
+        <h3>{{ rental.car?.brand }} {{ rental.car?.model }}</h3>
+        <p class="rental-dates">
+          <span class="material-icons">calendar_today</span>
+          {{ rental.startDate | date: 'dd/MM/yyyy' }} →
+          {{ rental.endDate | date: 'dd/MM/yyyy' }}
+        </p>
+        <p class="rental-days">{{ calcDays(rental.startDate, rental.endDate) }} días</p>
+      </div>
+
+      <div class="rental-right">
+        <span class="rental-status" [ngClass]="getStatusClass(rental.status)">
+          {{ getStatusLabel(rental.status) }}
+        </span>
+        <p class="rental-price">{{ rental.totalPrice }}€</p>
+      </div>
+    </div>
+  </div>
+</div>

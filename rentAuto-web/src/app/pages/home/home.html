@@ -14,12 +14,11 @@
       <div class="dates">
         <div>
           <label>Desde</label>
-          <input type="date" />
+          <input type="date" [(ngModel)]="startDate" name="startDate" />
         </div>
-
         <div>
           <label>Hasta</label>
-          <input type="date" />
+          <input type="date" [(ngModel)]="endDate" name="endDate" />
         </div>
       </div>
 
@@ -37,7 +36,7 @@
         />
       </div>
 
-      <button class="search-btn">Buscar</button>
+      <button class="search-btn" (click)="buscar()">Buscar</button>
     </div>
   </div>
 </section>

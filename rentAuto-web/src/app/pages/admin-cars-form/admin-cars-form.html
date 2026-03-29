@@ -1,0 +1,50 @@
+<div class="admin-form-page">
+  <h1>{{ isEdit ? 'Editar coche' : 'Añadir coche' }}</h1>
+
+  <form class="car-form" (ngSubmit)="save()">
+    <div class="form-group">
+      <label>Marca</label>
+      <input [(ngModel)]="car.brand" name="brand" required placeholder="Toyota" />
+    </div>
+
+    <div class="form-group">
+      <label>Modelo</label>
+      <input [(ngModel)]="car.model" name="model" required placeholder="Corolla" />
+    </div>
+
+    <div class="form-group">
+      <label>Año</label>
+      <input [(ngModel)]="car.year" name="year" type="number" required />
+    </div>
+
+    <div class="form-group">
+      <label>Precio por día (€)</label>
+      <input [(ngModel)]="car.pricePerDay" name="pricePerDay" type="number" required />
+    </div>
+
+    <div class="form-group">
+      <label>URL de imagen</label>
+      <input [(ngModel)]="car.imageUrl" name="imageUrl" placeholder="https://..." />
+    </div>
+
+    <div class="form-group">
+      <label>Descripción</label>
+      <textarea [(ngModel)]="car.description" name="description" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Estado</label>
+      <select [(ngModel)]="car.status" name="status">
+        <option value="available">Disponible</option>
+        <option value="rented">No disponible</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" routerLink="/cars" class="btn-cancel">Cancelar</button>
+      <button type="submit" class="btn-save" [disabled]="loading">
+        {{ loading ? 'Guardando...' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+</div>

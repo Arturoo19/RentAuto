@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { Navbar } from '../../components/navbar/navbar';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CarsCarusel } from '../../components/cars-carusel/cars-carusel';
-import { Noticias } from "../../components/noticias/noticias";
-import { Faq } from "../../components/faq/faq";
+import { Noticias } from '../../components/noticias/noticias';
+import { Faq } from '../../components/faq/faq';
 
 @Component({
   selector: 'app-home',
@@ -16,5 +15,21 @@ import { Faq } from "../../components/faq/faq";
 export class Home {
   promoActive = false;
   promoCode = '';
+  startDate = '';
+  endDate = '';
 
+  constructor(private router: Router) {}
+
+  buscar() {
+    if (this.startDate && this.endDate) {
+      this.router.navigate(['/cars'], {
+        queryParams: {
+          startDate: this.startDate,
+          endDate: this.endDate,
+        },
+      });
+    } else {
+      this.router.navigate(['/cars']);
+    }
+  }
 }
