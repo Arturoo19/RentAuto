@@ -114,13 +114,16 @@ export class ReservationForm implements OnInit {
       })
       .subscribe(async ({ clientSecret }) => {
         this.clientSecret = clientSecret;
-
         this.elements = this.stripe!.elements({ clientSecret });
         this.paymentElement = this.elements.create('payment');
-        this.paymentElement.mount('#payment-element');
 
         this.paymentReady = true;
-        this.cdr.detectChanges();
+        this.cdr.detectChanges(); // Angular рендерить div#payment-element
+
+        // Чекаємо один тік щоб DOM оновився
+        setTimeout(() => {
+          this.paymentElement.mount('#payment-element');
+        }, 0);
       });
   }
 
