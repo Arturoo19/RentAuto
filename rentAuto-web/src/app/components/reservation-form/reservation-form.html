@@ -40,7 +40,16 @@
         <div>
           <div class="label">Total estimado</div>
           <div class="days-info" *ngIf="startDate && endDate">
-            {{ getDays() }} día(s) × {{ car?.pricePerDay }}€
+            {{ getPricingBreakdown().days }} día(s) × {{ getPricingBreakdown().pricePerDay }}€
+          </div>
+          <div class="pricing-breakdown" *ngIf="startDate && endDate">
+            <div>Base: {{ getPricingBreakdown().baseTotal }}€</div>
+            <div *ngIf="getPricingBreakdown().weekendSurcharge > 0">
+              Fin de semana (+15%): +{{ getPricingBreakdown().weekendSurcharge }}€
+            </div>
+            <div *ngIf="getPricingBreakdown().longRentalDiscount > 0">
+              Descuento 7+ días (-10%): -{{ getPricingBreakdown().longRentalDiscount }}€
+            </div>
           </div>
         </div>
         <div class="amount">{{ calcTotal() }}€</div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Rajdhani:wght@500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -68,17 +68,21 @@
 }
 
 .car-info h3 {
-  font-family: 'Syne', sans-serif;
-  font-size: 26px;
-  font-weight: 800;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
   color: #fff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   margin: 0 0 6px;
 }
 
 .car-price {
   color: #d6001c;
+  font-family: 'Inter', sans-serif;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0;
   margin: 0;
 }
 
@@ -135,8 +139,9 @@
 
 /* Total box */
 .total-box {
-  background: linear-gradient(135deg, #1a0005, #1a0a0a);
-  border: 1px solid #3a0010;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  border-left: 3px solid #d6001c;
   border-radius: 14px;
   padding: 18px 20px;
   display: flex;
@@ -145,22 +150,32 @@
 }
 
 .total-box .label {
-  color: #888;
+  color: #aaa;
   font-size: 13px;
   font-weight: 500;
 }
 
 .total-box .amount {
-  color: #d6001c;
-  font-family: 'Syne', sans-serif;
-  font-size: 28px;
-  font-weight: 800;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .total-box .days-info {
-  color: #555;
+  color: #666;
   font-size: 11px;
   margin-top: 2px;
+}
+
+.pricing-breakdown {
+  color: #8f8f8f;
+  font-size: 11px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 /* ── ПРАВА КОЛОНКА ── */
@@ -173,9 +188,11 @@
 }
 
 .right-panel h2 {
-  font-family: 'Syne', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   color: #111;
   margin: 0;
 }
@@ -281,12 +298,12 @@
   color: #fff;
   border: none;
   border-radius: 12px;
-  font-family: 'Syne', sans-serif;
-  font-size: 16px;
-  font-weight: 800;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
   cursor: pointer;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-  letter-spacing: 0.5px;
   box-shadow: 0 4px 20px rgba(214,0,28,0.3);
 }
 

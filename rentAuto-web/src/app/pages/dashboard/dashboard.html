@@ -1,0 +1,183 @@
+<div class="dashboard-wrap">
+  <div *ngIf="loading" class="db-loading">
+    <div class="db-spinner"></div>
+  </div>
+
+  <!-- АДМІН -->
+  <ng-container *ngIf="!loading && isAdmin">
+    <div class="db-top">
+      <div class="db-top-left">
+        <div>
+          <p class="db-sub">Panel de administración</p>
+          <h1 class="db-greeting">BIENVENIDO,<br />{{ userName }}</h1>
+        </div>
+        <span class="db-tag">RentAuto Admin</span>
+      </div>
+      <div class="db-top-right">
+        <img
+          class="db-car-img"
+          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80"
+          alt="car"
+        />
+        <div class="db-car-overlay"></div>
+      </div>
+    </div>
+
+    <div class="db-body">
+      <p class="db-section-label">Resumen general</p>
+      <div class="db-stats">
+        <div class="db-stat">
+          <div class="db-stat-val">{{ fleetCount }}</div>
+          <div class="db-stat-lbl">Coches en flota</div>
+        </div>
+        <div class="db-stat">
+          <div class="db-stat-val">{{ totalRentals }}</div>
+          <div class="db-stat-lbl">Total alquileres</div>
+        </div>
+        <div class="db-stat db-highlight">
+          <div class="db-stat-val red">{{ revenueTotal | number: '1.0-0' }}€</div>
+          <div class="db-stat-lbl">Ingresos totales</div>
+        </div>
+        <div class="db-stat">
+          <div class="db-stat-val">
+            {{ totalRentals > 0 ? (revenueTotal / totalRentals | number: '1.0-0') : 0 }}€
+          </div>
+          <div class="db-stat-lbl">Ingreso medio</div>
+        </div>
+      </div>
+      <!-- Середній час оренди — нова картка -->
+      <div class="db-stats" style="margin-top: 1px">
+        <div class="db-stat db-highlight">
+          <div class="db-stat-val">{{ avgRentalDays }}</div>
+          <div class="db-stat-lbl">Días promedio por alquiler</div>
+        </div>
+      </div>
+
+      <!-- Графіки -->
+      <!-- Найпопулярніша машина -->
+      <p class="db-section-label">Coche más alquilado</p>
+      <div class="db-top-cars">
+        <div class="db-top-car" *ngFor="let car of topCarsList; let i = index">
+          <span class="db-top-num">{{ i + 1 }}</span>
+          <div class="db-top-car-info">
+            <span class="db-top-car-name">{{ car.name }}</span>
+            <span class="db-top-car-stats"
+              >{{ car.count }} alquileres · {{ car.revenue | number: '1.0-0' }}€</span
+            >
+          </div>
+          <span class="db-top-car-badge" *ngIf="i === 0">TOP</span>
+        </div>
+      </div>
+
+      <!-- Графік по днях тижня -->
+      <p class="db-section-label">Alquileres por día de la semana</p>
+      <div class="db-chart-card" style="margin-bottom: 40px">
+        <apx-chart
+          [series]="weekdayChartSeries"
+          [chart]="weekdayOptions.chart"
+          [xaxis]="weekdayOptions.xaxis"
+          [colors]="weekdayOptions.colors"
+          [plotOptions]="weekdayOptions.plotOptions"
+          [grid]="weekdayOptions.grid"
+          [tooltip]="weekdayOptions.tooltip"
+          [dataLabels]="weekdayOptions.dataLabels"
+        ></apx-chart>
+      </div>
+      <p class="db-section-label" style="margin-top: 40px">Evolución mensual</p>
+      <div class="db-charts-grid">
+        <div class="db-chart-card">
+          <apx-chart
+            [series]="revenueChartSeries"
+            [chart]="chartOptions.chart"
+            [xaxis]="chartOptions.xaxis"
+            [colors]="chartOptions.colors"
+            [stroke]="chartOptions.stroke"
+            [grid]="chartOptions.grid"
+            [tooltip]="chartOptions.tooltip"
+            [legend]="chartOptions.legend"
+          ></apx-chart>
+        </div>
+
+        <div class="db-chart-card">
+          <apx-chart
+            [series]="statusChartSeries"
+            [chart]="donutOptions.chart"
+            [labels]="statusChartLabels"
+            [colors]="donutOptions.colors"
+            [legend]="donutOptions.legend"
+            [plotOptions]="donutOptions.plotOptions"
+            [tooltip]="donutOptions.tooltip"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <div class="db-divider"></div>
+
+      <p class="db-section-label">Estado de reservas</p>
+      <div class="db-status-row">
+        <span class="db-pill active">
+          <span class="db-stat-val">{{ statusActive }}</span>
+          Activas
+        </span>
+        <span class="db-pill completed">
+          <span class="db-stat-val">{{ statusCompleted }}</span>
+          Completadas
+        </span>
+      </div>
+
+      <div class="db-actions">
+        <a routerLink="/admin/cars/new" class="db-btn primary">+ Añadir coche</a>
+        <a routerLink="/cars" class="db-btn outline">Gestionar flota</a>
+        <a routerLink="/reservations" class="db-btn ghost">Ver reservas</a>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ЮЗЕР -->
+  <ng-container *ngIf="!loading && !isAdmin">
+    <div class="db-top">
+      <div class="db-top-left">
+        <div>
+          <p class="db-sub">Mi cuenta</p>
+          <h1 class="db-greeting">HOLA,<br />{{ userName }}</h1>
+        </div>
+        <span class="db-tag">Cliente RentAuto</span>
+      </div>
+      <div class="db-top-right">
+        <img
+          class="db-car-img"
+          src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80"
+          alt="car"
+        />
+        <div class="db-car-overlay"></div>
+      </div>
+    </div>
+
+    <div class="db-body">
+      <p class="db-section-label">Tu actividad</p>
+      <div class="db-stats user">
+        <div class="db-stat">
+          <div class="db-stat-val">{{ myRentalsCount }}</div>
+          <div class="db-stat-lbl">Reservas totales</div>
+        </div>
+        <div class="db-stat">
+          <div class="db-stat-val">{{ myActive }}</div>
+          <div class="db-stat-lbl">Activas ahora</div>
+        </div>
+        <div class="db-stat">
+          <div class="db-stat-val">{{ myCompleted }}</div>
+          <div class="db-stat-lbl">Completadas</div>
+        </div>
+        <div class="db-stat db-highlight">
+          <div class="db-stat-val red">{{ mySpent | number: '1.0-0' }}€</div>
+          <div class="db-stat-lbl">Total gastado</div>
+        </div>
+      </div>
+
+      <div class="db-actions">
+        <a routerLink="/cars" class="db-btn primary">Nueva reserva</a>
+        <a routerLink="/reservations" class="db-btn outline">Mis reservas</a>
+      </div>
+    </div>
+  </ng-container>
+</div>

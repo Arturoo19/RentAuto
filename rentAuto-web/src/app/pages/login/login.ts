@@ -22,7 +22,6 @@ export class Login {
   ) {}
 
   login() {
-    this.loginError = '';
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
         this.router.navigate(['/home']);

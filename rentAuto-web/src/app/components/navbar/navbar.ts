@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
@@ -20,7 +20,6 @@ export class Navbar implements OnInit {
   ) {}
 
   ngOnInit() {
-    // зчитуємо юзера при старті
     this.user = this.authService.getCurrentUser();
 
     // оновлюємо юзера після кожної навігації

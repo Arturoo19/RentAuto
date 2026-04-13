@@ -8,6 +8,16 @@ import { AuthService } from '../../services/auth';
 import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
 import { environment } from '../../../environments/environment';
 
+type PricingBreakdown = {
+  days: number;
+  pricePerDay: number;
+  baseTotal: number;
+  weekendDays: number;
+  weekendSurcharge: number;
+  longRentalDiscount: number;
+  finalTotal: number;
+};
+
 @Component({
   selector: 'app-reservation-form',
   standalone: true,
@@ -24,7 +34,6 @@ export class ReservationForm implements OnInit {
   bookedRanges: { startDate: string; endDate: string }[] = [];
   dateError = '';
 
-  // Дані користувача
   currentUser: any = null;
   phone = '';
   dni = '';
@@ -36,6 +45,10 @@ export class ReservationForm implements OnInit {
   clientSecret = '';
   paying = false;
   paymentReady = false;
+
+  private readonly weekendSurchargeRate = 0.15;
+  private readonly longRentalDiscountRate = 0.1;
+  private readonly longRentalThresholdDays = 7;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +64,6 @@ export class ReservationForm implements OnInit {
     this.startDate = this.route.snapshot.queryParams['startDate'] || '';
     this.endDate = this.route.snapshot.queryParams['endDate'] || '';
 
-    // Підтягуємо дані юзера з authService
     this.currentUser = this.authService.getCurrentUser();
 
     this.carsService.getCar(this.carId).subscribe({
@@ -78,10 +90,60 @@ export class ReservationForm implements OnInit {
     return Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
   }
 
-  calcTotal(): number {
+  private roundCurrency(value: number): number {
+    return Math.round(value * 100) / 100;
+  }
+
+  private countWeekendDays(): number {
+    if (!this.startDate || !this.endDate) return 0;
+    const start = new Date(`${this.startDate}T00:00:00`);
+    const end = new Date(`${this.endDate}T00:00:00`);
+    let weekendDays = 0;
+    const current = new Date(start);
+
+    while (current < end) {
+      const day = current.getDay();
+      if (day === 0 || day === 6) weekendDays += 1;
+      current.setDate(current.getDate() + 1);
+    }
+
+    return weekendDays;
+  }
+
+  getPricingBreakdown(): PricingBreakdown {
     const days = this.getDays();
-    if (days <= 0) return 0;
-    return days * Number(this.car?.pricePerDay);
+    const pricePerDay = Number(this.car?.pricePerDay || 0);
+    if (days <= 0 || pricePerDay <= 0) {
+      return {
+        days: 0,
+        pricePerDay: 0,
+        baseTotal: 0,
+        weekendDays: 0,
+        weekendSurcharge: 0,
+        longRentalDiscount: 0,
+        finalTotal: 0,
+      };
+    }
+
+    const baseTotal = days * pricePerDay;
+    const weekendDays = this.countWeekendDays();
+    const weekendSurcharge = weekendDays * pricePerDay * this.weekendSurchargeRate;
+    const longRentalDiscount = days > this.longRentalThresholdDays ? baseTotal * this.longRentalDiscountRate : 0;
+    const finalTotal = baseTotal + weekendSurcharge - longRentalDiscount;
+
+    return {
+      days,
+      pricePerDay,
+      baseTotal: this.roundCurrency(baseTotal),
+      weekendDays,
+      weekendSurcharge: this.roundCurrency(weekendSurcharge),
+      longRentalDiscount: this.roundCurrency(longRentalDiscount),
+      finalTotal: this.roundCurrency(finalTotal),
+    };
+  }
+
+  calcTotal(): number {
+    return this.getPricingBreakdown().finalTotal;
   }
 
   isRangeBooked(start: string, end: string): boolean {

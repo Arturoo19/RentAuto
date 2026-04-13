@@ -36,7 +36,6 @@ export class Register {
     }
     this.passwordError = false;
 
-    // правильний порядок: nombre, email, password
     this.authService.register(this.nombre, this.email, this.password).subscribe({
       next: () => {
         this.router.navigate(['/home']);
