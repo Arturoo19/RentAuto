@@ -25,7 +25,7 @@ export class AdminCarsForm implements OnInit {
     pricePerDay: 0,
     imageUrl: '',
     description: '',
-    status: 'available',
+    status: 'Disponible',
   };
 
   constructor(

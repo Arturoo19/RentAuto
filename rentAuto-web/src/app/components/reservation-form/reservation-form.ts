@@ -7,6 +7,7 @@ import { CarsService } from '../../services/cars';
 import { AuthService } from '../../services/auth';
 import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
 import { environment } from '../../../environments/environment';
+import Swal from 'sweetalert2';
 
 type PricingBreakdown = {
   days: number;
@@ -46,9 +47,10 @@ export class ReservationForm implements OnInit {
   paying = false;
   paymentReady = false;
 
-  private readonly weekendSurchargeRate = 0.15;
+  private readonly weekendAumentoPrecio = 0.15;
   private readonly longRentalDiscountRate = 0.1;
-  private readonly longRentalThresholdDays = 7;
+  private readonly longRentalDays = 7;
+  private readonly availableStatuses = ['Disponible', 'available', 'availible'];
 
   constructor(
     private route: ActivatedRoute,
@@ -127,8 +129,9 @@ export class ReservationForm implements OnInit {
 
     const baseTotal = days * pricePerDay;
     const weekendDays = this.countWeekendDays();
-    const weekendSurcharge = weekendDays * pricePerDay * this.weekendSurchargeRate;
-    const longRentalDiscount = days > this.longRentalThresholdDays ? baseTotal * this.longRentalDiscountRate : 0;
+    const weekendSurcharge = weekendDays * pricePerDay * this.weekendAumentoPrecio;
+    const longRentalDiscount =
+      days > this.longRentalDays ? baseTotal * this.longRentalDiscountRate : 0;
     const finalTotal = baseTotal + weekendSurcharge - longRentalDiscount;
 
     return {
@@ -162,8 +165,23 @@ export class ReservationForm implements OnInit {
   }
 
   async preparePayment() {
+    if (this.car && !this.availableStatuses.includes(this.car.status)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No disponible',
+        text: 'Este coche está en mantenimiento y no se puede reservar',
+        confirmButtonColor: '#d6001c',
+      });
+      return;
+    }
+
     if (!this.startDate || !this.endDate) {
-      alert('Selecciona las fechas');
+      Swal.fire({
+        icon: 'info',
+        title: 'Fechas requeridas',
+        text: 'Selecciona las fechas',
+        confirmButtonColor: '#d6001c',
+      });
       return;
     }
 
@@ -190,6 +208,16 @@ export class ReservationForm implements OnInit {
   }
 
   async reservar() {
+    if (this.car && !this.availableStatuses.includes(this.car.status)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No disponible',
+        text: 'Este coche está en mantenimiento y no se puede reservar',
+        confirmButtonColor: '#d6001c',
+      });
+      return;
+    }
+
     if (!this.stripe || !this.elements) return;
     this.paying = true;
 
@@ -200,7 +228,12 @@ export class ReservationForm implements OnInit {
     });
 
     if (error) {
-      alert(error.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de pago',
+        text: error.message || 'No se pudo completar el pago',
+        confirmButtonColor: '#d6001c',
+      });
       this.paying = false;
       return;
     }
@@ -214,10 +247,23 @@ export class ReservationForm implements OnInit {
         })
         .subscribe({
           next: () => {
-            alert('¡Reserva y pago completados!');
+            Swal.fire({
+              icon: 'success',
+              title: 'Reserva completada',
+              text: '¡Reserva y pago completados!',
+              timer: 1800,
+              showConfirmButton: false,
+            });
             this.router.navigate(['/cars']);
           },
-          error: () => alert('Pago OK pero error al guardar reserva'),
+          error: () => {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Atención',
+              text: 'Pago OK, pero hubo error al guardar la reserva',
+              confirmButtonColor: '#d6001c',
+            });
+          },
         });
     }
 

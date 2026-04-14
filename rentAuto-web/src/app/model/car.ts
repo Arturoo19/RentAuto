@@ -3,6 +3,6 @@ export interface Car {
   brand: string;
   model: string;
   pricePerDay: number;
-  status: string;
+  status: 'Disponible' | 'En Mantenimiento' | 'available' | 'availible' | 'rented';
   imageUrl: string;
 }

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -37,11 +38,23 @@ export class Register {
     this.passwordError = false;
 
     this.authService.register(this.nombre, this.email, this.password).subscribe({
-      next: () => {
+      next: async () => {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Bienvenido',
+          text: 'Cuenta creada correctamente',
+          timer: 1700,
+          showConfirmButton: false,
+        });
         this.router.navigate(['/home']);
       },
       error: () => {
-        alert('Error al crear la cuenta');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al crear la cuenta',
+          confirmButtonColor: '#d6001c',
+        });
       },
     });
   }
