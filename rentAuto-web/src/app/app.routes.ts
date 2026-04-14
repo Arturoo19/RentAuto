@@ -8,6 +8,7 @@ import { Reservations } from './pages/reservations/reservations';
 import { AdminGuard } from './services/admin.guard';
 import { AdminCarsForm } from './pages/admin-cars-form/admin-cars-form';
 import { ReservationForm } from './components/reservation-form/reservation-form';
+import { Dashboard } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -16,6 +17,8 @@ export const routes: Routes = [
   { path: 'cars', component: Cars, canActivate: [Guard] },
   { path: 'register', component: Register },
   { path: 'reservations', component: Reservations, canActivate: [Guard] },
+  { path: 'dashboard', component: Dashboard, canActivate: [Guard] },
+  { path: 'profile', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'admin/cars/new', component: AdminCarsForm, canActivate: [Guard, AdminGuard] },
   { path: 'admin/cars/edit/:id', component: AdminCarsForm, canActivate: [Guard, AdminGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },

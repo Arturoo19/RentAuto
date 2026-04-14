@@ -1,7 +1,9 @@
 <div class="admin-form-page">
   <h1>{{ isEdit ? 'Editar coche' : 'Añadir coche' }}</h1>
 
-  <form class="car-form" (ngSubmit)="save()">
+  <div *ngIf="!dataLoaded" class="loading-spinner">Cargando...</div>
+
+  <form *ngIf="dataLoaded" class="car-form" (ngSubmit)="save()">
     <div class="form-group">
       <label>Marca</label>
       <input [(ngModel)]="car.brand" name="brand" required placeholder="Toyota" />
@@ -35,8 +37,8 @@
     <div class="form-group">
       <label>Estado</label>
       <select [(ngModel)]="car.status" name="status">
-        <option value="available">Disponible</option>
-        <option value="rented">No disponible</option>
+        <option value="Disponible">Disponible</option>
+        <option value="En Mantenimiento">En Mantenimiento</option>
       </select>
     </div>
 

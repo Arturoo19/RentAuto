@@ -65,11 +65,23 @@
 }
 
 
-.user-email {
-  color: rgba(255, 255, 255, 0.9);
+.user-name-link {
+  color: rgba(255, 255, 255, 0.95);
   font-weight: 600;
   font-size: 15px;
-  margin: 0;
+  text-decoration: none;
+  padding: 6px 4px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-name-link:hover {
+  color: #ff3b3b;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .login-link {

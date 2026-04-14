@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { CarsService } from '../../services/cars';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-admin-cars-form',
@@ -15,6 +16,7 @@ export class AdminCarsForm implements OnInit {
   isEdit = false;
   carId: number | null = null;
   loading = false;
+  dataLoaded = false;
 
   car = {
     brand: '',
@@ -23,37 +25,50 @@ export class AdminCarsForm implements OnInit {
     pricePerDay: 0,
     imageUrl: '',
     description: '',
-    status: 'available',
+    status: 'Disponible',
   };
 
   constructor(
     private carsService: CarsService,
     private router: Router,
     private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
-    this.carId = this.route.snapshot.params['id'];
+    const idParam = this.route.snapshot.params['id'];
+    this.carId = idParam ? +idParam : null;
+
     if (this.carId) {
       this.isEdit = true;
       this.carsService.getCar(this.carId).subscribe({
-        next: (data) => (this.car = data),
+        next: (data) => {
+          this.car = data;
+          this.dataLoaded = true;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error:', err);
+          this.dataLoaded = true;
+          this.cdr.detectChanges();
+        },
       });
+    } else {
+      this.dataLoaded = true;
     }
   }
 
   save() {
     this.loading = true;
-    if (this.isEdit && this.carId) {
-      this.carsService.updateCar(this.carId, this.car).subscribe({
-        next: () => (window.location.href = '/cars'),
-        error: () => (this.loading = false),
-      });
-    } else {
-      this.carsService.createCar(this.car).subscribe({
-        next: () => (window.location.href = '/cars'),
-        error: () => (this.loading = false),
-      });
-    }
+
+    const request$ =
+      this.isEdit && this.carId
+        ? this.carsService.updateCar(this.carId, this.car)
+        : this.carsService.createCar(this.car);
+
+    request$.pipe(finalize(() => (this.loading = false))).subscribe({
+      next: () => this.router.navigate(['/cars']),
+      error: (err) => console.error('Error en guardar:', err),
+    });
   }
 }

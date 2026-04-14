@@ -40,7 +40,16 @@
         <div>
           <div class="label">Total estimado</div>
           <div class="days-info" *ngIf="startDate && endDate">
-            {{ getDays() }} día(s) × {{ car?.pricePerDay }}€
+            {{ getPricingBreakdown().days }} día(s) × {{ getPricingBreakdown().pricePerDay }}€
+          </div>
+          <div class="pricing-breakdown" *ngIf="startDate && endDate">
+            <div>Base: {{ getPricingBreakdown().baseTotal }}€</div>
+            <div *ngIf="getPricingBreakdown().weekendSurcharge > 0">
+              Fin de semana (+15%): +{{ getPricingBreakdown().weekendSurcharge }}€
+            </div>
+            <div *ngIf="getPricingBreakdown().longRentalDiscount > 0">
+              Descuento 7+ días (-10%): -{{ getPricingBreakdown().longRentalDiscount }}€
+            </div>
           </div>
         </div>
         <div class="amount">{{ calcTotal() }}€</div>
@@ -77,15 +86,34 @@
       <!-- Stripe форма оплати -->
       <div>
         <p class="section-label">Pago</p>
+        <div
+          *ngIf="car && car.status !== 'Disponible' && car.status !== 'available' && car.status !== 'availible'"
+          class="placeholder-msg"
+        >
+          Este coche está en mantenimiento y no está disponible para reservas.
+        </div>
 
         <!-- Показуємо placeholder поки не натиснуто "Continuar" -->
-        <div *ngIf="!paymentReady && !startDate" class="placeholder-msg">
+        <div
+          *ngIf="
+            !paymentReady &&
+            !startDate &&
+            (!car || car.status === 'Disponible' || car.status === 'available' || car.status === 'availible')
+          "
+          class="placeholder-msg"
+        >
           Selecciona las fechas para continuar
         </div>
 
         <!-- Кнопка продовжити до оплати -->
         <button
-          *ngIf="!paymentReady && startDate && endDate && !dateError"
+          *ngIf="
+            !paymentReady &&
+            startDate &&
+            endDate &&
+            !dateError &&
+            (!car || car.status === 'Disponible' || car.status === 'available' || car.status === 'availible')
+          "
           class="btn-continue"
           (click)="preparePayment()"
         >

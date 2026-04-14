@@ -13,18 +13,23 @@
         <h3>{{ car.brand }} {{ car.model }}</h3>
         <p class="year">{{ car.year }}</p>
         <p class="price">{{ car.pricePerDay }}€ / día</p>
-        <p class="status available">Disponible</p>
+        <p class="status" [ngClass]="getStatusClass(car.status)">{{ getStatusLabel(car.status) }}</p>
       </div>
       <div class="car-actions">
         <button
           class="btn-rent"
+          *ngIf="isDisponible(car.status)"
           [routerLink]="['/reservar', car.id]"
           [queryParams]="{ startDate: startDate, endDate: endDate }"
         >
           Reservar
         </button>
+        <span *ngIf="!isDisponible(car.status) && !esAdmin" class="service-note">En servicio</span>
         <div *ngIf="esAdmin" class="admin-actions">
           <button class="btn-edit" [routerLink]="['/admin/cars/edit', car.id]">Editar</button>
+          <button class="btn-service" (click)="toggleMaintenance(car)">
+            {{ isDisponible(car.status) ? 'Enviar a servicio' : 'Hacer disponible' }}
+          </button>
           <button class="btn-delete" (click)="deleteCar(car.id)">Eliminar</button>
         </div>
       </div>

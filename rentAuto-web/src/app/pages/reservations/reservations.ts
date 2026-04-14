@@ -41,9 +41,9 @@ export class Reservations implements OnInit {
 
   loadRentals() {
     this.loading = true;
-    this.reservasService.getMyRentals().subscribe({
+    this.reservasService.syncMyRentalsCompletingExpired().subscribe({
       next: (data) => {
-        this.rentals = [...data];
+        this.rentals = this.reservasService.filterActiveOrCompletedRentals(data);
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -61,21 +61,17 @@ export class Reservations implements OnInit {
   }
 
   getStatusLabel(status: string): string {
-    const map: any = {
+    const map: Record<string, string> = {
       active: 'Activa',
-      pending: 'Pendiente',
       completed: 'Completada',
-      cancelled: 'Cancelada',
     };
     return map[status] || status;
   }
 
   getStatusClass(status: string): string {
-    const map: any = {
+    const map: Record<string, string> = {
       active: 'status-active',
-      pending: 'status-pending',
       completed: 'status-completed',
-      cancelled: 'status-cancelled',
     };
     return map[status] || '';
   }
