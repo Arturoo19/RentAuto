@@ -16,10 +16,19 @@ import { Reservas } from '../../services/reservas';
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
-  // стан
   isAdmin = false;
   loading = true;
   userName = '';
+
+  monthlyGrowth = 0;
+
+  revenueToday = 0;
+  revenueWeek = 0;
+
+  idleCars: any[] = [];
+  idleCount = 0;
+  idleChartSeries: number[] = [];
+  idleChartLabels: string[] = ['Activos', 'Inactivos'];
 
   // метрики адміна
   fleetCount = 0;
@@ -34,6 +43,7 @@ export class Dashboard implements OnInit {
   myActive = 0;
   myCompleted = 0;
   mySpent = 0;
+  loadError = '';
 
   // топ машини
   topCarsList: any[] = [];
@@ -108,33 +118,117 @@ export class Dashboard implements OnInit {
       rentals: this.reservas.syncAdminRentalsCompletingExpired().pipe(catchError(() => of([]))),
     }).subscribe({
       next: ({ cars, rentals }) => {
+        this.loadError = '';
         this.fleetCount = cars?.length ?? 0;
         const list = this.reservas.filterActiveOrCompletedRentals(rentals ?? []);
 
         this.totalRentals = list.length;
         this.revenueTotal = list.reduce((sum, r) => sum + (Number(r?.totalPrice) || 0), 0);
-        this.statusActive = list.filter((r) => r?.status === 'active').length;
-        this.statusCompleted = list.filter((r) => r?.status === 'completed').length;
+        this.statusActive = list.filter(
+          (r) => this.reservas.normalizeStatus(r?.status) === 'active',
+        ).length;
+        this.statusCompleted = list.filter(
+          (r) => this.reservas.normalizeStatus(r?.status) === 'completed',
+        ).length;
 
         // середній час оренди
-        const totalDays = list.reduce((sum, r) => {
-          const days = Math.ceil(
-            (new Date(r.endDate).getTime() - new Date(r.startDate).getTime()) /
-              (1000 * 60 * 60 * 24),
-          );
-          return sum + days;
-        }, 0);
-        this.avgRentalDays = list.length > 0 ? Math.round(totalDays / list.length) : 0;
+        const validDurations = list
+          .map((r) => this.getRentalDays(r?.startDate, r?.endDate))
+          .filter((days): days is number => days != null);
+        const totalDays = validDurations.reduce((sum, days) => sum + days, 0);
+        this.avgRentalDays =
+          validDurations.length > 0 ? Math.round(totalDays / validDurations.length) : 0;
+
+        this.calculateExtraMetrics(list, cars);
 
         this.prepareCharts(list);
         this.loading = false;
         this.cdr.detectChanges();
       },
       error: () => {
+        this.loadError = 'No se pudieron cargar las métricas del panel.';
         this.loading = false;
         this.cdr.detectChanges();
       },
     });
+  }
+
+  private calculateExtraMetrics(rentals: any[], cars: any[]) {
+    const now = new Date();
+
+    //  GROWTH (місяць до місяця)
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    let thisMonthRevenue = 0;
+    let lastMonthRevenue = 0;
+
+    rentals.forEach((r) => {
+      const date = this.parseDate(r?.startDate);
+      if (!date) return;
+
+      if (date.getMonth() === currentMonth && date.getFullYear() === currentYear) {
+        thisMonthRevenue += Number(r.totalPrice) || 0;
+      }
+
+      const lastMonthDate = new Date(currentYear, currentMonth - 1);
+
+      if (
+        date.getMonth() === lastMonthDate.getMonth() &&
+        date.getFullYear() === lastMonthDate.getFullYear()
+      ) {
+        lastMonthRevenue += Number(r.totalPrice) || 0;
+      }
+    });
+
+    this.monthlyGrowth =
+      lastMonthRevenue > 0
+        ? Math.round(((thisMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100)
+        : 0;
+
+    //  TODAY / WEEK
+    const todayStr = now.toDateString();
+
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+
+    rentals.forEach((r) => {
+      const date = this.parseDate(r?.startDate);
+      if (!date) return;
+
+      if (date.toDateString() === todayStr) {
+        this.revenueToday += Number(r.totalPrice) || 0;
+      }
+
+      if (date >= startOfWeek) {
+        this.revenueWeek += Number(r.totalPrice) || 0;
+      }
+    });
+
+    const lastRentalMap: Record<string, Date> = {};
+
+    rentals.forEach((r) => {
+      if (!r.car) return;
+      const id = String(r.car.id);
+      const end = this.parseDate(r?.endDate);
+      if (!end) return;
+
+      if (!lastRentalMap[id] || end > lastRentalMap[id]) {
+        lastRentalMap[id] = end;
+      }
+    });
+
+    const idleThresholdDays = 7;
+
+    this.idleCars = cars.filter((car: any) => {
+      const last = lastRentalMap[String(car.id)];
+      if (!last) return true;
+
+      const diffDays = (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24);
+      return diffDays > idleThresholdDays;
+    });
+
+    this.idleCount = this.idleCars.length;
   }
 
   private prepareCharts(rentals: any[]) {
@@ -144,13 +238,15 @@ export class Dashboard implements OnInit {
 
     this.statusChartSeries = [this.statusActive, this.statusCompleted];
     this.statusChartLabels = ['Activas', 'Completadas'];
+    this.idleChartSeries = [this.fleetCount - this.idleCount, this.idleCount];
   }
 
   private prepareMonthlyChart(rentals: any[]) {
     const monthMap: Record<string, { revenue: number; count: number }> = {};
 
     rentals.forEach((r) => {
-      const date = new Date(r.startDate);
+      const date = this.parseDate(r?.startDate);
+      if (!date) return;
       const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
       if (!monthMap[key]) monthMap[key] = { revenue: 0, count: 0 };
       monthMap[key].revenue += Number(r.totalPrice) || 0;
@@ -178,8 +274,9 @@ export class Dashboard implements OnInit {
     const dayCount = [0, 0, 0, 0, 0, 0, 0];
 
     rentals.forEach((r) => {
-      const current = new Date(r.startDate);
-      const end = new Date(r.endDate);
+      const current = this.parseDate(r?.startDate);
+      const end = this.parseDate(r?.endDate);
+      if (!current || !end) return;
       while (current <= end) {
         const d = current.getDay();
         dayCount[d === 0 ? 6 : d - 1]++;
@@ -223,25 +320,51 @@ export class Dashboard implements OnInit {
     });
 
     this.topCarsList = Object.values(carMap)
-      .sort((a, b) => b.count - a.count)
+      .sort((a, b) => {
+        if (b.count !== a.count) {
+          return b.count - a.count;
+        }
+        return b.revenue - a.revenue;
+      })
       .slice(0, 3);
   }
 
   private loadUser() {
     this.reservas.syncMyRentalsCompletingExpired().subscribe({
       next: (list) => {
+        this.loadError = '';
         const rentals = this.reservas.filterActiveOrCompletedRentals(list ?? []);
         this.myRentalsCount = rentals.length;
-        this.myActive = rentals.filter((r) => r?.status === 'active').length;
-        this.myCompleted = rentals.filter((r) => r?.status === 'completed').length;
+        this.myActive = rentals.filter(
+          (r) => this.reservas.normalizeStatus(r?.status) === 'active',
+        ).length;
+        this.myCompleted = rentals.filter(
+          (r) => this.reservas.normalizeStatus(r?.status) === 'completed',
+        ).length;
         this.mySpent = rentals.reduce((sum, r) => sum + (Number(r?.totalPrice) || 0), 0);
         this.loading = false;
         this.cdr.detectChanges();
       },
       error: () => {
+        this.loadError = 'No se pudieron cargar tus datos en este momento.';
         this.loading = false;
         this.cdr.detectChanges();
       },
     });
+  }
+
+  private parseDate(value: string | undefined): Date | null {
+    if (!value) return null;
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  private getRentalDays(startDate: string | undefined, endDate: string | undefined): number | null {
+    const start = this.parseDate(startDate);
+    const end = this.parseDate(endDate);
+    if (!start || !end) return null;
+    const diffMs = end.getTime() - start.getTime();
+    if (diffMs < 0) return null;
+    return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
   }
 }

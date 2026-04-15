@@ -5,6 +5,7 @@ import { Reservas } from '../../services/reservas';
 import { AuthService } from '../../services/auth';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reservations',
@@ -17,6 +18,8 @@ export class Reservations implements OnInit {
   rentals: any[] = [];
   loading = true;
   private sub!: Subscription;
+
+  cancellingId: string | null = null;
 
   constructor(
     private reservasService: Reservas,
@@ -47,7 +50,7 @@ export class Reservations implements OnInit {
         this.loading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -61,18 +64,68 @@ export class Reservations implements OnInit {
   }
 
   getStatusLabel(status: string): string {
+    const normalized = this.reservasService.normalizeStatus(status);
     const map: Record<string, string> = {
       active: 'Activa',
       completed: 'Completada',
     };
-    return map[status] || status;
+    return map[normalized] || status;
   }
 
   getStatusClass(status: string): string {
+    const normalized = this.reservasService.normalizeStatus(status);
     const map: Record<string, string> = {
       active: 'status-active',
       completed: 'status-completed',
     };
-    return map[status] || '';
+    return map[normalized] || '';
+  }
+
+  isCancellable(rental: any): boolean {
+    const normalized = this.reservasService.normalizeStatus(rental.status);
+    const startDate = new Date(rental.startDate);
+    // Можна скасувати тільки активні і якщо старт ще не настав
+    return normalized === 'active' && startDate > new Date();
+  }
+
+  cancelRental(rental: any): void {
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Cancelar reserva?',
+      text: `¿Seguro que quieres cancelar la reserva del ${rental.car?.brand} ${rental.car?.model}?`,
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No, volver',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      this.cancellingId = rental.id;
+      this.reservasService.cancelRental(rental.id).subscribe({
+        next: () => {
+          this.cancellingId = null;
+          this.loadRentals();
+          Swal.fire({
+            icon: 'success',
+            title: 'Cancelación',
+            text: 'Reserva cancelada con exito',
+            timer: 1700,
+            showConfirmButton: false,
+          });
+        },
+        error: (err) => {
+          console.error('Cancel error:', err);
+          this.cancellingId = null;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al cancelar la reserva. Inténtalo de nuevo.',
+            timer: 1700,
+            showConfirmButton: false,
+          });
+        },
+      });
+    });
   }
 }

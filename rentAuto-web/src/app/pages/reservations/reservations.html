@@ -32,6 +32,14 @@
           {{ getStatusLabel(rental.status) }}
         </span>
         <p class="rental-price">{{ rental.totalPrice }}€</p>
+        <button
+          *ngIf="isCancellable(rental)"
+          class="btn-cancel"
+          [disabled]="cancellingId === rental.id"
+          (click)="cancelRental(rental)"
+        >
+          {{ cancellingId === rental.id ? 'Cancelando...' : 'Cancelar reserva' }}
+        </button>
       </div>
     </div>
   </div>

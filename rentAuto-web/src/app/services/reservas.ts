@@ -9,6 +9,15 @@ export class Reservas {
 
   constructor(private http: HttpClient) {}
 
+  normalizeStatus(status: string | null | undefined): string {
+    const value = String(status ?? '')
+      .trim()
+      .toLowerCase();
+    if (value === 'activa') return 'active';
+    if (value === 'completada') return 'completed';
+    return value;
+  }
+
   rentalPeriodHasEnded(endDate: string): boolean {
     if (!endDate) return false;
     const day = String(endDate).split('T')[0];
@@ -20,12 +29,16 @@ export class Reservas {
   }
 
   filterActiveOrCompletedRentals(rentals: any[] | null | undefined): any[] {
-    return (rentals ?? []).filter((r) => r?.status === 'active' || r?.status === 'completed');
+    return (rentals ?? []).filter((r) => {
+      const status = this.normalizeStatus(r?.status);
+      return status === 'active' || status === 'completed';
+    });
   }
 
   private expiredActiveIds(rentals: any[]): (number | string)[] {
     return (rentals ?? [])
-      .filter((r) => r?.status === 'active' && this.rentalPeriodHasEnded(r.endDate))
+      .filter((r) => this.normalizeStatus(r?.status) === 'active')
+      .filter((r) => this.rentalPeriodHasEnded(r.endDate))
       .map((r) => r.id)
       .filter((id) => id != null);
   }
@@ -74,5 +87,9 @@ export class Reservas {
 
   completeRental(id: number | string) {
     return this.http.put(`${this.apiUrl}/${id}/complete`, {});
+  }
+
+  cancelRental(id: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/cancel`, {});
   }
 }

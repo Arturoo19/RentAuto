@@ -10,7 +10,7 @@
         <span class="news-tag">{{ item.tag }}</span>
         <h3>{{ item.title }}</h3>
         <p>{{ item.description }}</p>
-        <a class="news-link" href="#">Leer más →</a>
+        <a class="news-link" [routerLink]="['/news', item.slug]">Leer más →</a>
       </div>
     </div>
   </div>

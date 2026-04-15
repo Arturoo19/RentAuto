@@ -78,4 +78,15 @@ export class RentalsService {
 
     return { message: 'Alquiler completo' };
   }
+  async cancel(id: number, userId: number) {
+    const rental = await this.rentalsRepo.findOne({
+      where: { id, user: { id: userId } },
+    });
+
+    if (!rental) throw new NotFoundException('Reserva no encontrada');
+    if (rental.status === 'cancelled') throw new BadRequestException('Ya cancelada');
+
+    rental.status = 'cancelled';
+    return this.rentalsRepo.save(rental);
+  }
 }

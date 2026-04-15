@@ -37,8 +37,38 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  private getTokenPayload(token: string): { exp?: number } | null {
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const payloadBase64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const payloadJson = decodeURIComponent(
+        atob(payloadBase64)
+          .split('')
+          .map((char) => `%${('00' + char.charCodeAt(0).toString(16)).slice(-2)}`)
+          .join(''),
+      );
+      return JSON.parse(payloadJson);
+    } catch {
+      return null;
+    }
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const payload = this.getTokenPayload(token);
+    if (!payload?.exp) return false;
+    return Date.now() >= payload.exp * 1000;
+  }
+
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    if (!token) return false;
+    if (this.isTokenExpired(token)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return false;
+    }
+    return true;
   }
 
   getCurrentUser() {
