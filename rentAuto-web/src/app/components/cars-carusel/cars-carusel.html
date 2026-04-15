@@ -26,7 +26,13 @@
                 <span class="price">{{ car.price }}€</span>
                 <span class="per-day">/día</span>
               </div>
-              <button class="reserve-btn" routerLink="/cars">Reservar</button>
+              <button
+                class="reserve-btn"
+                [routerLink]="['/reservar', car.id]"
+                [queryParams]="{ startDate: '', endDate: '' }"
+              >
+                Reservar
+              </button>
             </div>
           </div>
         </div>

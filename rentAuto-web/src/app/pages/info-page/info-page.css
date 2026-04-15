@@ -1,0 +1,104 @@
+.info-page {
+  padding: 42px 20px 70px;
+  background:
+    radial-gradient(circle at top left, rgba(214, 0, 28, 0.2), transparent 45%),
+    linear-gradient(180deg, #111, #080808);
+}
+
+.info-page__container {
+  max-width: 820px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #fefefe, #f4f4f4);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.26);
+}
+
+.info-page h1 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.info-page__intro {
+  margin: 0 0 20px;
+  color: #444;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.info-page p {
+  margin: 0 0 14px;
+  line-height: 1.7;
+}
+
+.info-page__sections {
+  display: grid;
+  gap: 14px;
+}
+
+.info-section {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #ececec;
+  padding: 16px;
+}
+
+.info-section h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.info-section ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.info-section li {
+  margin-bottom: 8px;
+}
+
+.info-page__support {
+  margin-top: 16px;
+  border-radius: 12px;
+  padding: 18px;
+  background: linear-gradient(120deg, #d6001c, #9e0015);
+  color: #fff;
+}
+
+.info-page__support h3 {
+  margin: 0 0 8px;
+}
+
+.info-page__support p {
+  margin: 0 0 14px;
+}
+
+.info-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.info-page__btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+.info-page__btn--primary {
+  background: #fff;
+  color: #b9001a;
+  border-color: #fff;
+}
+
+@media (max-width: 760px) {
+  .info-page h1 {
+    font-size: 30px;
+  }
+}

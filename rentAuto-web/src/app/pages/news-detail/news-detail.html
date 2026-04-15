@@ -1,0 +1,65 @@
+<section class="news-detail" *ngIf="article; else notFound">
+  <div class="news-detail__container">
+    <div class="news-detail__head">
+      <span class="news-detail__tag">{{ article.tag }}</span>
+      <div class="news-detail__meta">
+        <span>{{ article.publishedAt }}</span>
+        <span>•</span>
+        <span>{{ article.readingTime }}</span>
+      </div>
+    </div>
+    <h1>{{ article.title }}</h1>
+    <p class="news-detail__summary">{{ article.summary }}</p>
+
+    <img [src]="article.image" [alt]="article.title" />
+
+    <div class="news-detail__content">
+      <p *ngFor="let paragraph of article.content">{{ paragraph }}</p>
+    </div>
+
+    <div class="news-detail__cards">
+      <article class="detail-card">
+        <h3>Puntos clave</h3>
+        <ul>
+          <li *ngFor="let point of article.highlights">{{ point }}</li>
+        </ul>
+      </article>
+
+      <article class="detail-card">
+        <h3>Consejos prácticos</h3>
+        <ul>
+          <li *ngFor="let tip of article.tips">{{ tip }}</li>
+        </ul>
+      </article>
+    </div>
+
+    <section class="news-detail__facts">
+      <h3>Datos rápidos</h3>
+      <div class="facts-grid">
+        <div class="fact-item" *ngFor="let fact of article.facts">
+          <span class="fact-value">{{ fact.value }}</span>
+          <span class="fact-label">{{ fact.label }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="news-detail__cta">
+      <h3>{{ article.ctaTitle }}</h3>
+      <p>{{ article.ctaText }}</p>
+      <div class="news-detail__actions">
+        <a class="news-detail__btn news-detail__btn--primary" routerLink="/cars">Ver coches</a>
+        <a class="news-detail__btn" routerLink="/home">Volver al inicio</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+<ng-template #notFound>
+  <section class="news-detail news-detail--empty">
+    <div class="news-detail__container">
+      <h1>Noticia no encontrada</h1>
+      <p>No hemos encontrado esta noticia. Puedes volver a la página principal y revisar las últimas publicaciones.</p>
+      <a class="news-detail__back" routerLink="/home">Ir al inicio</a>
+    </div>
+  </section>
+</ng-template>

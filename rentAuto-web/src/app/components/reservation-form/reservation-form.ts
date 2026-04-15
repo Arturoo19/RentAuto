@@ -256,11 +256,15 @@ export class ReservationForm implements OnInit {
             });
             this.router.navigate(['/cars']);
           },
-          error: () => {
+          error: (err) => {
+            const backendMessage =
+              err?.error?.message && typeof err.error.message === 'string'
+                ? err.error.message
+                : 'Pago OK, pero hubo error al guardar la reserva';
             Swal.fire({
               icon: 'warning',
               title: 'Atención',
-              text: 'Pago OK, pero hubo error al guardar la reserva',
+              text: backendMessage,
               confirmButtonColor: '#d6001c',
             });
           },

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, Param, UseGuards, Req, Patch } from '@nestjs/common';
 import { RentalsService } from './rentals.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
@@ -43,5 +43,11 @@ export class RentalsController {
   @UseGuards(JwtAuthGuard)
   complete(@Param('id') id: string) {
     return this.rentalsService.complete(+id);
+  }
+
+  @Patch(':id/cancel')
+  @UseGuards(JwtAuthGuard)
+  cancel(@Param('id') id: string, @Req() req: RequestWithUser) {
+    return this.rentalsService.cancel(+id, req.user.id);
   }
 }

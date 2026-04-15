@@ -1,0 +1,37 @@
+<section class="info-page" *ngIf="content; else noContent">
+  <div class="info-page__container">
+    <h1>{{ content.title }}</h1>
+    <p class="info-page__intro">{{ content.intro }}</p>
+
+    <div class="info-page__sections">
+      <article class="info-section" *ngFor="let section of content.sections">
+        <h2>{{ section.heading }}</h2>
+        <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
+        <ul>
+          <li *ngFor="let bullet of section.bullets">{{ bullet }}</li>
+        </ul>
+      </article>
+    </div>
+
+    <section class="info-page__support">
+      <h3>{{ content.supportCard.title }}</h3>
+      <p>{{ content.supportCard.description }}</p>
+      <div class="info-page__actions">
+        <a class="info-page__btn info-page__btn--primary" [routerLink]="content.supportCard.primaryActionLink">
+          {{ content.supportCard.primaryActionLabel }}
+        </a>
+        <a class="info-page__btn" routerLink="/home">Volver al inicio</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+<ng-template #noContent>
+  <section class="info-page">
+    <div class="info-page__container">
+      <h1>Página no disponible</h1>
+      <p>Este contenido no está disponible ahora mismo.</p>
+      <a class="info-page__back" routerLink="/home">Ir al inicio</a>
+    </div>
+  </section>
+</ng-template>

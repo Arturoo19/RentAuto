@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpInterceptor } from '@angular/common/http';
 import { AuthService } from './auth';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -13,6 +15,13 @@ export class AuthInterceptor implements HttpInterceptor {
         setHeaders: { Authorization: `Bearer ${token}` },
       });
     }
-    return next.handle(req);
+    return next.handle(req).pipe(
+      catchError((error) => {
+        if (error?.status === 401) {
+          this.authService.logout();
+        }
+        return throwError(() => error);
+      }),
+    );
   }
 }

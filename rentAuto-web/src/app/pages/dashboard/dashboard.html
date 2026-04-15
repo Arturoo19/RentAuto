@@ -3,6 +3,10 @@
     <div class="db-spinner"></div>
   </div>
 
+  <div *ngIf="!loading && loadError" class="db-error-banner">
+    {{ loadError }}
+  </div>
+
   <!-- АДМІН -->
   <ng-container *ngIf="!loading && isAdmin">
     <div class="db-top">
@@ -25,6 +29,37 @@
 
     <div class="db-body">
       <p class="db-section-label">Resumen general</p>
+      <p class="db-section-label">Performance</p>
+
+      <div class="db-stats">
+        <!-- Growth -->
+        <div class="db-stat db-highlight">
+          <div class="db-stat-val" [ngClass]="monthlyGrowth >= 0 ? 'green' : 'red'">
+            {{ monthlyGrowth }}%
+          </div>
+          <div class="db-stat-lbl">Crecimiento mensual</div>
+        </div>
+
+        <!-- Today -->
+        <div class="db-stat">
+          <div class="db-stat-val">{{ revenueToday | number: '1.0-0' }}€</div>
+          <div class="db-stat-lbl">Ingresos hoy</div>
+        </div>
+
+        <!-- Week -->
+        <div class="db-stat">
+          <div class="db-stat-val">{{ revenueWeek | number: '1.0-0' }}€</div>
+          <div class="db-stat-lbl">Esta semana</div>
+        </div>
+
+        <!-- Idle -->
+        <div class="db-stat">
+          <div class="db-stat-val">
+            {{ idleCount }}
+          </div>
+          <div class="db-stat-lbl">Coches inactivos</div>
+        </div>
+      </div>
       <div class="db-stats">
         <div class="db-stat">
           <div class="db-stat-val">{{ fleetCount }}</div>
@@ -109,6 +144,18 @@
             [tooltip]="donutOptions.tooltip"
           ></apx-chart>
         </div>
+      </div>
+      <p class="db-section-label">Uso de flota</p>
+
+      <div class="db-chart-card">
+        <apx-chart
+          [series]="idleChartSeries"
+          [chart]="donutOptions.chart"
+          [labels]="idleChartLabels"
+          [colors]="['#66bb6a', '#d6001c']"
+          [legend]="donutOptions.legend"
+          [plotOptions]="donutOptions.plotOptions"
+        ></apx-chart>
       </div>
 
       <div class="db-divider"></div>
