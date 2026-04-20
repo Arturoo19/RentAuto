@@ -47,7 +47,7 @@ export class RentalsController {
 
   @Patch(':id/cancel')
   @UseGuards(JwtAuthGuard)
-  cancel(@Param('id') id: string, @Req() req: RequestWithUser) {
+  async cancel(@Param('id') id: string, @Req() req: RequestWithUser) {
     return this.rentalsService.cancel(+id, req.user.id);
   }
 }

@@ -8,6 +8,8 @@ import { CarsModule } from './cars/cars.module';
 import { RentalsModule } from './rentals/rentals.module';
 import { AuthModule } from './auth/auth.module';
 import { PaymentsModule } from './payments/payments.module';
+import { ChatModule } from './chat/chat.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -23,10 +25,11 @@ import { PaymentsModule } from './payments/payments.module';
       synchronize: true,
     }),
     UsersModule,
+    ScheduleModule.forRoot(),
     CarsModule,
     RentalsModule,
+    ChatModule,
     AuthModule,
-    PaymentsModule,
     PaymentsModule,
   ],
   controllers: [AppController],

@@ -193,7 +193,7 @@ export class Dashboard implements OnInit {
     startOfWeek.setDate(now.getDate() - now.getDay());
 
     rentals.forEach((r) => {
-      const date = this.parseDate(r?.startDate);
+      const date = this.parseDate(r?.createdAt ?? r?.bookingDate);
       if (!date) return;
 
       if (date.toDateString() === todayStr) {

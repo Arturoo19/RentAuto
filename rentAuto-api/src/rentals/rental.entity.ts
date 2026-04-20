@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm'; // ← додай CreateDateColumn
 import { Car } from '../cars/car.entity';
 import { User } from 'src/users/user.entity';
 
@@ -24,4 +24,7 @@ export class Rental {
 
   @Column({ default: 'pending' })
   status: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

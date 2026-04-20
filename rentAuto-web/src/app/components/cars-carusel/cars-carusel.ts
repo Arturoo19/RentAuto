@@ -41,7 +41,7 @@ export class CarsCarusel {
       seats: 5,
       transmission: 'Manual',
       ac: 'Aire acond.',
-      price: 45,
+      price: 87,
       image: '/fotosCoches/golf.jpg',
     },
     {
