@@ -76,7 +76,7 @@ export class ReservationForm implements OnInit {
       error: (err) => console.error(err),
     });
 
-    this.http.get<any[]>(`http://localhost:3000/cars/${this.carId}/booked-dates`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/cars/${this.carId}/booked-dates`).subscribe({
       next: (data) => {
         this.bookedRanges = data;
       },
@@ -189,7 +189,7 @@ export class ReservationForm implements OnInit {
     if (total <= 0) return;
 
     this.http
-      .post<{ clientSecret: string }>('http://localhost:3000/payments/create-intent', {
+      .post<{ clientSecret: string }>(`${environment.apiUrl}/payments/create-intent`, {
         amount: total,
       })
       .subscribe(async ({ clientSecret }) => {
@@ -223,7 +223,7 @@ export class ReservationForm implements OnInit {
 
     const { error, paymentIntent } = await this.stripe.confirmPayment({
       elements: this.elements,
-      confirmParams: { return_url: 'http://localhost:4200/cars' },
+      confirmParams: { return_url: 'https://rent-auto-sepia.vercel.app/cars' },
       redirect: 'if_required',
     });
 
@@ -240,7 +240,7 @@ export class ReservationForm implements OnInit {
 
     if (paymentIntent?.status === 'succeeded') {
       this.http
-        .post('http://localhost:3000/rentals', {
+        .post(`${environment.apiUrl}/rentals`, {
           carId: this.carId,
           startDate: this.startDate,
           endDate: this.endDate,

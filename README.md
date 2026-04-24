@@ -6,13 +6,13 @@ A full-stack car rental platform built with **Angular** and **NestJS**, featurin
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Angular 17, TypeScript |
-| Backend | NestJS, TypeScript |
-| Database | TypeORM + PostgreSQL |
-| Auth | JWT + Role-based Access Control (RBAC) |
-| Payments | Stripe |
+| Layer    | Technology                             |
+| -------- | -------------------------------------- |
+| Frontend | Angular 17, TypeScript                 |
+| Backend  | NestJS, TypeScript                     |
+| Database | TypeORM + PostgreSQL                   |
+| Auth     | JWT + Role-based Access Control (RBAC) |
+| Payments | Stripe                                 |
 
 ---
 
@@ -63,7 +63,7 @@ ng serve
 ```
 
 App runs at `http://localhost:4200`  
-API runs at `http://localhost:3000`
+API runs at `${environment.apiUrl}`
 
 ---
 
