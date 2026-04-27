@@ -3,10 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Car } from './car.entity';
 import { Repository } from 'typeorm';
 import { Rental } from 'src/rentals/rental.entity';
+import { CarCategory } from './car.entity';
 
 @Injectable()
 export class CarsService {
   private readonly availableStatuses = ['Disponible', 'available', 'availible'];
+  private readonly legacyCategoryMap: Record<string, CarCategory> = {
+    familiar: CarCategory.ELECTRICOS,
+  };
 
   constructor(
     @InjectRepository(Car)
@@ -15,7 +19,10 @@ export class CarsService {
     private rentalsRepo: Repository<Rental>,
   ) {}
 
-  findAll() {
+  findAll(category?:CarCategory) {
+    if(category){
+      return this.carsRepo.find({where: {category}})
+    }
     return this.carsRepo.find();
   }
 
@@ -26,14 +33,32 @@ export class CarsService {
   }
 
   create(dto: Partial<Car>) {
-    const car = this.carsRepo.create(dto);
+    const normalizedDto = this.normalizeCategory(dto);
+    const car = this.carsRepo.create(normalizedDto);
     return this.carsRepo.save(car);
   }
 
   async update(id: number, dto: Partial<Car>) {
     await this.findOne(id);
-    await this.carsRepo.update(id, dto);
+    const normalizedDto = this.normalizeCategory(dto);
+    await this.carsRepo.update(id, normalizedDto);
     return this.findOne(id);
+  }
+
+  private normalizeCategory(dto: Partial<Car>): Partial<Car> {
+    if (!dto.category) {
+      return dto;
+    }
+
+    const mappedCategory = this.legacyCategoryMap[dto.category];
+    if (!mappedCategory) {
+      return dto;
+    }
+
+    return {
+      ...dto,
+      category: mappedCategory,
+    };
   }
 
   async remove(id: number) {

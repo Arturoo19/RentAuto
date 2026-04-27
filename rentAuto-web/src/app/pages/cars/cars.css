@@ -249,3 +249,165 @@
     gap: 16px;
   }
 }
+
+/* ── Filter bar ── */
+.cars-header h1 {
+  flex: 1;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.filters-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #edf0f4;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.07);
+}
+
+/* ── Filter select ── */
+.filter-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 180px;
+}
+
+.filter-icon {
+  position: absolute;
+  left: 12px;
+  color: #d6001c;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+.filter-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 38px 10px 36px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.filter-wrapper select:hover {
+  border-color: #d6001c;
+  background: #fff;
+}
+
+.filter-wrapper select:focus {
+  outline: none;
+  border-color: #d6001c;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(214, 0, 28, 0.13);
+}
+
+.filter-wrapper.is-active select {
+  border-color: #d6001c;
+  background: #fff5f6;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 11px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.filter-wrapper:hover .select-arrow,
+.filter-wrapper select:focus ~ .select-arrow,
+.filter-wrapper.is-active .select-arrow {
+  color: #d6001c;
+}
+
+.btn-reset-filters {
+  border: 1px solid #f0c3ca;
+  background: #fff;
+  color: #d6001c;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.btn-reset-filters:hover:not(:disabled) {
+  background: #d6001c;
+  color: #fff;
+  border-color: #d6001c;
+  transform: translateY(-1px);
+}
+
+.btn-reset-filters:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Add button ── */
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .cars-header {
+    flex-wrap: wrap;
+  }
+
+  .cars-header h1 {
+    width: 100%;
+  }
+
+  .header-controls {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .filters-panel {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .filter-wrapper {
+    flex: 1;
+    min-width: 170px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-wrapper {
+    min-width: 100%;
+  }
+
+  .btn-reset-filters,
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+  }
+}

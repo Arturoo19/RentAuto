@@ -21,6 +21,8 @@ export class Cars implements OnInit, OnDestroy {
   startDate = '';
   endDate = '';
   private sub!: Subscription;
+  selectedCategory = '';
+  selectedPrice = 'todos';
 
   constructor(
     private carsService: CarsService,
@@ -49,6 +51,18 @@ export class Cars implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
+  }
+
+  onCategoryChange(event: Event) {
+    this.selectedCategory = (event.target as HTMLSelectElement).value;
+  }
+  onPriceChange(event: Event) {
+    this.selectedPrice = (event.target as HTMLSelectElement).value;
+  }
+
+  resetFilters() {
+    this.selectedCategory = 'todos';
+    this.selectedPrice = 'todos';
   }
 
   loadCars() {
@@ -163,5 +177,24 @@ export class Cars implements OnInit, OnDestroy {
         });
       },
     });
+  }
+
+  get cochesFiltrados() {
+    let resultado = this.cars;
+
+    if (this.selectedCategory && this.selectedCategory !== 'todos') {
+      resultado = resultado.filter((car) => car.category === this.selectedCategory);
+    }
+    if (this.selectedPrice && this.selectedPrice !== 'todos') {
+      resultado = resultado.filter((car) => {
+        const price = car.pricePerDay;
+        if (this.selectedPrice === 'low') return price <= 60;
+        if (this.selectedPrice === 'mid') return price > 60 && price <= 100;
+        if (this.selectedPrice === 'high') return price > 100;
+        return true;
+      });
+    }
+
+    return resultado;
   }
 }

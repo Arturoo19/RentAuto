@@ -42,6 +42,17 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label>Categoría</label>
+      <select [(ngModel)]="car.category" name="category">
+        <option value="">Sin categoría</option>
+        <option value="deportivo">Deportivo</option>
+        <option value="suv">SUV</option>
+        <option value="electricos">Eléctricos</option>
+        <option value="lujo">De Lujo</option>
+      </select>
+    </div>
+
     <div class="form-actions">
       <button type="button" routerLink="/cars" class="btn-cancel">Cancelar</button>
       <button type="submit" class="btn-save" [disabled]="loading">

@@ -1,32 +1,44 @@
 <nav class="navbar">
   <div class="logo" routerLink="/home">
-    <img src="/logo.png" />
+    <img src="/logo.png" alt="RentAuto logo" />
   </div>
 
-  <div class="menu">
-    <a routerLink="/home">Home</a>
-    <a routerLink="/cars">Coches</a>
-    <a routerLink="/reservations">Mis reservas</a>
-  </div>
+  <button
+    class="mobile-menu-btn"
+    type="button"
+    (click)="toggleMobileMenu()"
+    [attr.aria-expanded]="mobileMenuOpen"
+    aria-label="Toggle navigation menu"
+  >
+    <span class="material-icons">{{ mobileMenuOpen ? 'close' : 'menu' }}</span>
+  </button>
 
-  <div class="auth">
-    <ng-container *ngIf="user; else login">
-      <a routerLink="/dashboard" class="user-name-link">{{ user.name }}</a>
-      <a routerLink="/dashboard" class="login-link">
-        <span class="material-icons">person</span>
-        Mi cuenta
-      </a>
-      <button class="logout-btn" (click)="logout()">
-        <span class="material-icons">logout</span>
-        Salir
-      </button>
-    </ng-container>
+  <div class="nav-content" [class.open]="mobileMenuOpen">
+    <div class="menu">
+      <a routerLink="/home" (click)="closeMobileMenu()">Home</a>
+      <a routerLink="/cars" (click)="closeMobileMenu()">Coches</a>
+      <a routerLink="/reservations" (click)="closeMobileMenu()">Mis reservas</a>
+    </div>
 
-    <ng-template #login>
-      <a routerLink="/login" class="login-link">
-        <span class="material-icons">person</span>
-        Iniciar sesión
-      </a>
-    </ng-template>
+    <div class="auth">
+      <ng-container *ngIf="user; else login">
+        <a routerLink="/dashboard" class="user-name-link" (click)="closeMobileMenu()">{{ user.name }}</a>
+        <a routerLink="/dashboard" class="login-link" (click)="closeMobileMenu()">
+          <span class="material-icons">person</span>
+          Mi cuenta
+        </a>
+        <button class="logout-btn" (click)="logout()">
+          <span class="material-icons">logout</span>
+          Salir
+        </button>
+      </ng-container>
+
+      <ng-template #login>
+        <a routerLink="/login" class="login-link" (click)="closeMobileMenu()">
+          <span class="material-icons">person</span>
+          Iniciar sesión
+        </a>
+      </ng-template>
+    </div>
   </div>
 </nav>

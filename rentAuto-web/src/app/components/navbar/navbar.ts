@@ -13,6 +13,7 @@ import { filter } from 'rxjs';
 })
 export class Navbar implements OnInit {
   user: any = null;
+  mobileMenuOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -26,11 +27,21 @@ export class Navbar implements OnInit {
     // тобто після логіну коли Angular переходить на іншу сторінку
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       this.user = this.authService.getCurrentUser();
+      this.mobileMenuOpen = false;
     });
+  }
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen = false;
   }
 
   logout() {
     this.user = null;
+    this.mobileMenuOpen = false;
     this.authService.logout();
   }
 }

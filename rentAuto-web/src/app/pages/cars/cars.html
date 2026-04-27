@@ -1,19 +1,119 @@
 <div class="cars-page">
   <div class="cars-header">
     <h1>Nuestros coches</h1>
-    <button *ngIf="esAdmin" routerLink="/admin/cars/new" class="btn-add">+ Añadir coche</button>
+
+    <div class="header-controls">
+      <div class="filters-panel">
+        <div class="filter-wrapper" [class.is-active]="selectedCategory && selectedCategory !== 'todos'">
+          <span class="filter-icon">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="7" y1="12" x2="17" y2="12" />
+              <line x1="10" y1="18" x2="14" y2="18" />
+            </svg>
+          </span>
+          <select name="cars" id="cars" [value]="selectedCategory || 'todos'" (change)="onCategoryChange($event)">
+            <option value="todos">Categoría: Todas</option>
+            <option value="deportivo">Deportivo</option>
+            <option value="suv">SUVs</option>
+            <option value="electricos">Eléctricos</option>
+            <option value="lujo">De Lujo</option>
+          </select>
+          <span class="select-arrow">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        </div>
+
+        <div class="filter-wrapper" [class.is-active]="selectedPrice && selectedPrice !== 'todos'">
+          <span class="filter-icon">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+          </span>
+          <select name="price" id="price" [value]="selectedPrice" (change)="onPriceChange($event)">
+            <option value="todos">Precio: Todos</option>
+            <option value="low">Hasta 60€ / día</option>
+            <option value="mid">60€ – 100€ / día</option>
+            <option value="high">Más de 100€ / día</option>
+          </select>
+          <span class="select-arrow">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        </div>
+
+        <button
+          class="btn-reset-filters"
+          type="button"
+          (click)="resetFilters()"
+          [disabled]="selectedCategory === 'todos' && selectedPrice === 'todos'"
+          aria-label="Limpiar filtros"
+        >
+          Limpiar
+        </button>
+      </div>
+
+      <button *ngIf="esAdmin" routerLink="/admin/cars/new" class="btn-add">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Añadir coche
+      </button>
+    </div>
   </div>
 
   <div *ngIf="loading" class="loading">Cargando...</div>
 
   <div class="cars-grid" *ngIf="!loading">
-    <div class="car-card" *ngFor="let car of cars">
+    <div class="car-card" *ngFor="let car of cochesFiltrados">
       <img [src]="car.imageUrl || '/car-placeholder.png'" [alt]="car.brand + ' ' + car.model" />
       <div class="car-info">
         <h3>{{ car.brand }} {{ car.model }}</h3>
         <p class="year">{{ car.year }}</p>
         <p class="price">{{ car.pricePerDay }}€ / día</p>
-        <p class="status" [ngClass]="getStatusClass(car.status)">{{ getStatusLabel(car.status) }}</p>
+        <p class="status" [ngClass]="getStatusClass(car.status)">
+          {{ getStatusLabel(car.status) }}
+        </p>
       </div>
       <div class="car-actions">
         <button

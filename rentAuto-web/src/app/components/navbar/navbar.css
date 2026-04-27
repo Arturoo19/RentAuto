@@ -2,13 +2,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 90px;
+  min-height: 90px;
   padding: 0 80px;
   background: linear-gradient(90deg, #1a1a1a, #000000);
+  position: relative;
+  gap: 24px;
 }
 
 .logo {
-  flex: 1; 
+  flex: 1;
   height: 90px;
   display: flex;
   align-items: center;
@@ -16,25 +18,45 @@
   cursor: pointer;
 }
 
-.menu {
-  flex: 1; 
+.nav-content {
+  flex: 2;
   display: flex;
-  justify-content: center; 
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.menu {
+  flex: 1;
+  display: flex;
+  justify-content: center;
   gap: 40px;
 }
 
 .auth {
-  flex: 1; 
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   gap: 12px;
 }
 
 .logo img {
-  height: 150px;
+  height: 130px;
 }
 
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: white;
+  background: transparent;
+  cursor: pointer;
+}
 
 .menu a {
   position: relative;
@@ -132,4 +154,103 @@
 .logout-btn:hover {
   border-color: #d6001c;
   color: #d6001c;
+}
+
+@media (max-width: 1100px) {
+  .navbar {
+    padding: 0 24px;
+  }
+
+  .menu {
+    gap: 24px;
+  }
+
+  .logo img {
+    height: 115px;
+  }
+}
+
+@media (max-width: 860px) {
+  .navbar {
+    min-height: 76px;
+    padding: 10px 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    height: 56px;
+    flex: 1 1 auto;
+  }
+
+  .logo img {
+    height: 92px;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .nav-content {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: #0f0f0f;
+  }
+
+  .nav-content.open {
+    display: flex;
+  }
+
+  .menu {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .menu a {
+    display: block;
+    padding: 10px 8px;
+    border-radius: 8px;
+  }
+
+  .menu a:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .menu a::after {
+    display: none;
+  }
+
+  .auth {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .user-name-link,
+  .login-link,
+  .logout-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 40px;
+  }
+
+  .user-name-link {
+    max-width: none;
+    text-align: center;
+  }
+
+  .login-link::after {
+    display: none;
+  }
 }

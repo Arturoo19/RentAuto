@@ -26,6 +26,7 @@ export class AdminCarsForm implements OnInit {
     imageUrl: '',
     description: '',
     status: 'Disponible',
+    category: '',
   };
 
   constructor(

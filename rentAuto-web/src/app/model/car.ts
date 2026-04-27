@@ -5,4 +5,5 @@ export interface Car {
   pricePerDay: number;
   status: 'Disponible' | 'En Mantenimiento' | 'available' | 'availible' | 'rented';
   imageUrl: string;
+  category?: string
 }

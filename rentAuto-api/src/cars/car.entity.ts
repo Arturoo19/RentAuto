@@ -1,5 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+export enum CarCategory {
+  DEPORTIVO = 'deportivo',
+  SUV = 'suv',
+  ELECTRICOS = 'electricos',
+  LUJO = 'lujo',
+}
+
 @Entity('cars')
 export class Car {
   @PrimaryGeneratedColumn()
@@ -25,4 +32,11 @@ export class Car {
 
   @Column({ nullable: true })
   description: string;
+
+  @Column({
+    type: 'enum',
+    enum: CarCategory,
+    nullable: true,
+  })
+  category: CarCategory;
 }

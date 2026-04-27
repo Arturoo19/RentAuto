@@ -4,6 +4,8 @@ import { Car } from './car.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Role } from '../auth/roles.decorator';
+import { CarDto } from './car.dto'; 
+import { CarCategory } from './car.entity';   
 
 @Controller('cars')
 export class CarsController {
@@ -33,7 +35,7 @@ export class CarsController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Role('admin')
-  create(@Body() dto: Partial<Car>) {
+  create(@Body() dto: CarDto) {
     return this.carsService.create(dto);
   }
 
@@ -41,7 +43,7 @@ export class CarsController {
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Role('admin')
-  update(@Param('id') id: string, @Body() dto: Partial<Car>) {
+  update(@Param('id') id: string, @Body() dto: Partial<CarDto>) {
     return this.carsService.update(+id, dto);
   }
 
