@@ -14,7 +14,7 @@ import { InfoPage } from './pages/info-page/info-page';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
-  { path: 'reservar/:id', component: ReservationForm },
+  { path: 'reservar/:id', component: ReservationForm, canActivate: [Guard] },
   { path: 'home', component: Home },
   { path: 'cars', component: Cars, canActivate: [Guard] },
   { path: 'register', component: Register },

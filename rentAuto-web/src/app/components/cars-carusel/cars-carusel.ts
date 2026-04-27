@@ -15,7 +15,7 @@ export class CarsCarusel implements OnInit {
 
   cars = [
     {
-      id: 1,
+      id: 2,
       name: 'BMW Serie 3',
       category: 'Premium',
       seats: 5,
@@ -25,7 +25,7 @@ export class CarsCarusel implements OnInit {
       image: '/fotosCoches/bmw3.jpg',
     },
     {
-      id: 2,
+      id: 3,
       name: 'Audi A4',
       category: 'Premium',
       seats: 5,
@@ -35,13 +35,13 @@ export class CarsCarusel implements OnInit {
       image: '/fotosCoches/audiA4.jpg',
     },
     {
-      id: 6,
+      id: 1,
       name: 'Volkswagen Golf',
       category: 'Compacto',
       seats: 5,
       transmission: 'Manual',
       ac: 'Aire acond.',
-      price: 87,
+      price: 59,
       image: '/fotosCoches/golf.jpg',
     },
     {
@@ -65,7 +65,7 @@ export class CarsCarusel implements OnInit {
       image: '/fotosCoches/Mustang.jpg',
     },
     {
-      id: 3,
+      id: 6,
       name: 'Mercedes Clase C',
       category: 'Lujo',
       seats: 5,

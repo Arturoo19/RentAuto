@@ -3,12 +3,21 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 type InfoContent = {
+  pageType: string;
   title: string;
+  subtitle: string;
   intro: string;
+  lastUpdated: string;
+  legalNotice: string;
+  quickFacts: string[];
   sections: {
     heading: string;
     paragraphs: string[];
     bullets: string[];
+  }[];
+  faqs: {
+    question: string;
+    answer: string;
   }[];
   supportCard: {
     title: string;
@@ -27,154 +36,238 @@ type InfoContent = {
 export class InfoPage {
   private readonly pages: Record<string, InfoContent> = {
     privacy: {
+      pageType: 'privacy',
       title: 'Política de privacidad',
+      subtitle: 'Transparencia y protección de datos',
       intro:
-        'Protegemos tu información personal en todo momento y aplicamos medidas técnicas y organizativas para un uso seguro y transparente.',
+        'Tratamos tus datos con criterios de minimización, seguridad y control por parte del usuario para que puedas reservar con confianza.',
+      lastUpdated: 'Última actualización: 27/04/2026',
+      legalNotice: 'Aplicable a todos los usuarios que utilicen la plataforma web y móvil de RentAuto.',
+      quickFacts: [
+        'No vendemos información personal.',
+        'Solo compartimos datos con proveedores necesarios para prestar el servicio.',
+        'Puedes solicitar acceso, rectificación o eliminación cuando quieras.',
+      ],
       sections: [
         {
-          heading: 'Qué datos recopilamos',
+          heading: 'Datos que recopilamos',
           paragraphs: [
-            'Recopilamos datos de identificación, contacto y reserva para procesar tu alquiler y ofrecer soporte.',
-            'En determinados casos también almacenamos información de pago mediante proveedores certificados.',
+            'Recopilamos únicamente la información necesaria para gestionar reservas, soporte y cumplimiento normativo.',
+            'Los datos de pago se procesan con pasarelas certificadas y no se almacenan íntegramente en nuestra plataforma.',
           ],
           bullets: [
-            'Nombre completo, email y teléfono.',
-            'Datos de reserva y preferencias de vehículo.',
-            'Información de facturación vinculada al servicio.',
+            'Identificación y contacto: nombre, email y teléfono.',
+            'Operativa de reserva: fechas, oficina, categoría de vehículo y extras.',
+            'Facturación y trazabilidad de transacciones.',
           ],
         },
         {
-          heading: 'Cómo usamos tus datos',
+          heading: 'Finalidades del tratamiento',
           paragraphs: [
-            'Utilizamos la información para confirmar reservas, gestionar cambios y prevenir fraudes.',
-            'No vendemos datos personales y solo compartimos con terceros cuando es imprescindible para el servicio.',
+            'Usamos tus datos para ejecutar la reserva, mantener la seguridad de la cuenta y responder incidencias.',
+            'Solo tratamos la información con base legal válida: ejecución de contrato, consentimiento o interés legítimo.',
           ],
           bullets: [
-            'Gestión y confirmación de reservas.',
-            'Mejora de experiencia y soporte post-venta.',
-            'Cumplimiento legal y fiscal.',
+            'Gestión de reservas, cambios y cancelaciones.',
+            'Prevención de fraude y protección de la plataforma.',
+            'Obligaciones legales, fiscales y de auditoría.',
           ],
         },
       ],
+      faqs: [
+        {
+          question: '¿Cuánto tiempo se conservan mis datos?',
+          answer:
+            'Conservamos la información durante el tiempo estrictamente necesario para la finalidad del servicio y los plazos legales aplicables.',
+        },
+        {
+          question: '¿Cómo puedo ejercer mis derechos de privacidad?',
+          answer:
+            'Puedes contactarnos desde la página de contacto para solicitar acceso, rectificación, limitación u oposición al tratamiento.',
+        },
+      ],
       supportCard: {
-        title: '¿Quieres ejercer tus derechos?',
+        title: 'Gestiona tus derechos de privacidad',
         description:
-          'Puedes solicitar acceso, rectificación o eliminación de datos desde nuestro canal de soporte.',
-        primaryActionLabel: 'Ir a contacto',
+          'Nuestro equipo de soporte te ayuda a gestionar cualquier solicitud relacionada con protección de datos.',
+        primaryActionLabel: 'Solicitar asistencia',
         primaryActionLink: '/contact',
       },
     },
     terms: {
+      pageType: 'terms',
       title: 'Términos y condiciones',
+      subtitle: 'Condiciones de uso del servicio',
       intro:
-        'Estas condiciones regulan el uso del servicio de alquiler y detallan responsabilidades, cobertura y política de uso.',
+        'Estas condiciones definen derechos y responsabilidades al reservar, conducir y devolver un vehículo RentAuto.',
+      lastUpdated: 'Última actualización: 27/04/2026',
+      legalNotice: 'La aceptación de estos términos es necesaria para formalizar cualquier reserva.',
+      quickFacts: [
+        'Reserva sujeta a disponibilidad en tiempo real.',
+        'Requisitos de edad y licencia según categoría de vehículo.',
+        'Cancelaciones y cambios bajo política vigente al momento de la contratación.',
+      ],
       sections: [
         {
-          heading: 'Condiciones de reserva',
+          heading: 'Reservas y modificaciones',
           paragraphs: [
-            'La reserva se confirma tras completar el pago y recibir el correo de confirmación.',
-            'Puedes modificar fechas según disponibilidad y posibles diferencias de tarifa.',
+            'La reserva queda confirmada al completar el proceso de pago y recibir confirmación por correo electrónico.',
+            'Las modificaciones se tramitan según disponibilidad de flota y condiciones tarifarias vigentes.',
           ],
           bullets: [
-            'Confirmación inmediata por email.',
-            'Cambios sujetos a disponibilidad.',
-            'Cancelación según política vigente.',
+            'Confirmación digital inmediata con detalles de la reserva.',
+            'Cambios sujetos a diferencias de precio o categoría.',
+            'Cancelaciones con política variable según tarifa.',
           ],
         },
         {
-          heading: 'Requisitos del conductor',
+          heading: 'Requisitos para el conductor',
           paragraphs: [
-            'El conductor principal debe cumplir la edad mínima y presentar licencia vigente.',
-            'En algunas categorías premium pueden aplicarse requisitos adicionales.',
+            'El conductor principal debe acreditar identidad y licencia válidas al recoger el vehículo.',
+            'En categorías premium pueden aplicarse requisitos adicionales de edad, experiencia y fianza.',
           ],
           bullets: [
-            'Edad mínima general de 21 años.',
+            'Edad mínima general: 21 años (puede variar por categoría).',
             'Licencia con al menos 1 año de antigüedad.',
-            'Documento de identidad válido en el momento de recogida.',
+            'Documento identificativo vigente en el momento de recogida.',
           ],
         },
       ],
+      faqs: [
+        {
+          question: '¿Puedo añadir un segundo conductor?',
+          answer:
+            'Sí, en la mayoría de reservas es posible añadir conductores adicionales con coste y requisitos específicos.',
+        },
+        {
+          question: '¿Qué pasa si devuelvo el coche tarde?',
+          answer:
+            'Puede aplicarse un recargo por demora según el tiempo excedido y la política de la tarifa contratada.',
+        },
+      ],
       supportCard: {
-        title: '¿Tienes dudas antes de reservar?',
+        title: 'Aclara condiciones antes de reservar',
         description:
-          'Nuestro equipo puede ayudarte a validar requisitos para evitar incidencias al recoger el coche.',
-        primaryActionLabel: 'Hablar con soporte',
+          'Te ayudamos a validar requisitos, coberturas y documentación para evitar incidencias en mostrador.',
+        primaryActionLabel: 'Hablar con un agente',
         primaryActionLink: '/contact',
       },
     },
     cookies: {
+      pageType: 'cookies',
       title: 'Política de cookies',
+      subtitle: 'Controla tu experiencia y preferencias',
       intro:
-        'Las cookies nos ayudan a que el sitio funcione correctamente, recuerde tus preferencias y mejore el rendimiento general.',
+        'Las cookies permiten que la web funcione correctamente, recuerde tus preferencias y mejore el rendimiento del servicio.',
+      lastUpdated: 'Última actualización: 27/04/2026',
+      legalNotice: 'Puedes revisar y modificar tus preferencias en cualquier momento desde el navegador.',
+      quickFacts: [
+        'Las cookies técnicas son necesarias para operar la web.',
+        'Las analíticas ayudan a mejorar rendimiento y experiencia.',
+        'Puedes bloquear o eliminar cookies en cualquier momento.',
+      ],
       sections: [
         {
-          heading: 'Tipos de cookies',
+          heading: 'Categorías de cookies',
           paragraphs: [
-            'Utilizamos cookies técnicas necesarias para navegación, autenticación y seguridad.',
-            'También usamos cookies analíticas para medir rendimiento y mejorar funcionalidades.',
+            'Utilizamos cookies técnicas para autenticación, seguridad y funcionalidades básicas de navegación.',
+            'También empleamos cookies de analítica para entender el uso de la plataforma y optimizarla.',
           ],
           bullets: [
-            'Técnicas: necesarias para operar la web.',
-            'Analíticas: medición de uso y rendimiento.',
-            'Preferencias: recordar idioma y ajustes.',
+            'Técnicas: necesarias para acceso y sesión.',
+            'Analíticas: evaluación de uso y rendimiento.',
+            'Preferencias: idioma, filtros y ajustes personalizados.',
           ],
         },
         {
-          heading: 'Control de preferencias',
+          heading: 'Gestión y desactivación',
           paragraphs: [
-            'Puedes eliminar o bloquear cookies desde la configuración del navegador.',
-            'Al desactivar ciertas cookies, algunas funciones podrían verse limitadas.',
+            'Puedes aceptar, bloquear o eliminar cookies desde la configuración de tu navegador.',
+            'Si desactivas ciertas categorías, algunas funciones de personalización pueden limitarse.',
           ],
           bullets: [
-            'Gestiona permisos desde tu navegador.',
-            'Borra historial y datos de navegación cuando quieras.',
-            'Vuelve a aceptar cookies para recuperar experiencia completa.',
+            'Configura permisos en navegador o dispositivo.',
+            'Elimina datos almacenados cuando lo necesites.',
+            'Reactiva cookies para restaurar experiencia completa.',
           ],
         },
       ],
+      faqs: [
+        {
+          question: '¿Desactivar cookies afecta a la reserva?',
+          answer:
+            'Las cookies técnicas son necesarias para procesos clave; si se bloquean, algunas funciones de reserva pueden fallar.',
+        },
+        {
+          question: '¿Cómo vuelvo a activar cookies?',
+          answer:
+            'Puedes restablecer permisos en tu navegador y volver a cargar la página para aplicar los cambios.',
+        },
+      ],
       supportCard: {
-        title: '¿Necesitas ayuda con la configuración?',
+        title: 'Configura cookies según tu preferencia',
         description:
-          'Te guiamos para ajustar cookies y privacidad según tu navegador o dispositivo.',
-        primaryActionLabel: 'Contactar soporte',
+          'Si necesitas ayuda técnica para gestionar cookies, nuestro equipo puede guiarte paso a paso.',
+        primaryActionLabel: 'Pedir ayuda técnica',
         primaryActionLink: '/contact',
       },
     },
     contact: {
+      pageType: 'contact',
       title: 'Contacto',
+      subtitle: 'Atención rápida y soporte experto',
       intro:
-        'Estamos aquí para ayudarte antes, durante y después de tu reserva. Elige el canal más cómodo para ti.',
+        'Nuestro equipo está disponible para ayudarte antes, durante y después de tu alquiler por el canal que prefieras.',
+      lastUpdated: 'Última actualización: 27/04/2026',
+      legalNotice: 'El horario puede variar en días festivos según la oficina o canal de atención.',
+      quickFacts: [
+        'Respuesta rápida en horario laboral.',
+        'Soporte para reservas, cambios, facturación e incidencias.',
+        'Atención prioritaria para incidencias en carretera.',
+      ],
       sections: [
         {
-          heading: 'Canales disponibles',
+          heading: 'Canales de atención',
           paragraphs: [
-            'Respondemos consultas sobre reservas, cambios de fecha, documentación y facturación.',
-            'Nuestro tiempo de respuesta promedio por email es menor a 2 horas en horario laboral.',
+            'Atendemos consultas de reservas, documentación, facturación, cambios y reclamaciones.',
+            'El tiempo medio de respuesta por email es inferior a 2 horas en horario operativo.',
           ],
           bullets: [
-            'Email: soporte@rentacar.com',
+            'Email: soporte@rentauto.com',
             'Atención diaria: 09:00 - 21:00',
-            'Chat en vivo para consultas rápidas',
+            'Chat online para consultas rápidas',
           ],
         },
         {
-          heading: 'Antes de escribirnos',
+          heading: 'Qué incluir en tu solicitud',
           paragraphs: [
-            'Para ayudarte más rápido, incluye número de reserva, fecha y descripción del problema.',
-            'Si es una incidencia en carretera, indica tu ubicación y teléfono de contacto.',
+            'Para agilizar la resolución, incluye datos de reserva, fecha del incidente y una breve descripción.',
+            'En incidencias en carretera, añade ubicación exacta y teléfono de contacto activo.',
           ],
           bullets: [
             'Número de reserva o matrícula.',
             'Fecha y oficina de recogida/devolución.',
-            'Captura o detalle del error recibido.',
+            'Captura de pantalla o detalle del error.',
           ],
         },
       ],
+      faqs: [
+        {
+          question: '¿Tenéis teléfono de emergencias?',
+          answer:
+            'Sí, tras confirmar tu reserva encontrarás el número de asistencia en la documentación enviada por correo.',
+        },
+        {
+          question: '¿Puedo gestionar cambios desde contacto?',
+          answer:
+            'Sí, puedes solicitar cambios de fecha, oficina o categoría y te confirmaremos opciones disponibles.',
+        },
+      ],
       supportCard: {
-        title: '¿Quieres resolverlo ya?',
+        title: 'Empieza tu gestión ahora',
         description:
-          'Puedes volver al inicio para iniciar una nueva reserva o revisar coches disponibles.',
-        primaryActionLabel: 'Ver coches',
+          'Si ya sabes qué necesitas, puedes ir directamente al catálogo o crear una nueva reserva.',
+        primaryActionLabel: 'Explorar coches',
         primaryActionLink: '/cars',
       },
     },

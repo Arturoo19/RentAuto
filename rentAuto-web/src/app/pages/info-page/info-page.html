@@ -1,28 +1,60 @@
 <section class="info-page" *ngIf="content; else noContent">
   <div class="info-page__container">
-    <h1>{{ content.title }}</h1>
-    <p class="info-page__intro">{{ content.intro }}</p>
-
-    <div class="info-page__sections">
-      <article class="info-section" *ngFor="let section of content.sections">
-        <h2>{{ section.heading }}</h2>
-        <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
-        <ul>
-          <li *ngFor="let bullet of section.bullets">{{ bullet }}</li>
-        </ul>
-      </article>
-    </div>
-
-    <section class="info-page__support">
-      <h3>{{ content.supportCard.title }}</h3>
-      <p>{{ content.supportCard.description }}</p>
-      <div class="info-page__actions">
-        <a class="info-page__btn info-page__btn--primary" [routerLink]="content.supportCard.primaryActionLink">
-          {{ content.supportCard.primaryActionLabel }}
-        </a>
-        <a class="info-page__btn" routerLink="/home">Volver al inicio</a>
+    <header class="info-page__hero">
+      <div class="info-page__hero-meta">
+        <span class="info-page__badge">{{ content.lastUpdated }}</span>
+        <span class="info-page__badge info-page__badge--outline">{{ content.legalNotice }}</span>
       </div>
+      <h1>{{ content.title }}</h1>
+      <h2 class="info-page__subtitle">{{ content.subtitle }}</h2>
+      <p class="info-page__intro">{{ content.intro }}</p>
+    </header>
+
+    <nav class="info-page__tabs" aria-label="Navegación de información legal">
+      <a class="info-page__tab" routerLink="/privacy" routerLinkActive="info-page__tab--active">Privacidad</a>
+      <a class="info-page__tab" routerLink="/terms" routerLinkActive="info-page__tab--active">Términos</a>
+      <a class="info-page__tab" routerLink="/cookies" routerLinkActive="info-page__tab--active">Cookies</a>
+      <a class="info-page__tab" routerLink="/contact" routerLinkActive="info-page__tab--active">Contacto</a>
+    </nav>
+
+    <section class="info-page__quick-facts" aria-label="Resumen rápido">
+      <article class="info-page__fact" *ngFor="let fact of content.quickFacts">
+        <p>{{ fact }}</p>
+      </article>
     </section>
+
+    <div class="info-page__grid">
+      <div class="info-page__sections">
+        <article class="info-section" *ngFor="let section of content.sections">
+          <h3>{{ section.heading }}</h3>
+          <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
+          <ul>
+            <li *ngFor="let bullet of section.bullets">{{ bullet }}</li>
+          </ul>
+        </article>
+      </div>
+
+      <aside class="info-page__aside">
+        <section class="info-page__support">
+          <h3>{{ content.supportCard.title }}</h3>
+          <p>{{ content.supportCard.description }}</p>
+          <div class="info-page__actions">
+            <a class="info-page__btn info-page__btn--primary" [routerLink]="content.supportCard.primaryActionLink">
+              {{ content.supportCard.primaryActionLabel }}
+            </a>
+            <a class="info-page__btn" routerLink="/home">Volver al inicio</a>
+          </div>
+        </section>
+
+        <section class="info-page__faq" *ngIf="content.faqs.length">
+          <h3>Preguntas frecuentes</h3>
+          <details *ngFor="let item of content.faqs">
+            <summary>{{ item.question }}</summary>
+            <p>{{ item.answer }}</p>
+          </details>
+        </section>
+      </aside>
+    </div>
   </div>
 </section>
 
@@ -31,7 +63,7 @@
     <div class="info-page__container">
       <h1>Página no disponible</h1>
       <p>Este contenido no está disponible ahora mismo.</p>
-      <a class="info-page__back" routerLink="/home">Ir al inicio</a>
+      <a class="info-page__btn info-page__btn--primary" routerLink="/home">Ir al inicio</a>
     </div>
   </section>
 </ng-template>
