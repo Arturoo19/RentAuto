@@ -26,7 +26,7 @@
 }
 
 .carousel-track-container {
-  width: 960px;
+  width: min(960px, 100%);
   overflow: hidden;
 }
 
@@ -39,10 +39,11 @@
 /* CARD */
 .car-card {
   min-width: 300px;
+  width: 300px;
   background: #1a1a1a;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   transition: transform 0.3s, border-color 0.3s;
 }
 
@@ -103,8 +104,8 @@
 
 .car-specs span {
   font-size: 12px;
-  color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.05);
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
   padding: 4px 10px;
   border-radius: 20px;
 }
@@ -129,7 +130,7 @@
 
 .per-day {
   font-size: 13px;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .reserve-btn {
@@ -154,7 +155,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   background: transparent;
   color: white;
   font-size: 18px;
@@ -183,7 +184,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -192,4 +193,110 @@
   background: #d6001c;
   width: 24px;
   border-radius: 4px;
+}
+
+@media (max-width: 1100px) {
+  .carousel-section {
+    padding: 64px 0;
+  }
+
+  .carousel-title {
+    font-size: 32px;
+    margin-bottom: 36px;
+  }
+
+  .carousel-wrapper {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 860px) {
+  .carousel-section {
+    padding: 48px 0;
+  }
+
+  .carousel-title {
+    font-size: 28px;
+    margin-bottom: 26px;
+    padding: 0 14px;
+  }
+
+  .carousel-wrapper {
+    gap: 10px;
+    padding: 0 12px;
+  }
+
+  .carousel-track-container {
+    width: 100%;
+  }
+
+  .car-card {
+    min-width: calc(100vw - 80px);
+    width: calc(100vw - 80px);
+  }
+
+  .car-image {
+    height: 170px;
+  }
+
+  .car-info {
+    padding: 16px;
+  }
+
+  .car-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .reserve-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .carousel-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .carousel-dots {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 540px) {
+  .carousel-section {
+    padding: 40px 0;
+  }
+
+  .carousel-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .carousel-wrapper {
+    padding: 0 10px;
+  }
+
+  .car-card {
+    min-width: calc(100vw - 40px);
+    width: calc(100vw - 40px);
+  }
+
+  .car-image {
+    height: 160px;
+  }
+
+  .car-info h3 {
+    font-size: 17px;
+    margin-bottom: 10px;
+  }
+
+  .price {
+    font-size: 24px;
+  }
+
+  .carousel-btn {
+    display: none;
+  }
 }

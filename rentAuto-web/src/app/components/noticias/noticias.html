@@ -4,7 +4,7 @@
   <div class="news-grid">
     <div class="news-card" *ngFor="let item of news; let i = index" [class.reverse]="i % 2 !== 0">
       <div class="news-image">
-        <img [src]="item.image" [alt]="item.title" />
+        <img [src]="item.image" [alt]="item.title" loading="lazy" decoding="async" />
       </div>
       <div class="news-content">
         <span class="news-tag">{{ item.tag }}</span>

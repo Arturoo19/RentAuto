@@ -14,6 +14,8 @@
         <img
           [src]="rental.car?.imageUrl || '/car-placeholder.png'"
           [alt]="rental.car?.brand + ' ' + rental.car?.model"
+          loading="lazy"
+          decoding="async"
         />
       </div>
 

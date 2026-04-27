@@ -21,7 +21,7 @@
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
 }
 
 /* ── ЛІВА КОЛОНКА ── */
@@ -56,7 +56,7 @@
   position: absolute;
   bottom: 12px;
   left: 12px;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   color: #fff;
   padding: 6px 12px;
@@ -64,7 +64,7 @@
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .car-info h3 {
@@ -304,13 +304,13 @@
   letter-spacing: 0.2px;
   cursor: pointer;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(214,0,28,0.3);
+  box-shadow: 0 4px 20px rgba(214, 0, 28, 0.3);
 }
 
 .btn-pay:hover:not(:disabled) {
   background: #b0001a;
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(214,0,28,0.4);
+  box-shadow: 0 8px 30px rgba(214, 0, 28, 0.4);
 }
 
 .btn-pay:disabled {
@@ -362,17 +362,126 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .reservation-container {
+    padding: 22px 14px;
+    align-items: flex-start;
+  }
+
+  .reservation-layout {
+    border-radius: 16px;
+  }
+
+  .left-panel,
+  .right-panel {
+    padding: 24px 18px;
+    gap: 18px;
+  }
+
+  .car-info h3 {
+    font-size: 26px;
+  }
+
+  .right-panel h2 {
+    font-size: 24px;
+  }
+}
+
 @media (max-width: 768px) {
+  .reservation-container {
+    min-height: auto;
+    padding: 16px 10px 22px;
+  }
+
   .reservation-layout {
     grid-template-columns: 1fr;
+    border-radius: 14px;
   }
 
   .left-panel {
     border-right: none;
     border-bottom: 1px solid #222;
+    gap: 16px;
+  }
+
+  .right-panel {
+    gap: 16px;
+  }
+
+  .car-image-wrap img {
+    height: 180px;
+  }
+
+  .car-info h3 {
+    font-size: 24px;
   }
 
   .date-fields {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .total-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 14px;
+  }
+
+  .total-box .amount {
+    font-size: 24px;
+  }
+
+  .btn-pay,
+  .btn-continue {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .btn-back {
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 540px) {
+  .left-panel,
+  .right-panel {
+    padding: 14px 12px;
+    gap: 14px;
+  }
+
+  .car-image-wrap img {
+    height: 160px;
+  }
+
+  .car-info h3 {
+    font-size: 20px;
+    line-height: 1.1;
+  }
+
+  .car-price {
+    font-size: 17px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  .date-field input[type='date'],
+  .form-group input {
+    font-size: 16px;
+    padding: 10px 11px;
+  }
+
+  .placeholder-msg {
+    font-size: 13px;
+    padding: 18px 8px;
   }
 }

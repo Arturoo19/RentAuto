@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './cars-carusel.html',
   styleUrl: './cars-carusel.css',
 })
-export class CarsCarusel {
+export class CarsCarusel implements OnInit {
   currentIndex = 0;
   cardWidth = 320;
 
@@ -84,6 +84,15 @@ export class CarsCarusel {
     return this.cars.length - 3;
   }
 
+  ngOnInit() {
+    this.updateCardWidth();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.updateCardWidth();
+  }
+
   next() {
     if (this.currentIndex < this.maxIndex) this.currentIndex++;
   }
@@ -94,5 +103,21 @@ export class CarsCarusel {
 
   goTo(i: number) {
     this.currentIndex = i;
+  }
+
+  private updateCardWidth() {
+    const viewportWidth = window.innerWidth;
+
+    if (viewportWidth <= 540) {
+      this.cardWidth = viewportWidth - 40;
+      return;
+    }
+
+    if (viewportWidth <= 860) {
+      this.cardWidth = viewportWidth - 80;
+      return;
+    }
+
+    this.cardWidth = 320;
   }
 }

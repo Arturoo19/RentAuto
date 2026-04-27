@@ -34,7 +34,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .db-top {
@@ -260,39 +262,6 @@
   border-color: #666;
 }
 
-@media (max-width: 768px) {
-  .db-top {
-    grid-template-columns: 1fr;
-  }
-
-  .db-top-right {
-    height: 160px;
-  }
-
-  .db-top-left {
-    padding: 32px 24px;
-  }
-
-  .db-body {
-    padding: 0 24px 40px;
-  }
-
-  .db-error-banner {
-    margin: 14px 24px 0;
-  }
-
-  .db-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .db-greeting {
-    font-size: 38px;
-  }
-
-  .db-actions {
-    flex-wrap: wrap;
-  }
-}
 .db-charts-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -370,4 +339,139 @@
 }
 .db-stat-val.green {
   color: #66bb6a;
+}
+
+@media (max-width: 1024px) {
+  .db-top-left {
+    padding: 32px 24px;
+  }
+
+  .db-greeting {
+    font-size: 46px;
+  }
+
+  .db-body {
+    padding: 0 24px 40px;
+  }
+
+  .db-error-banner {
+    margin: 14px 24px 0;
+  }
+
+  .db-stat {
+    padding: 22px 16px;
+  }
+
+  .db-stat-val {
+    font-size: 36px;
+  }
+
+  .db-chart-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrap {
+    min-height: calc(100vh - 76px);
+  }
+
+  .db-top {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .db-top-right {
+    height: 160px;
+  }
+
+  .db-greeting {
+    font-size: 38px;
+    letter-spacing: 2px;
+  }
+
+  .db-section-label {
+    margin: 24px 0 12px;
+  }
+
+  .db-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .db-charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .db-top-cars {
+    margin-bottom: 24px;
+  }
+
+  .db-status-row {
+    grid-template-columns: 1fr;
+  }
+
+  .db-actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 540px) {
+  .db-top-left {
+    padding: 20px 12px;
+    gap: 14px;
+  }
+
+  .db-greeting {
+    font-size: 30px;
+    letter-spacing: 1.5px;
+  }
+
+  .db-tag {
+    font-size: 9px;
+    padding: 4px 10px;
+  }
+
+  .db-body {
+    padding: 0 12px 22px;
+  }
+
+  .db-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .db-stat,
+  .db-pill {
+    padding: 14px 12px;
+  }
+
+  .db-stat-val {
+    font-size: 32px;
+  }
+
+  .db-top-car {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .db-top-num {
+    width: 18px;
+    font-size: 24px;
+  }
+
+  .db-top-car-name {
+    font-size: 13px;
+  }
+
+  .db-top-car-stats {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .db-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 12px;
+    font-size: 10px;
+  }
 }

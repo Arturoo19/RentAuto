@@ -11,7 +11,7 @@
       >
         <div class="car-card" *ngFor="let car of cars">
           <div class="car-image">
-            <img [src]="car.image" [alt]="car.name" />
+            <img [src]="car.image" [alt]="car.name" loading="lazy" decoding="async" />
             <span class="car-badge">{{ car.category }}</span>
           </div>
           <div class="car-info">
