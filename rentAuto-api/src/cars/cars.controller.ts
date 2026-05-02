@@ -1,11 +1,9 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Query } from '@nestjs/common';
 import { CarsService } from './cars.service';
-import { Car } from './car.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Role } from '../auth/roles.decorator';
-import { CarDto } from './car.dto'; 
-import { CarCategory } from './car.entity';   
+import { CarDto } from './car.dto';
 
 @Controller('cars')
 export class CarsController {

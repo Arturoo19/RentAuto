@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -16,4 +16,7 @@ export class User {
 
   @Column({ default: 'client' })
   role: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }
