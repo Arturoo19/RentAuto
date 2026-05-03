@@ -14,4 +14,19 @@ export class AdminController {
   getStats(@Query('period') period: 'day' | 'week' = 'day') {
     return this.adminService.getStats(period);
   }
+
+  @Get('rentals/active')
+  getActiveRentals() {
+    return this.adminService.getActiveRentals();
+  }
+
+  @Get('rentals/expiring')
+  getExpiringRentals() {
+    return this.adminService.getExpiringRentals();
+  }
+
+  @Get('profitable')
+  getMostProfitable() {
+    return this.adminService.getMostProfitable();
+  }
 }
