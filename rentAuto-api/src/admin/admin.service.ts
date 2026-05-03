@@ -107,10 +107,9 @@ export class AdminService {
   }
 
   async getMostProfitable() {
-    // Найприбутковіша машина
     const cars = await this.rentalsRepo
       .createQueryBuilder('rental')
-      .leftJoinAndSelect('rental.car', 'car')
+      .leftJoin('rental.car', 'car')
       .where('rental.status != :cancelled', { cancelled: 'cancelled' })
       .select('car.id', 'carId')
       .addSelect('car.brand', 'brand')
@@ -120,7 +119,7 @@ export class AdminService {
       .groupBy('car.id')
       .addGroupBy('car.brand')
       .addGroupBy('car.model')
-      .orderBy('totalRevenue', 'DESC')
+      .orderBy('"totalRevenue"', 'DESC')
       .limit(3)
       .getRawMany();
 
