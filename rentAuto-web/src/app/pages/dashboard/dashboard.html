@@ -94,8 +94,9 @@
       <div class="db-top-cars">
         <div class="db-top-car" *ngFor="let car of topCarsList; let i = index">
           <span class="db-top-num">{{ i + 1 }}</span>
+          <img class="db-top-car-image" [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" />
           <div class="db-top-car-info">
-            <span class="db-top-car-name">{{ car.name }}</span>
+            <span class="db-top-car-name">{{ car.brand }} {{ car.model }}</span>
             <span class="db-top-car-stats"
               >{{ car.count }} alquileres · {{ car.revenue | number: '1.0-0' }}€</span
             >
@@ -220,6 +221,26 @@
           <div class="db-stat-lbl">Total gastado</div>
         </div>
       </div>
+
+      <p class="db-section-label">Tu coche favorito</p>
+      <div class="db-favorite-car" *ngIf="favoriteCar; else noFavoriteCar">
+        <img
+          class="db-favorite-car-image"
+          [src]="favoriteCar.imageUrl"
+          [alt]="favoriteCar.brand + ' ' + favoriteCar.model"
+        />
+        <div class="db-favorite-car-content">
+          <span class="db-favorite-car-title">{{ favoriteCar.brand }} {{ favoriteCar.model }}</span>
+          <span class="db-favorite-car-subtitle"
+            >Tu opción más reservada ({{ favoriteCar.count }} reservas)</span
+          >
+        </div>
+      </div>
+      <ng-template #noFavoriteCar>
+        <div class="db-favorite-car db-favorite-car-empty">
+          Aún no tienes reservas para identificar tu coche favorito.
+        </div>
+      </ng-template>
 
       <div class="db-actions">
         <a routerLink="/cars" class="db-btn primary">Nueva reserva</a>

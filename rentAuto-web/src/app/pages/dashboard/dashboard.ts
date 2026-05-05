@@ -46,7 +46,20 @@ export class Dashboard implements OnInit {
   loadError = '';
 
   // топ машини
-  topCarsList: any[] = [];
+  topCarsList: Array<{
+    id: string;
+    brand: string;
+    model: string;
+    imageUrl: string;
+    count: number;
+    revenue: number;
+  }> = [];
+  favoriteCar: {
+    brand: string;
+    model: string;
+    imageUrl: string;
+    count: number;
+  } | null = null;
 
   // графік місячний
   revenueChartSeries: any[] = [];
@@ -308,13 +321,25 @@ export class Dashboard implements OnInit {
   }
 
   private prepareTopCars(rentals: any[]) {
-    const carMap: Record<string, { name: string; count: number; revenue: number }> = {};
+    const carMap: Record<
+      string,
+      { id: string; brand: string; model: string; imageUrl: string; count: number; revenue: number }
+    > = {};
 
     rentals.forEach((r) => {
       if (!r.car) return;
       const key = String(r.car.id);
       if (!carMap[key])
-        carMap[key] = { name: `${r.car.brand} ${r.car.model}`, count: 0, revenue: 0 };
+        carMap[key] = {
+          id: key,
+          brand: r.car.brand ?? 'Car',
+          model: r.car.model ?? '',
+          imageUrl:
+            r.car.imageUrl ??
+            'https://images.unsplash.com/photo-1493238792000-8113da705763?w=800&q=80',
+          count: 0,
+          revenue: 0,
+        };
       carMap[key].count++;
       carMap[key].revenue += Number(r.totalPrice) || 0;
     });
@@ -342,6 +367,7 @@ export class Dashboard implements OnInit {
           (r) => this.reservas.normalizeStatus(r?.status) === 'completed',
         ).length;
         this.mySpent = rentals.reduce((sum, r) => sum + (Number(r?.totalPrice) || 0), 0);
+        this.favoriteCar = this.getFavoriteCar(rentals);
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -366,5 +392,39 @@ export class Dashboard implements OnInit {
     const diffMs = end.getTime() - start.getTime();
     if (diffMs < 0) return null;
     return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  }
+
+  private getFavoriteCar(rentals: any[]) {
+    const carMap: Record<
+      string,
+      { brand: string; model: string; imageUrl: string; count: number; revenue: number }
+    > = {};
+
+    rentals.forEach((r) => {
+      if (!r?.car?.id) return;
+      const key = String(r.car.id);
+      if (!carMap[key]) {
+        carMap[key] = {
+          brand: r.car.brand ?? 'Car',
+          model: r.car.model ?? '',
+          imageUrl:
+            r.car.imageUrl ??
+            'https://images.unsplash.com/photo-1493238792000-8113da705763?w=800&q=80',
+          count: 0,
+          revenue: 0,
+        };
+      }
+      carMap[key].count += 1;
+      carMap[key].revenue += Number(r?.totalPrice) || 0;
+    });
+
+    const sorted = Object.values(carMap).sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return b.revenue - a.revenue;
+    });
+
+    if (sorted.length === 0) return null;
+    const { brand, model, imageUrl, count } = sorted[0];
+    return { brand, model, imageUrl, count };
   }
 }
