@@ -35,6 +35,29 @@ export class AdminService {
 
     const revenue = rentals.reduce((sum, r) => sum + Number(r.totalPrice), 0);
 
+    //порівняння з вчора
+    let revenueChange = 0;
+    if (period === 'day') {
+      const yesterdayStart = new Date();
+      yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+      yesterdayStart.setHours(0, 0, 0, 0);
+      const yesterdayEnd = new Date();
+      yesterdayEnd.setHours(0, 0, 0, 0);
+
+      const yesterdayRentals = await this.rentalsRepo
+        .createQueryBuilder('rental')
+        .where('rental.createdAt >= :from', { from: yesterdayStart })
+        .andWhere('rental.createdAt < :to', { to: yesterdayEnd })
+        .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
+        .getMany();
+
+      const yesterdayRevenue = yesterdayRentals.reduce((sum, r) => sum + Number(r.totalPrice), 0);
+      revenueChange =
+        yesterdayRevenue === 0
+          ? 0
+          : Math.round(((revenue - yesterdayRevenue) / yesterdayRevenue) * 100);
+    }
+
     // Нові юзери
     const newUsers = await this.usersRepo
       .createQueryBuilder('user')
@@ -51,15 +74,37 @@ export class AdminService {
     const activeRentals = await this.rentalsRepo.count({
       where: { status: 'active' },
     });
+    // Машини без бронювань сьогодні
+    const carsWithBookings = await this.rentalsRepo
+      .createQueryBuilder('rental')
+      .select('rental.carId')
+      .where('rental.createdAt >= :from', { from })
+      .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
+      .distinct(true)
+      .getRawMany();
+
+    const bookedIds = carsWithBookings.map((r) => r.rental_carId);
+    const carsWithoutBookings =
+      bookedIds.length === 0
+        ? totalCars
+        : await this.carsRepo
+            .createQueryBuilder('car')
+            .where('car.id NOT IN (:...ids)', { ids: bookedIds })
+            .getCount();
+
+    const failedPayments = await this.rentalsRepo.count({ where: { status: 'payment_failed' } });
 
     return {
       period,
       from,
       revenue: Number(revenue.toFixed(2)),
+      revenueChange,
       newUsers,
       totalCars,
       activeCars,
       activeRentals,
+      failedPayments,
+      carsWithoutBookings,
     };
   }
 
