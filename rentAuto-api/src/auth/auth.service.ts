@@ -13,6 +13,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  private buildAuthResponse(user: User) {
+    const token = this.jwtService.sign({ id: user.id, role: user.role });
+    return {
+      token,
+      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+    };
+  }
+
   async register(name: string, email: string, password: string) {
     // Перевіряємо чи email вже існує
     const existing = await this.usersRepo.findOneBy({ email });
@@ -23,7 +31,7 @@ export class AuthService {
     const user = this.usersRepo.create({ name, email, passwordHash });
     await this.usersRepo.save(user);
 
-    return { message: 'Registrado correctamente' };
+    return this.buildAuthResponse(user);
   }
 
   async login(email: string, password: string) {
@@ -37,10 +45,6 @@ export class AuthService {
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) throw new UnauthorizedException('No coincide email o contraseña');
 
-    const token = this.jwtService.sign({ id: user.id, role: user.role });
-    return {
-      token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
-    };
+    return this.buildAuthResponse(user);
   }
 }
