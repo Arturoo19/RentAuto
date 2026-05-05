@@ -48,106 +48,162 @@
 .cars-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 22px;
+  gap: 24px;
 }
 
 .car-card {
-  border-radius: 14px;
+  border-radius: 18px;
   overflow: hidden;
-  border: 1px solid #eceff4;
-  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+  border: 1px solid #e9edf3;
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.07);
   transition: transform 0.2s, box-shadow 0.2s;
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .car-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 30px rgba(17, 24, 39, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 36px rgba(17, 24, 39, 0.12);
+}
+
+.car-media {
+  position: relative;
 }
 
 .car-card img {
   width: 100%;
-  height: 180px;
+  height: 196px;
   object-fit: cover;
+  display: block;
+}
+
+.car-media::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 56px;
+  background: linear-gradient(to top, rgba(17, 24, 39, 0.45), rgba(17, 24, 39, 0));
+}
+
+.status-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 5px 10px;
+  margin: 0;
+  border: 1px solid transparent;
+  backdrop-filter: blur(4px);
+}
+
+.status-badge.available {
+  color: #14532d;
+  background: rgba(220, 252, 231, 0.95);
+  border-color: #86efac;
+}
+
+.status-badge.maintenance {
+  color: #92400e;
+  background: rgba(254, 243, 199, 0.95);
+  border-color: #fcd34d;
 }
 
 .car-info {
-  padding: 14px 14px 12px;
+  padding: 16px 16px 12px;
   display: grid;
-  gap: 6px;
+  gap: 10px;
+}
+
+.car-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .car-info h3 {
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.2;
   margin: 0;
   color: #111827;
 }
 
-.car-info .year {
-  color: #6b7280;
-  font-size: 14px;
+.year-chip {
   margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  background: #eef2f8;
+  border: 1px solid #dce3ee;
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.car-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.car-type {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 .car-info .price {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin: 0;
+}
+
+.car-info .price span {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 800;
   color: #d6001c;
-  margin: 2px 0 0;
-}
-
-.car-info .status {
-  width: fit-content;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  border-radius: 999px;
-  padding: 4px 10px;
-  margin-top: 2px;
-  border: 1px solid transparent;
-}
-
-.car-info .status.available {
-  color: #1b7a35;
-  background: #ebf8ef;
-  border-color: #ccefd6;
-}
-
-.car-info .status.maintenance {
-  color: #b45309;
-  background: #fff5e8;
-  border-color: #ffe2b8;
 }
 
 .car-actions {
   margin-top: auto;
-  padding: 12px 14px 14px;
+  padding: 12px 16px 16px;
   border-top: 1px solid #edf0f4;
   display: grid;
   gap: 10px;
 }
 
 .btn-rent {
-  background: #d6001c;
+  background: linear-gradient(135deg, #e0001d 0%, #be0018 100%);
   color: white;
   border: none;
   width: 100%;
-  min-height: 38px;
+  min-height: 40px;
   padding: 8px 14px;
-  border-radius: 9px;
+  border-radius: 11px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  box-shadow: 0 8px 18px rgba(214, 0, 28, 0.2);
 }
 
 .btn-rent:hover:not(:disabled) {
-  background: #b0001a;
+  filter: brightness(0.96);
   transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(214, 0, 28, 0.28);
 }
 
 .btn-rent:disabled {
@@ -166,7 +222,7 @@
 .btn-delete {
   width: 100%;
   min-height: 36px;
-  border-radius: 9px;
+  border-radius: 10px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -219,13 +275,13 @@
 }
 
 .service-note {
-  color: #b45309;
-  font-size: 13px;
+  color: #92400e;
+  font-size: 12px;
   font-weight: 700;
-  background: #fff5e8;
-  border: 1px solid #ffe2b8;
-  padding: 8px 10px;
-  border-radius: 9px;
+  background: #fef7e8;
+  border: 1px solid #fcd99a;
+  padding: 9px 10px;
+  border-radius: 10px;
   text-align: center;
 }
 

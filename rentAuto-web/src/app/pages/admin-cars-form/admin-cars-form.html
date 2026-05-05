@@ -1,25 +1,28 @@
 <div class="admin-form-page">
-  <h1>{{ isEdit ? 'Editar coche' : 'Añadir coche' }}</h1>
+  <div class="admin-form-header">
+    <h1>{{ isEdit ? 'Editar coche' : 'Añadir coche' }}</h1>
+    <p>{{ isEdit ? 'Actualiza los datos del vehículo' : 'Completa los detalles para publicar un nuevo coche' }}</p>
+  </div>
 
   <div *ngIf="!dataLoaded" class="loading-spinner">Cargando...</div>
 
   <form *ngIf="dataLoaded" class="car-form" (ngSubmit)="save()">
-    <div class="form-group">
+    <div class="form-group half">
       <label>Marca</label>
       <input [(ngModel)]="car.brand" name="brand" required placeholder="Toyota" />
     </div>
 
-    <div class="form-group">
+    <div class="form-group half">
       <label>Modelo</label>
       <input [(ngModel)]="car.model" name="model" required placeholder="Corolla" />
     </div>
 
-    <div class="form-group">
+    <div class="form-group half">
       <label>Año</label>
       <input [(ngModel)]="car.year" name="year" type="number" required />
     </div>
 
-    <div class="form-group">
+    <div class="form-group half">
       <label>Precio por día (€)</label>
       <input [(ngModel)]="car.pricePerDay" name="pricePerDay" type="number" required />
     </div>
@@ -34,7 +37,7 @@
       <textarea [(ngModel)]="car.description" name="description" rows="3"></textarea>
     </div>
 
-    <div class="form-group">
+    <div class="form-group half">
       <label>Estado</label>
       <select [(ngModel)]="car.status" name="status">
         <option value="Disponible">Disponible</option>
@@ -42,7 +45,7 @@
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group half">
       <label>Categoría</label>
       <select [(ngModel)]="car.category" name="category">
         <option value="">Sin categoría</option>

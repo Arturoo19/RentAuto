@@ -4,7 +4,10 @@
 
     <div class="header-controls">
       <div class="filters-panel">
-        <div class="filter-wrapper" [class.is-active]="selectedCategory && selectedCategory !== 'todos'">
+        <div
+          class="filter-wrapper"
+          [class.is-active]="selectedCategory && selectedCategory !== 'todos'"
+        >
           <span class="filter-icon">
             <svg
               width="15"
@@ -19,7 +22,12 @@
               <line x1="10" y1="18" x2="14" y2="18" />
             </svg>
           </span>
-          <select name="cars" id="cars" [value]="selectedCategory || 'todos'" (change)="onCategoryChange($event)">
+          <select
+            name="cars"
+            id="cars"
+            [value]="selectedCategory || 'todos'"
+            (change)="onCategoryChange($event)"
+          >
             <option value="todos">Categoría: Todas</option>
             <option value="deportivo">Deportivo</option>
             <option value="suv">SUVs</option>
@@ -106,15 +114,25 @@
 
   <div class="cars-grid" *ngIf="!loading">
     <div class="car-card" *ngFor="let car of cochesFiltrados">
-      <img [src]="car.imageUrl || '/car-placeholder.png'" [alt]="car.brand + ' ' + car.model" />
-      <div class="car-info">
-        <h3>{{ car.brand }} {{ car.model }}</h3>
-        <p class="year">{{ car.year }}</p>
-        <p class="price">{{ car.pricePerDay }}€ / día</p>
-        <p class="status" [ngClass]="getStatusClass(car.status)">
+      <div class="car-media">
+        <img [src]="car.imageUrl || '/car-placeholder.png'" [alt]="car.brand + ' ' + car.model" />
+        <p class="status-badge" [ngClass]="getStatusClass(car.status)">
           {{ getStatusLabel(car.status) }}
         </p>
       </div>
+
+      <div class="car-info">
+        <div class="car-title-row">
+          <h3>{{ car.brand }} {{ car.model }}</h3>
+          <p class="year-chip">{{ car.year }}</p>
+        </div>
+
+        <div class="car-meta">
+          <p class="car-type">{{ car.category || 'Vehículo premium' }}</p>
+          <p class="price"><span>{{ car.pricePerDay }}€</span> / día</p>
+        </div>
+      </div>
+
       <div class="car-actions">
         <button
           class="btn-rent"
