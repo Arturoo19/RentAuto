@@ -94,6 +94,78 @@ export class AdminService {
 
     const failedPayments = await this.rentalsRepo.count({ where: { status: 'payment_failed' } });
 
+    let weeklyExtras: any = {};
+
+    if (period === 'week') {
+      // % vs минулий тиждень
+      const prevWeekStart = new Date();
+      prevWeekStart.setDate(prevWeekStart.getDate() - 14);
+      const prevWeekEnd = new Date();
+      prevWeekEnd.setDate(prevWeekEnd.getDate() - 7);
+
+      const prevWeekRentals = await this.rentalsRepo
+        .createQueryBuilder('rental')
+        .where('rental.createdAt >= :from', { from: prevWeekStart })
+        .andWhere('rental.createdAt < :to', { to: prevWeekEnd })
+        .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
+        .getMany();
+
+      const prevWeekRevenue = prevWeekRentals.reduce((sum, r) => sum + Number(r.totalPrice), 0);
+      revenueChange =
+        prevWeekRevenue === 0
+          ? 0
+          : Math.round(((revenue - prevWeekRevenue) / prevWeekRevenue) * 100);
+
+      // Топ 3 машини за тиждень
+      const topCars = await this.rentalsRepo
+        .createQueryBuilder('rental')
+        .leftJoin('rental.car', 'car')
+        .where('rental.createdAt >= :from', { from })
+        .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
+        .select('car.brand', 'brand')
+        .addSelect('car.model', 'model')
+        .addSelect('SUM(rental.totalPrice)', 'totalRevenue')
+        .groupBy('car.id')
+        .addGroupBy('car.brand')
+        .addGroupBy('car.model')
+        .orderBy('"totalRevenue"', 'DESC')
+        .limit(3)
+        .getRawMany();
+
+      // Кращий день
+      const allWeekRentals = await this.rentalsRepo
+        .createQueryBuilder('rental')
+        .where('rental.createdAt >= :from', { from })
+        .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
+        .getMany();
+
+      const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const byDay: Record<number, number> = {};
+      for (const r of allWeekRentals) {
+        const day = new Date(r.createdAt).getDay();
+        byDay[day] = (byDay[day] || 0) + Number(r.totalPrice);
+      }
+      const bestDayNum = Object.entries(byDay).sort((a, b) => b[1] - a[1])[0];
+      const bestDay = bestDayNum
+        ? `${dayNames[Number(bestDayNum[0])]} — ${Number(bestDayNum[1]).toFixed(2)} €`
+        : 'N/A';
+
+      // Скасування
+      const cancellations = await this.rentalsRepo
+        .createQueryBuilder('rental')
+        .where('rental.createdAt >= :from', { from })
+        .andWhere('rental.status = :cancelled', { cancelled: 'cancelled' })
+        .getCount();
+
+      // Нові бронювання
+      const newReservations = await this.rentalsRepo
+        .createQueryBuilder('rental')
+        .where('rental.createdAt >= :from', { from })
+        .getCount();
+
+      weeklyExtras = { topCars, bestDay, cancellations, newReservations };
+    }
+
     return {
       period,
       from,
@@ -105,6 +177,7 @@ export class AdminService {
       activeRentals,
       failedPayments,
       carsWithoutBookings,
+      weeklyExtras,
     };
   }
 
