@@ -11,6 +11,17 @@ export class CarsService {
   private readonly legacyCategoryMap: Record<string, CarCategory> = {
     familiar: CarCategory.ELECTRICOS,
   };
+  private readonly editableFields: (keyof Car)[] = [
+    'brand',
+    'model',
+    'year',
+    'pricePerDay',
+    'status',
+    'imageUrl',
+    'description',
+    'category',
+    'city',
+  ];
 
   constructor(
     @InjectRepository(Car)
@@ -36,16 +47,27 @@ export class CarsService {
   }
 
   create(dto: Partial<Car>) {
-    const normalizedDto = this.normalizeCategory(dto);
+    const normalizedDto = this.normalizeCategory(this.pickEditableFields(dto));
     const car = this.carsRepo.create(normalizedDto);
     return this.carsRepo.save(car);
   }
 
   async update(id: number, dto: Partial<Car>) {
     await this.findOne(id);
-    const normalizedDto = this.normalizeCategory(dto);
+    const normalizedDto = this.normalizeCategory(this.pickEditableFields(dto));
     await this.carsRepo.update(id, normalizedDto);
     return this.findOne(id);
+  }
+
+  private pickEditableFields(dto: Partial<Car>): Partial<Car> {
+    const safeDto: Partial<Car> = {};
+    for (const field of this.editableFields) {
+      const value = dto[field];
+      if (value !== undefined) {
+        safeDto[field] = value;
+      }
+    }
+    return safeDto;
   }
 
   private normalizeCategory(dto: Partial<Car>): Partial<Car> {

@@ -62,11 +62,22 @@ export class AdminCarsForm implements OnInit {
 
   save() {
     this.loading = true;
+    const payload = {
+      brand: this.car.brand,
+      model: this.car.model,
+      year: this.car.year,
+      pricePerDay: this.car.pricePerDay,
+      imageUrl: this.car.imageUrl,
+      description: this.car.description,
+      status: this.car.status,
+      category: this.car.category,
+      city: this.car.city,
+    };
 
     const request$ =
       this.isEdit && this.carId
-        ? this.carsService.updateCar(this.carId, this.car)
-        : this.carsService.createCar(this.car);
+        ? this.carsService.updateCar(this.carId, payload)
+        : this.carsService.createCar(payload);
 
     request$.pipe(finalize(() => (this.loading = false))).subscribe({
       next: () => this.router.navigate(['/cars']),
