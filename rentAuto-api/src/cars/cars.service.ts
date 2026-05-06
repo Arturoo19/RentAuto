@@ -19,9 +19,12 @@ export class CarsService {
     private rentalsRepo: Repository<Rental>,
   ) {}
 
-  findAll(category?:CarCategory) {
-    if(category){
-      return this.carsRepo.find({where: {category}})
+  findAll(city?: string) {
+    if (city) {
+      return this.carsRepo
+        .createQueryBuilder('car')
+        .where('LOWER(car.city) = LOWER(:city)', { city })
+        .getMany();
     }
     return this.carsRepo.find();
   }
@@ -66,7 +69,7 @@ export class CarsService {
     await this.carsRepo.delete(id);
     return { message: 'Coche eliminado' };
   }
-  async findAvailable(startDate: string, endDate: string) {
+  async findAvailable(startDate: string, endDate: string, city?: string) {
     const rentedCars = await this.rentalsRepo
       .createQueryBuilder('rental')
       .select('rental.carId', 'carId')
@@ -88,6 +91,10 @@ export class CarsService {
       .where('car.status IN (:...availableStatuses)', {
         availableStatuses: this.availableStatuses,
       });
+
+    if (city) {
+      qb.andWhere('LOWER(car.city) = LOWER(:city)', { city });
+    }
 
     if (rentedCarIds.length > 0) {
       qb.andWhere('car.id NOT IN (:...ids)', { ids: rentedCarIds });

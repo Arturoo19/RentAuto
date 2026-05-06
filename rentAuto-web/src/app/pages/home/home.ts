@@ -17,19 +17,30 @@ export class Home {
   promoCode = '';
   startDate = '';
   endDate = '';
+  city = '';
 
   constructor(private router: Router) {}
 
   buscar() {
+    const normalizedCity = this.city.trim();
+    if (!normalizedCity) {
+      return;
+    }
+
     if (this.startDate && this.endDate) {
       this.router.navigate(['/cars'], {
         queryParams: {
           startDate: this.startDate,
           endDate: this.endDate,
+          city: normalizedCity,
         },
       });
     } else {
-      this.router.navigate(['/cars']);
+      this.router.navigate(['/cars'], {
+        queryParams: {
+          city: normalizedCity,
+        },
+      });
     }
   }
 }

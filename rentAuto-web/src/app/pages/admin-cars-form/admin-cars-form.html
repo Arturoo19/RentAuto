@@ -56,6 +56,11 @@
       </select>
     </div>
 
+    <div class="form-group half">
+      <label>Ciudad</label>
+      <input [(ngModel)]="car.city" name="city" required placeholder="Madrid" />
+    </div>
+
     <div class="form-actions">
       <button type="button" routerLink="/cars" class="btn-cancel">Cancelar</button>
       <button type="submit" class="btn-save" [disabled]="loading">

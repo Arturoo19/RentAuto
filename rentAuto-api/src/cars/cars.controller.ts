@@ -11,16 +11,20 @@ export class CarsController {
 
   // GET /cars — доступно всім
   @Get()
-  findAll() {
-    return this.carsService.findAll();
+  findAll(@Query('city') city?: string) {
+    return this.carsService.findAll(city);
   }
 
   @Get('available')
-  findAvailable(@Query('startDate') startDate: string, @Query('endDate') endDate: string) {
+  findAvailable(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @Query('city') city?: string,
+  ) {
     if (startDate && endDate) {
-      return this.carsService.findAvailable(startDate, endDate);
+      return this.carsService.findAvailable(startDate, endDate, city);
     }
-    return this.carsService.findAll();
+    return this.carsService.findAll(city);
   }
 
   // GET /cars/:id — доступно всім

@@ -33,11 +33,17 @@ export class CarsService {
     return this.http.delete(`${this.apiUrl}/${id}`, this.getHeaders());
   }
 
-  getAvailableCars(startDate?: string, endDate?: string) {
+  getAvailableCars(startDate?: string, endDate?: string, city?: string) {
+    const params = new URLSearchParams();
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    if (city) params.append('city', city);
+
+    const query = params.toString();
     const url =
       startDate && endDate
-        ? `${this.apiUrl}/available?startDate=${startDate}&endDate=${endDate}`
-        : this.apiUrl;
+        ? `${this.apiUrl}/available${query ? `?${query}` : ''}`
+        : `${this.apiUrl}${query ? `?${query}` : ''}`;
     return this.http.get<any[]>(url, this.getHeaders());
   }
 }

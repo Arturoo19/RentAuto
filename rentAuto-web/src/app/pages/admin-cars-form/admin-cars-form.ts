@@ -27,6 +27,7 @@ export class AdminCarsForm implements OnInit {
     description: '',
     status: 'Disponible',
     category: '',
+    city: '',
   };
 
   constructor(

@@ -39,4 +39,7 @@ export class Car {
     nullable: true,
   })
   category: CarCategory;
+
+  @Column({ default: 'Sin ciudad' })
+  city: string;
 }

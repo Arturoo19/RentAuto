@@ -25,4 +25,7 @@ export class CarDto {
   @IsOptional()
   @IsEnum(CarCategory)
   category?: CarCategory;
+
+  @IsString()
+  city: string;
 }

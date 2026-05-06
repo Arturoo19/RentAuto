@@ -20,6 +20,7 @@ export class Cars implements OnInit, OnDestroy {
   loading = true;
   startDate = '';
   endDate = '';
+  city = '';
   private sub!: Subscription;
   selectedCategory = '';
   selectedPrice = 'todos';
@@ -40,8 +41,9 @@ export class Cars implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       this.startDate = params['startDate'] || '';
       this.endDate = params['endDate'] || '';
+      this.city = params['city'] || '';
 
-      if (this.startDate && this.endDate) {
+      if ((this.startDate && this.endDate) || this.city) {
         this.loadCars();
       } else {
         this.loadAllCars();
@@ -67,7 +69,7 @@ export class Cars implements OnInit, OnDestroy {
 
   loadCars() {
     this.loading = true;
-    this.carsService.getAvailableCars(this.startDate, this.endDate).subscribe({
+    this.carsService.getAvailableCars(this.startDate, this.endDate, this.city).subscribe({
       next: (data) => {
         this.cars = [...data];
         this.loading = false;
@@ -118,7 +120,7 @@ export class Cars implements OnInit, OnDestroy {
           timer: 1700,
           showConfirmButton: false,
         });
-        if (this.startDate && this.endDate) {
+        if ((this.startDate && this.endDate) || this.city) {
           this.loadCars();
           return;
         }
@@ -161,7 +163,7 @@ export class Cars implements OnInit, OnDestroy {
           timer: 1700,
           showConfirmButton: false,
         });
-        if (this.startDate && this.endDate) {
+        if ((this.startDate && this.endDate) || this.city) {
           this.loadCars();
           return;
         }

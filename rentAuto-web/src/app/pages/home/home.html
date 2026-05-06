@@ -9,7 +9,13 @@
     <!-- RIGHT -->
     <div class="search-box">
       <label>Recoger en</label>
-      <input type="text" placeholder="Ciudad o aeropuerto" />
+      <input
+        type="text"
+        placeholder="Ciudad o aeropuerto"
+        [(ngModel)]="city"
+        name="city"
+        required
+      />
 
       <div class="dates">
         <div>
@@ -36,7 +42,7 @@
         />
       </div>
 
-      <button class="search-btn" (click)="buscar()">Buscar</button>
+      <button class="search-btn" (click)="buscar()" [disabled]="!city.trim()">Buscar</button>
     </div>
   </div>
 </section>
