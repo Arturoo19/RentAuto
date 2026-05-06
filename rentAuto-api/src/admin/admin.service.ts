@@ -94,7 +94,12 @@ export class AdminService {
 
     const failedPayments = await this.rentalsRepo.count({ where: { status: 'payment_failed' } });
 
-    let weeklyExtras: any = {};
+    let weeklyExtras: {
+      topCars?: any[];
+      bestDay?: string;
+      cancellations?: number;
+      newReservations?: number;
+    } = {};
 
     if (period === 'week') {
       // % vs минулий тиждень
@@ -177,7 +182,7 @@ export class AdminService {
       activeRentals,
       failedPayments,
       carsWithoutBookings,
-      weeklyExtras,
+      ...weeklyExtras,
     };
   }
 
