@@ -92,7 +92,11 @@ export class AdminService {
             .where('car.id NOT IN (:...ids)', { ids: bookedIds })
             .getCount();
 
-    const failedPayments = await this.rentalsRepo.count({ where: { status: 'payment_failed' } });
+    const cancellations = await this.rentalsRepo
+      .createQueryBuilder('rental')
+      .where('rental.createdAt >= :from', { from })
+      .andWhere('rental.status = :cancelled', { cancelled: 'cancelled' })
+      .getCount();
 
     let weeklyExtras: {
       topCars?: any[];
@@ -180,7 +184,7 @@ export class AdminService {
       totalCars,
       activeCars,
       activeRentals,
-      failedPayments,
+      cancellations,
       carsWithoutBookings,
       ...weeklyExtras,
     };
