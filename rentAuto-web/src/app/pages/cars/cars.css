@@ -1,6 +1,7 @@
 .cars-page {
-  padding: 32px 48px;
+  padding: 32px max(48px, env(safe-area-inset-left, 0px)) 32px max(48px, env(safe-area-inset-right, 0px));
   min-height: 100vh;
+  min-height: 100dvh;
   background: #f7f8fb;
 }
 
@@ -153,6 +154,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .car-type {
@@ -293,7 +295,7 @@
 
 @media (max-width: 768px) {
   .cars-page {
-    padding: 20px 14px;
+    padding: 20px max(14px, env(safe-area-inset-left, 0px)) 24px max(14px, env(safe-area-inset-right, 0px));
   }
 
   .cars-header h1 {
@@ -465,5 +467,26 @@
   .btn-add {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .car-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .car-meta .price {
+    margin-top: 4px;
+  }
+
+  .car-title-row {
+    flex-wrap: wrap;
+  }
+
+  .btn-rent {
+    min-height: 48px;
+    font-size: 15px;
   }
 }

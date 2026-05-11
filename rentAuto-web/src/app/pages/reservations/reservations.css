@@ -1,6 +1,7 @@
 .reservations-page {
-  padding: 40px 80px;
+  padding: 40px max(80px, env(safe-area-inset-left, 0px)) 40px max(80px, env(safe-area-inset-right, 0px));
   min-height: 100vh;
+  min-height: 100dvh;
   background: #f5f5f5;
 }
 
@@ -176,7 +177,7 @@
 
 @media (max-width: 760px) {
   .reservations-page {
-    padding: 20px 12px 26px;
+    padding: 20px max(12px, env(safe-area-inset-left, 0px)) 26px max(12px, env(safe-area-inset-right, 0px));
   }
 
   .reservations-page h1 {

@@ -6,11 +6,12 @@
 
 .reservation-container {
   min-height: calc(100vh - 90px);
+  min-height: calc(100dvh - 90px);
   background: #0a0a0a;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 24px;
+  padding: 40px max(24px, env(safe-area-inset-left, 0px)) 40px max(24px, env(safe-area-inset-right, 0px));
   font-family: 'Inter', sans-serif;
 }
 
@@ -390,7 +391,8 @@
 @media (max-width: 768px) {
   .reservation-container {
     min-height: auto;
-    padding: 16px 10px 22px;
+    padding: 16px max(10px, env(safe-area-inset-left, 0px)) max(22px, env(safe-area-inset-bottom, 0px))
+      max(10px, env(safe-area-inset-right, 0px));
   }
 
   .reservation-layout {

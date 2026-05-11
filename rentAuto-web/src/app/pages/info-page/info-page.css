@@ -1,5 +1,5 @@
 .info-page {
-  padding: 36px 20px 72px;
+  padding: 36px max(20px, env(safe-area-inset-left, 0px)) 72px max(20px, env(safe-area-inset-right, 0px));
   background:
     radial-gradient(circle at top left, rgba(214, 0, 28, 0.18), transparent 36%),
     radial-gradient(circle at bottom right, rgba(214, 0, 28, 0.13), transparent 42%),
@@ -266,5 +266,41 @@
 
   .info-page__quick-facts {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-page {
+    padding: 24px max(12px, env(safe-area-inset-left, 0px)) max(56px, env(safe-area-inset-bottom, 0px))
+      max(12px, env(safe-area-inset-right, 0px));
+  }
+
+  .info-page__container {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .info-page h1 {
+    font-size: 24px;
+  }
+
+  .info-page__tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .info-page__tab {
+    flex: 0 0 auto;
+    min-width: min(160px, 48vw);
+  }
+
+  .info-page__hero {
+    padding: 18px 14px;
   }
 }

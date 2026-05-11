@@ -3,9 +3,11 @@
   background-image: url('/excellentcars-barcelona-traslados-para-ejecutivos.jpg');
   background-size: cover;
   background-position: center;
-  padding: 36px 20px;
+  padding: 36px max(20px, env(safe-area-inset-left, 0px)) 36px max(20px, env(safe-area-inset-right, 0px));
   display: flex;
   align-items: center;
+  position: relative;
+  isolation: isolate;
 }
 
 .hero-container {
@@ -16,6 +18,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 40px;
+  position: relative;
+  z-index: 1;
 }
 
 /* LEFT */
@@ -151,9 +155,24 @@
 }
 
 @media (max-width: 860px) {
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      165deg,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.35) 42%,
+      rgba(0, 0, 0, 0.78) 100%
+    );
+  }
+
   .hero {
     min-height: auto;
-    padding: 24px 14px 32px;
+    padding: 28px max(14px, env(safe-area-inset-left, 0px)) max(32px, env(safe-area-inset-bottom, 0px))
+      max(14px, env(safe-area-inset-right, 0px));
   }
 
   .hero-container {
@@ -176,17 +195,32 @@
 
   .search-box {
     width: 100%;
-    padding: 18px 14px;
+    padding: 20px 16px;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .search-box input,
+  .search-btn {
+    min-height: 48px;
+    border-radius: 12px;
+  }
+
+  .search-box label {
+    font-size: 13px;
   }
 }
 
 @media (max-width: 540px) {
   .hero {
-    padding: 18px 10px 24px;
+    padding: 22px max(12px, env(safe-area-inset-left, 0px)) max(28px, env(safe-area-inset-bottom, 0px))
+      max(12px, env(safe-area-inset-right, 0px));
   }
 
   .hero-left h1 {
-    font-size: 30px;
+    font-size: clamp(26px, 7vw, 32px);
+    line-height: 1.12;
   }
 
   .dates {

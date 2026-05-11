@@ -1,6 +1,7 @@
 .admin-form-page {
-  padding: 42px 80px;
+  padding: 42px max(80px, env(safe-area-inset-left, 0px)) 42px max(80px, env(safe-area-inset-right, 0px));
   min-height: 100vh;
+  min-height: 100dvh;
   background: #f6f8fc;
   max-width: 840px;
   margin: 0 auto;
@@ -152,7 +153,7 @@
 
 @media (max-width: 760px) {
   .admin-form-page {
-    padding: 20px 12px 26px;
+    padding: 20px max(12px, env(safe-area-inset-left, 0px)) 26px max(12px, env(safe-area-inset-right, 0px));
   }
 
   .admin-form-page h1 {

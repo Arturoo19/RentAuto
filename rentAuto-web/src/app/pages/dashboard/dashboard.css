@@ -4,6 +4,7 @@
   font-family: 'DM Sans', sans-serif;
   background: #0a0a0a;
   min-height: calc(100vh - 90px);
+  min-height: calc(100dvh - 90px);
   color: #fff;
 }
 
@@ -15,7 +16,7 @@
 }
 
 .db-error-banner {
-  margin: 18px 56px 0;
+  margin: 18px max(56px, env(safe-area-inset-left, 0px)) 0 max(56px, env(safe-area-inset-right, 0px));
   padding: 12px 14px;
   border-radius: 6px;
   border: 1px solid rgba(214, 0, 28, 0.45);
@@ -46,7 +47,7 @@
 }
 
 .db-top-left {
-  padding: 40px 56px;
+  padding: 40px max(56px, env(safe-area-inset-left, 0px)) 40px max(56px, env(safe-area-inset-right, 0px));
   background: #0a0a0a;
   display: flex;
   flex-direction: column;
@@ -104,7 +105,7 @@
 }
 
 .db-body {
-  padding: 0 56px 56px;
+  padding: 0 max(56px, env(safe-area-inset-left, 0px)) 56px max(56px, env(safe-area-inset-right, 0px));
 }
 
 .db-section-label {
@@ -395,7 +396,7 @@
 
 @media (max-width: 1024px) {
   .db-top-left {
-    padding: 32px 24px;
+    padding: 32px max(24px, env(safe-area-inset-left, 0px)) 32px max(24px, env(safe-area-inset-right, 0px));
   }
 
   .db-greeting {
@@ -403,11 +404,11 @@
   }
 
   .db-body {
-    padding: 0 24px 40px;
+    padding: 0 max(24px, env(safe-area-inset-left, 0px)) 40px max(24px, env(safe-area-inset-right, 0px));
   }
 
   .db-error-banner {
-    margin: 14px 24px 0;
+    margin: 14px max(24px, env(safe-area-inset-left, 0px)) 0 max(24px, env(safe-area-inset-right, 0px));
   }
 
   .db-stat {
@@ -426,6 +427,7 @@
 @media (max-width: 768px) {
   .dashboard-wrap {
     min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
   }
 
   .db-top {
@@ -469,7 +471,7 @@
 
 @media (max-width: 540px) {
   .db-top-left {
-    padding: 20px 12px;
+    padding: 20px max(12px, env(safe-area-inset-left, 0px)) 20px max(12px, env(safe-area-inset-right, 0px));
     gap: 14px;
   }
 
@@ -484,7 +486,7 @@
   }
 
   .db-body {
-    padding: 0 12px 22px;
+    padding: 0 max(12px, env(safe-area-inset-left, 0px)) 22px max(12px, env(safe-area-inset-right, 0px));
   }
 
   .db-stats {

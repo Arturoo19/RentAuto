@@ -127,9 +127,10 @@
   }
 
   .faq-question {
-    padding: 14px;
+    padding: 16px 14px;
     font-size: 14px;
     gap: 12px;
+    min-height: 52px;
   }
 
   .faq-icon {
