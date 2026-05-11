@@ -64,7 +64,7 @@ export class CarsService {
     for (const field of this.editableFields) {
       const value = dto[field];
       if (value !== undefined) {
-        safeDto[field] = value;
+        (safeDto as any)[field] = value;
       }
     }
     return safeDto;
