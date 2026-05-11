@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum CarCategory {
   DEPORTIVO = 'deportivo',
+  COMPACTO = 'compacto',
   SUV = 'suv',
   ELECTRICOS = 'electricos',
   LUJO = 'lujo',
