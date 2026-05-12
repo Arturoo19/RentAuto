@@ -223,7 +223,7 @@
   }
 
   .carousel-wrapper {
-    gap: 10px;
+    gap: 0;
     padding: 0 12px;
   }
 
@@ -231,11 +231,16 @@
     width: 100%;
   }
 
+  /* Без стрілок — картка на всю ширину контенту (лише бокові відступи обгортки). */
+  .carousel-btn {
+    display: none;
+  }
+
   .car-card {
     min-width: calc(
-      100vw - 80px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)
+      100vw - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)
     );
-    width: calc(100vw - 80px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+    width: calc(100vw - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
   }
 
   .car-image {
@@ -255,11 +260,6 @@
   .reserve-btn {
     width: 100%;
     text-align: center;
-  }
-
-  .carousel-btn {
-    width: 38px;
-    height: 38px;
   }
 
   .carousel-dots {
@@ -283,9 +283,9 @@
 
   .car-card {
     min-width: calc(
-      100vw - 40px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)
+      100vw - 20px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)
     );
-    width: calc(100vw - 40px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+    width: calc(100vw - 20px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
   }
 
   .car-image {
@@ -299,16 +299,5 @@
 
   .price {
     font-size: 24px;
-  }
-
-  /* Стрілки лишаємо видимими на телефоні (раніше були сховані — без них був лише свайп/крапки). */
-  .carousel-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
-  }
-
-  .carousel-wrapper {
-    gap: 6px;
   }
 }

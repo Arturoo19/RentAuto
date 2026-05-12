@@ -233,10 +233,36 @@
 
   .checkbox {
     margin-top: 2px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .checkbox span {
+    font-size: 13px;
+    line-height: 1.25;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .checkbox input[type='checkbox'] {
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: #d6001c;
+    cursor: pointer;
   }
 
   .promo-input {
     margin-top: 6px;
+  }
+
+  .promo-input input {
+    min-height: 42px;
+    padding: 8px 10px;
+    font-size: 15px;
+    border-radius: 8px;
   }
 }
 
@@ -258,11 +284,31 @@
   }
 
   .checkbox {
-    align-items: flex-start;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
   }
 
   .checkbox span {
-    font-size: 14px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .checkbox input[type='checkbox'] {
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
+  }
+
+  .promo-input {
+    margin-top: 4px;
+  }
+
+  .promo-input input {
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 16px;
+    border-radius: 8px;
   }
 
   .search-box {

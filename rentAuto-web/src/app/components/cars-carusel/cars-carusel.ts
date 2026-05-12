@@ -152,12 +152,12 @@ export class CarsCarusel implements OnInit {
     const viewportWidth = window.innerWidth;
 
     if (viewportWidth <= 540) {
-      this.cardWidth = viewportWidth - 40;
+      this.cardWidth = viewportWidth - 20;
       return;
     }
 
     if (viewportWidth <= 860) {
-      this.cardWidth = viewportWidth - 80;
+      this.cardWidth = viewportWidth - 24;
       return;
     }
 
