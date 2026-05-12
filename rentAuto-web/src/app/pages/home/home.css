@@ -195,20 +195,48 @@
 
   .search-box {
     width: 100%;
-    padding: 20px 16px;
-    border-radius: 16px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    max-width: min(420px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 14px 12px;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.32);
     border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
-  .search-box input,
-  .search-btn {
-    min-height: 48px;
-    border-radius: 12px;
+  .search-box > label:first-of-type {
+    margin-top: 0;
   }
 
   .search-box label {
     font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .search-box input,
+  .search-btn {
+    min-height: 44px;
+    border-radius: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .dates {
+    margin-bottom: 12px;
+  }
+
+  .search-btn {
+    margin-top: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .checkbox {
+    margin-top: 2px;
+  }
+
+  .promo-input {
+    margin-top: 6px;
   }
 }
 
@@ -225,7 +253,8 @@
 
   .dates {
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
+    margin-bottom: 10px;
   }
 
   .checkbox {
@@ -234,5 +263,15 @@
 
   .checkbox span {
     font-size: 14px;
+  }
+
+  .search-box {
+    padding: 12px 10px;
+    max-width: min(380px, calc(100% - 8px));
+    border-radius: 12px;
+  }
+
+  .search-btn {
+    margin-top: 10px;
   }
 }

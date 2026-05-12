@@ -1,17 +1,26 @@
-<nav class="navbar">
-  <div class="logo" routerLink="/home">
-    <img src="/logo.png" alt="RentAuto logo" />
+<nav class="navbar" [class.menu-open]="mobileMenuOpen">
+  <div class="navbar-mobile-head">
+    <div class="logo" routerLink="/home">
+      <img src="/logo.png" alt="RentAuto logo" />
+    </div>
+
+    <button
+      class="mobile-menu-btn"
+      type="button"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="mobileMenuOpen"
+      aria-label="Toggle navigation menu"
+    >
+      <span class="material-icons">{{ mobileMenuOpen ? 'close' : 'menu' }}</span>
+    </button>
   </div>
 
-  <button
-    class="mobile-menu-btn"
-    type="button"
-    (click)="toggleMobileMenu()"
-    [attr.aria-expanded]="mobileMenuOpen"
-    aria-label="Toggle navigation menu"
-  >
-    <span class="material-icons">{{ mobileMenuOpen ? 'close' : 'menu' }}</span>
-  </button>
+  <div
+    class="mobile-menu-backdrop"
+    *ngIf="mobileMenuOpen"
+    (click)="closeMobileMenu()"
+    aria-hidden="true"
+  ></div>
 
   <div class="nav-content" [class.open]="mobileMenuOpen">
     <div class="menu">

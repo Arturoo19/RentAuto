@@ -4,10 +4,14 @@
   <div class="carousel-wrapper">
     <button class="carousel-btn prev" (click)="prev()">&#8592;</button>
 
-    <div class="carousel-track-container">
+    <div
+      class="carousel-track-container"
+      (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)"
+    >
       <div
         class="carousel-track"
-        [style.transform]="'translateX(-' + currentIndex * cardWidth + 'px)'"
+        [style.transform]="'translateX(-' + currentIndex * translateXStride + 'px)'"
       >
         <div class="car-card" *ngFor="let car of cars">
           <div class="car-image">

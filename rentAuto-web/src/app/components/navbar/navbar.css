@@ -51,6 +51,11 @@
   height: 130px;
 }
 
+/* На десктопі обгортка не змінює flex — діти йдуть у `.navbar` як раніше */
+.navbar-mobile-head {
+  display: contents;
+}
+
 .mobile-menu-btn {
   display: none;
   align-items: center;
@@ -162,6 +167,17 @@
   color: #d6001c;
 }
 
+.mobile-menu-backdrop {
+  display: none;
+}
+
+@media (min-width: 861px) {
+  .mobile-menu-backdrop {
+    display: none !important;
+    pointer-events: none;
+  }
+}
+
 @media (max-width: 1100px) {
   .navbar {
     padding: max(0px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) 0
@@ -179,25 +195,37 @@
 
 @media (max-width: 860px) {
   .navbar {
-    min-height: 76px;
-    padding: max(8px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px)) 10px
+    min-height: auto;
+    padding: max(8px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px)) 0
       max(14px, env(safe-area-inset-left, 0px));
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 0;
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+  }
+
+  .navbar-mobile-head {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding-bottom: 10px;
   }
 
   .logo {
-    height: 48px;
     flex: 1 1 auto;
+    height: auto;
+    min-height: 52px;
     min-width: 0;
     align-items: center;
   }
 
   .logo img {
-    height: 44px;
+    height: 52px;
     width: auto;
-    max-width: min(200px, 52vw);
+    max-width: min(240px, 62vw);
     object-fit: contain;
     object-position: left center;
   }
@@ -205,10 +233,35 @@
   .mobile-menu-btn {
     display: inline-flex;
     flex-shrink: 0;
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .mobile-menu-btn .material-icons {
+    font-size: 24px;
+  }
+
+  .mobile-menu-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Поверх затемнення: верхній ряд і відкрите меню */
+  .navbar.menu-open .navbar-mobile-head,
+  .navbar.menu-open .nav-content.open {
+    position: relative;
+    z-index: 1;
   }
 
   .nav-content {
@@ -216,11 +269,14 @@
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    gap: 14px;
-    padding: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 12px;
-    background: #0f0f0f;
+    gap: 0;
+    padding: 6px 0 16px;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    box-shadow: none;
   }
 
   .nav-content.open {
@@ -231,17 +287,25 @@
     width: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: 6px;
+    gap: 2px;
+    padding-top: 10px;
   }
 
   .menu a {
-    display: block;
-    padding: 10px 8px;
-    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 12px 4px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
   }
 
   .menu a:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .menu a:active {
+    background: rgba(255, 255, 255, 0.12);
   }
 
   .menu a::after {
@@ -253,20 +317,49 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 2px;
+    margin-top: 12px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .user-name-link,
   .login-link,
   .logout-btn {
     width: 100%;
-    justify-content: center;
-    min-height: 40px;
+    justify-content: flex-start;
+    min-height: 46px;
+    padding: 10px 4px;
+    box-sizing: border-box;
+    border-radius: 10px;
   }
 
   .user-name-link {
     max-width: none;
-    text-align: center;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .login-link {
+    font-size: 15px;
+  }
+
+  .logout-btn {
+    justify-content: flex-start;
+    margin-top: 4px;
+    padding: 12px 4px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .logout-btn:hover {
+    background: rgba(213, 0, 28, 0.12);
+    border-color: rgba(213, 0, 28, 0.45);
+    color: #ff6b6b;
   }
 
   .login-link::after {

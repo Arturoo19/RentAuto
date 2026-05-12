@@ -13,6 +13,9 @@ export class CarsCarusel implements OnInit {
   currentIndex = 0;
   cardWidth = 320;
 
+  private touchStartX = 0;
+  private touchStartY = 0;
+
   cars = [
     {
       id: 2,
@@ -76,12 +79,24 @@ export class CarsCarusel implements OnInit {
     },
   ];
 
+  /** Desktop shows 3 cards per “window”; phones show one card — different dot/step counts. */
+  private isNarrowCarousel(): boolean {
+    return typeof window !== 'undefined' && window.innerWidth <= 860;
+  }
+
   get dots() {
-    return Array(this.cars.length - 2);
+    const count = this.isNarrowCarousel() ? this.cars.length : this.cars.length - 2;
+    return Array(count);
   }
 
   get maxIndex() {
-    return this.cars.length - 3;
+    return this.isNarrowCarousel() ? this.cars.length - 1 : this.cars.length - 3;
+  }
+
+  /** Pixels to translate per step: desktop stride is stored in cardWidth; narrow layouts add flex gap. */
+  get translateXStride(): number {
+    const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    return w > 860 ? this.cardWidth : this.cardWidth + 20;
   }
 
   ngOnInit() {
@@ -91,6 +106,34 @@ export class CarsCarusel implements OnInit {
   @HostListener('window:resize')
   onResize() {
     this.updateCardWidth();
+    const max = this.maxIndex;
+    if (this.currentIndex > max) {
+      this.currentIndex = max;
+    }
+  }
+
+  onTouchStart(event: TouchEvent): void {
+    if (!event.touches?.length) return;
+    this.touchStartX = event.touches[0].clientX;
+    this.touchStartY = event.touches[0].clientY;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    const t = event.changedTouches?.[0];
+    if (!t) return;
+
+    const dx = t.clientX - this.touchStartX;
+    const dy = t.clientY - this.touchStartY;
+    const threshold = 45;
+
+    if (Math.abs(dx) < threshold) return;
+    if (Math.abs(dx) < Math.abs(dy)) return;
+
+    if (dx < 0) {
+      this.next();
+    } else {
+      this.prev();
+    }
   }
 
   next() {
