@@ -88,10 +88,16 @@ export class AdminService {
       where: { status: 'active' },
     });
     // Машини без бронювань сьогодні
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     const carsWithBookings = await this.rentalsRepo
       .createQueryBuilder('rental')
       .select('rental.carId')
-      .where('rental.createdAt >= :from', { from })
+      .where('rental.startDate < :tomorrow', { tomorrow })
+      .andWhere('rental.endDate >= :today', { today })
       .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
       .distinct(true)
       .getRawMany();
