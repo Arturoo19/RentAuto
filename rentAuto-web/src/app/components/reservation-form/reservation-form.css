@@ -259,42 +259,54 @@
 /* Sandbox: instrucciones de pago de prueba */
 .stripe-test-hint {
   margin: 0 0 16px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(20, 20, 20, 0.95));
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  background: linear-gradient(
+    135deg,
+    #2a2115 0%,
+    #1f1f1f 45%,
+    #141414 100%
+  );
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+/* BADGE */
 .stripe-test-hint__badge {
   display: inline-block;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
   color: #fbbf24;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
+/* TITLE */
 .stripe-test-hint__title {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   font-family: 'Syne', sans-serif;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
+  line-height: 1.3;
 }
 
+/* TEXT */
 .stripe-test-hint__text {
   margin: 0;
   font-size: 13px;
-  line-height: 1.55;
-  color: #c4c4c4;
+  line-height: 1.65;
+  color: #e2e2e2;
 }
 
+/* CARD NUMBER */
 .stripe-test-hint__card {
   color: #fde68a;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
