@@ -101,7 +101,7 @@ export class AdminService {
       .select('rental.carId')
       .where('rental.startDate < :tomorrow', { tomorrow: tomorrowStr })
       .andWhere('rental.endDate >= :today', { today: todayStr })
-      .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
+      .andWhere('rental.status = :active', { active: 'active' })
       .distinct(true)
       .getRawMany();
 
