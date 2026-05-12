@@ -48,7 +48,7 @@
 }
 
 .logo img {
-  height: 130px;
+  height: 138px;
 }
 
 /* На десктопі обгортка не змінює flex — діти йдуть у `.navbar` як раніше */
@@ -189,7 +189,7 @@
   }
 
   .logo img {
-    height: 115px;
+    height: 122px;
   }
 }
 
@@ -210,22 +210,22 @@
     justify-content: space-between;
     gap: 12px;
     width: 100%;
-    min-height: 52px;
+    min-height: 54px;
     padding-bottom: 10px;
   }
 
   .logo {
     flex: 1 1 auto;
     height: auto;
-    min-height: 52px;
+    min-height: 54px;
     min-width: 0;
     align-items: center;
   }
 
   .logo img {
-    height: 52px;
+    height: 56px;
     width: auto;
-    max-width: min(240px, 62vw);
+    max-width: min(252px, 64vw);
     object-fit: contain;
     object-position: left center;
   }
@@ -257,7 +257,7 @@
     margin: 0;
   }
 
-  /* Поверх затемнення: верхній ряд і відкрите меню */
+  /* Above dim overlay: top row + open menu */
   .navbar.menu-open .navbar-mobile-head,
   .navbar.menu-open .nav-content.open {
     position: relative;

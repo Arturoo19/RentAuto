@@ -25,14 +25,14 @@
 
 .footer-logo {
   overflow: hidden;
-  height: 80px;
+  height: 88px;
 }
 
 .footer-logo img {
-  height: 150px;
+  height: 162px;
   object-fit: contain;
   transform: translateX(-20px);
-  margin-top: -35px;
+  margin-top: -38px;
 }
 
 .footer-tagline {
@@ -167,9 +167,9 @@
   }
 
   .footer-logo img {
-    height: 44px;
+    height: 50px;
     width: auto;
-    max-width: min(220px, 85vw);
+    max-width: min(236px, 88vw);
     margin: 0;
     transform: none;
     object-fit: contain;
