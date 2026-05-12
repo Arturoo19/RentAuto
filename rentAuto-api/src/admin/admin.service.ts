@@ -41,8 +41,12 @@ export class AdminService {
       const yesterdayStart = new Date();
       yesterdayStart.setDate(yesterdayStart.getDate() - 1);
       yesterdayStart.setHours(0, 0, 0, 0);
+
       const yesterdayEnd = new Date();
       yesterdayEnd.setHours(0, 0, 0, 0);
+
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
 
       const yesterdayRentals = await this.rentalsRepo
         .createQueryBuilder('rental')
@@ -52,10 +56,19 @@ export class AdminService {
         .getMany();
 
       const yesterdayRevenue = yesterdayRentals.reduce((sum, r) => sum + Number(r.totalPrice), 0);
-      revenueChange =
-        yesterdayRevenue === 0
-          ? 0
-          : Math.round(((revenue - yesterdayRevenue) / yesterdayRevenue) * 100);
+
+      console.log('TODAY revenue:', revenue);
+      console.log('YESTERDAY revenue:', yesterdayRevenue);
+      console.log('yesterdayStart:', yesterdayStart);
+      console.log('yesterdayEnd:', yesterdayEnd);
+
+      if (yesterdayRevenue === 0 && revenue === 0) {
+        revenueChange = 0;
+      } else if (yesterdayRevenue === 0) {
+        revenueChange = 100; // вчора нічого, сьогодні є —ріст 100%
+      } else {
+        revenueChange = Math.round(((revenue - yesterdayRevenue) / yesterdayRevenue) * 100);
+      }
     }
 
     // Нові юзери
