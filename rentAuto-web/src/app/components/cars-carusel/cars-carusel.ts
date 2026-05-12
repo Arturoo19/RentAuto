@@ -21,7 +21,7 @@ export class CarsCarusel implements OnInit {
       seats: 5,
       transmission: 'Automático',
       ac: 'Climatizador',
-      price: 89,
+      price: 95,
       image: '/fotosCoches/bmw3.jpg',
     },
     {
@@ -31,7 +31,7 @@ export class CarsCarusel implements OnInit {
       seats: 5,
       transmission: 'Automático',
       ac: 'Climatizador',
-      price: 95,
+      price: 89,
       image: '/fotosCoches/audiA4.jpg',
     },
     {
@@ -41,7 +41,7 @@ export class CarsCarusel implements OnInit {
       seats: 5,
       transmission: 'Manual',
       ac: 'Aire acond.',
-      price: 59,
+      price: 40,
       image: '/fotosCoches/golf.jpg',
     },
     {
@@ -51,7 +51,7 @@ export class CarsCarusel implements OnInit {
       seats: 5,
       transmission: 'Automático',
       ac: 'Climatizador',
-      price: 75,
+      price: 55,
       image: '/fotosCoches/RAV4.jpg',
     },
     {
@@ -61,7 +61,7 @@ export class CarsCarusel implements OnInit {
       seats: 4,
       transmission: 'Automático',
       ac: 'Climatizador',
-      price: 120,
+      price: 140,
       image: '/fotosCoches/Mustang.jpg',
     },
     {
@@ -71,7 +71,7 @@ export class CarsCarusel implements OnInit {
       seats: 5,
       transmission: 'Automático',
       ac: 'Climatizador',
-      price: 110,
+      price: 105,
       image: '/fotosCoches/mercedesC.jpg',
     },
   ];

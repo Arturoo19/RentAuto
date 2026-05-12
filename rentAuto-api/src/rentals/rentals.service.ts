@@ -64,6 +64,7 @@ export class RentalsService {
     return this.rentalsRepo.find({
       where: { user: { id: userId } },
       relations: ['car'],
+      order: { startDate: 'DESC', id: 'DESC' },
     });
   }
   // PUT /rentals/:id/complete - завершити оренду
