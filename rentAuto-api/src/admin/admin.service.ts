@@ -93,11 +93,14 @@ export class AdminService {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    const todayStr = today.toISOString().split('T')[0]; // '2026-05-12'
+    const tomorrowStr = tomorrow.toISOString().split('T')[0]; // '2026-05-13'
+
     const carsWithBookings = await this.rentalsRepo
       .createQueryBuilder('rental')
       .select('rental.carId')
-      .where('rental.startDate < :tomorrow', { tomorrow })
-      .andWhere('rental.endDate >= :today', { today })
+      .where('rental.startDate < :tomorrow', { tomorrow: tomorrowStr })
+      .andWhere('rental.endDate >= :today', { today: todayStr })
       .andWhere('rental.status != :cancelled', { cancelled: 'cancelled' })
       .distinct(true)
       .getRawMany();
