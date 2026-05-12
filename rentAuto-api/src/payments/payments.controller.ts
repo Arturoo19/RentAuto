@@ -6,7 +6,7 @@ export class PaymentsController {
   constructor(private paymentsService: PaymentsService) {}
 
   @Post('create-intent')
-  createIntent(@Body() body: { amount: number }) {
-    return this.paymentsService.createPaymentIntent(body.amount);
+  createIntent(@Body() body: { amount: number; receiptEmail?: string }) {
+    return this.paymentsService.createPaymentIntent(body.amount, 'eur', body.receiptEmail);
   }
 }

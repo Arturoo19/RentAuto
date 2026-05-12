@@ -207,9 +207,11 @@ export class ReservationForm implements OnInit {
     const total = this.calcTotal();
     if (total <= 0) return;
 
+    const receiptEmail = this.currentUser?.email?.trim();
     this.http
       .post<{ clientSecret: string }>(`${environment.apiUrl}/payments/create-intent`, {
         amount: total,
+        receiptEmail: receiptEmail || undefined,
       })
       .subscribe(async ({ clientSecret }) => {
         this.clientSecret = clientSecret;
@@ -238,11 +240,26 @@ export class ReservationForm implements OnInit {
     }
 
     if (!this.stripe || !this.elements) return;
+
+    const receiptEmail = this.currentUser?.email?.trim();
+    if (!receiptEmail) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Email requerido',
+        text: 'Inicia sesión con una cuenta que tenga email para recibir el comprobante y completar el pago.',
+        confirmButtonColor: '#d6001c',
+      });
+      return;
+    }
+
     this.paying = true;
 
     const { error, paymentIntent } = await this.stripe.confirmPayment({
       elements: this.elements,
-      confirmParams: { return_url: 'https://rent-auto-sepia.vercel.app/cars' },
+      confirmParams: {
+        return_url: 'https://rent-auto-sepia.vercel.app/cars',
+        receipt_email: receiptEmail,
+      },
       redirect: 'if_required',
     });
 
