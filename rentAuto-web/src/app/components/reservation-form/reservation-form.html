@@ -86,6 +86,18 @@
       <!-- Stripe форма оплати -->
       <div>
         <p class="section-label">Pago</p>
+
+        <div *ngIf="showStripeTestPaymentHint" class="stripe-test-hint" role="note">
+          <span class="stripe-test-hint__badge">Modo prueba</span>
+          <p class="stripe-test-hint__title">No se cobra dinero real</p>
+          <p class="stripe-test-hint__text">
+            Para completar el pago de prueba usa la tarjeta
+            <strong class="stripe-test-hint__card">4242 4242 4242 4242</strong>, cualquier fecha
+            de caducidad futura (p. ej. 12/34), un CVC de 3 dígitos (p. ej. 123) y el nombre del
+            titular que prefieras.
+          </p>
+        </div>
+
         <div
           *ngIf="car && car.status !== 'Disponible' && car.status !== 'available' && car.status !== 'availible'"
           class="placeholder-msg"

@@ -82,7 +82,26 @@ export class ReservationForm implements OnInit {
       },
     });
 
-    this.stripe = await loadStripe(environment.stripePublicKey);
+    const stripeLoadOptions =
+      this.currentUser?.role === 'admin'
+        ? undefined
+        : {
+            developerTools: {
+              assistant: { enabled: false },
+            },
+          };
+
+    this.stripe = await loadStripe(environment.stripePublicKey, stripeLoadOptions as Parameters<
+      typeof loadStripe
+    >[1]);
+  }
+
+  /** Sandbox (pk_test_): show how to pay without real charges. */
+  get showStripeTestPaymentHint(): boolean {
+    const key = environment.stripePublicKey ?? '';
+    if (!key.startsWith('pk_test_')) return false;
+    if (!this.car || !this.startDate || !this.endDate || this.dateError) return false;
+    return this.availableStatuses.includes(this.car.status);
   }
 
   getDays(): number {
