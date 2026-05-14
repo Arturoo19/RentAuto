@@ -8,13 +8,8 @@
 
     <!-- RIGHT -->
     <div class="search-box">
-      <label>Recoger en <span class="optional-hint">(opcional)</span></label>
-      <input
-        type="text"
-        placeholder="Ciudad o aeropuerto"
-        [(ngModel)]="city"
-        name="city"
-      />
+      <label>Recoger en <span class="optional-hint"></span></label>
+      <input type="text" placeholder="Ciudad o aeropuerto" [(ngModel)]="city" name="city" />
 
       <div class="dates">
         <div>
@@ -41,11 +36,7 @@
         />
       </div>
 
-      <button
-        class="search-btn"
-        (click)="buscar()"
-        [disabled]="!city.trim() && !promoActive"
-      >
+      <button class="search-btn" (click)="buscar()" [disabled]="!city.trim() && !promoActive">
         Buscar
       </button>
     </div>
