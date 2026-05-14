@@ -21,6 +21,7 @@ export class Cars implements OnInit, OnDestroy {
   startDate = '';
   endDate = '';
   city = '';
+  promoCode = '';
   private sub!: Subscription;
   selectedCategory = '';
   selectedPrice = 'todos';
@@ -42,6 +43,7 @@ export class Cars implements OnInit, OnDestroy {
       this.startDate = params['startDate'] || '';
       this.endDate = params['endDate'] || '';
       this.city = params['city'] || '';
+      this.promoCode = (params['promoCode'] || '').trim();
 
       if ((this.startDate && this.endDate) || this.city) {
         this.loadCars();
@@ -198,5 +200,13 @@ export class Cars implements OnInit, OnDestroy {
     }
 
     return resultado;
+  }
+
+  reservarQueryParams() {
+    const q: Record<string, string> = {};
+    if (this.startDate) q['startDate'] = this.startDate;
+    if (this.endDate) q['endDate'] = this.endDate;
+    if (this.promoCode) q['promoCode'] = this.promoCode;
+    return q;
   }
 }

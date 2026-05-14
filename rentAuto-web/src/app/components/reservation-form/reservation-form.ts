@@ -8,16 +8,10 @@ import { AuthService } from '../../services/auth';
 import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
 import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
-
-type PricingBreakdown = {
-  days: number;
-  pricePerDay: number;
-  baseTotal: number;
-  weekendDays: number;
-  weekendSurcharge: number;
-  longRentalDiscount: number;
-  finalTotal: number;
-};
+import {
+  computeRentalPricingBreakdown,
+  type RentalPricingBreakdown,
+} from '../../utils/rental-pricing';
 
 @Component({
   selector: 'app-reservation-form',
@@ -38,6 +32,8 @@ export class ReservationForm implements OnInit {
   currentUser: any = null;
   phone = '';
   dni = '';
+  /** Carried from home → cars via query string; validated server-side. */
+  promoCode = '';
 
   // Stripe
   stripe: Stripe | null = null;
@@ -47,9 +43,6 @@ export class ReservationForm implements OnInit {
   paying = false;
   paymentReady = false;
 
-  private readonly weekendAumentoPrecio = 0.15;
-  private readonly longRentalDiscountRate = 0.1;
-  private readonly longRentalDays = 7;
   private readonly availableStatuses = ['Disponible', 'available', 'availible'];
 
   constructor(
@@ -65,6 +58,7 @@ export class ReservationForm implements OnInit {
     this.carId = Number(this.route.snapshot.paramMap.get('id'));
     this.startDate = this.route.snapshot.queryParams['startDate'] || '';
     this.endDate = this.route.snapshot.queryParams['endDate'] || '';
+    this.promoCode = (this.route.snapshot.queryParams['promoCode'] || '').trim();
 
     this.currentUser = this.authService.getCurrentUser();
 
@@ -104,64 +98,14 @@ export class ReservationForm implements OnInit {
     return this.availableStatuses.includes(this.car.status);
   }
 
-  getDays(): number {
-    if (!this.startDate || !this.endDate) return 0;
-    const start = new Date(this.startDate);
-    const end = new Date(this.endDate);
-    return Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  }
-
-  private roundCurrency(value: number): number {
-    return Math.round(value * 100) / 100;
-  }
-
-  private countWeekendDays(): number {
-    if (!this.startDate || !this.endDate) return 0;
-    const start = new Date(`${this.startDate}T00:00:00`);
-    const end = new Date(`${this.endDate}T00:00:00`);
-    let weekendDays = 0;
-    const current = new Date(start);
-
-    while (current < end) {
-      const day = current.getDay();
-      if (day === 0 || day === 6) weekendDays += 1;
-      current.setDate(current.getDate() + 1);
-    }
-
-    return weekendDays;
-  }
-
-  getPricingBreakdown(): PricingBreakdown {
-    const days = this.getDays();
+  getPricingBreakdown(): RentalPricingBreakdown {
     const pricePerDay = Number(this.car?.pricePerDay || 0);
-    if (days <= 0 || pricePerDay <= 0) {
-      return {
-        days: 0,
-        pricePerDay: 0,
-        baseTotal: 0,
-        weekendDays: 0,
-        weekendSurcharge: 0,
-        longRentalDiscount: 0,
-        finalTotal: 0,
-      };
-    }
-
-    const baseTotal = days * pricePerDay;
-    const weekendDays = this.countWeekendDays();
-    const weekendSurcharge = weekendDays * pricePerDay * this.weekendAumentoPrecio;
-    const longRentalDiscount =
-      days > this.longRentalDays ? baseTotal * this.longRentalDiscountRate : 0;
-    const finalTotal = baseTotal + weekendSurcharge - longRentalDiscount;
-
-    return {
-      days,
+    return computeRentalPricingBreakdown(
       pricePerDay,
-      baseTotal: this.roundCurrency(baseTotal),
-      weekendDays,
-      weekendSurcharge: this.roundCurrency(weekendSurcharge),
-      longRentalDiscount: this.roundCurrency(longRentalDiscount),
-      finalTotal: this.roundCurrency(finalTotal),
-    };
+      this.startDate,
+      this.endDate,
+      this.promoCode,
+    );
   }
 
   calcTotal(): number {
@@ -280,6 +224,7 @@ export class ReservationForm implements OnInit {
           carId: this.carId,
           startDate: this.startDate,
           endDate: this.endDate,
+          ...(this.promoCode ? { promoCode: this.promoCode } : {}),
         })
         .subscribe({
           next: () => {

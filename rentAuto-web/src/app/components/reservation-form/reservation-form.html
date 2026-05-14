@@ -50,6 +50,11 @@
             <div *ngIf="getPricingBreakdown().longRentalDiscount > 0">
               Descuento 7+ días (-10%): -{{ getPricingBreakdown().longRentalDiscount }}€
             </div>
+            <div *ngIf="getPricingBreakdown().promoDiscountAmount > 0">
+              Código promo (-{{ getPricingBreakdown().promoDiscountRate * 100 }}%): -{{
+                getPricingBreakdown().promoDiscountAmount
+              }}€
+            </div>
           </div>
         </div>
         <div class="amount">{{ calcTotal() }}€</div>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -10,6 +10,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './cars-carusel.css',
 })
 export class CarsCarusel implements OnInit {
+  /** When set from the home hero, “Reservar” forwards the same promo code. */
+  @Input() promoCode = '';
   currentIndex = 0;
   cardWidth = 320;
 
@@ -97,6 +99,13 @@ export class CarsCarusel implements OnInit {
   get translateXStride(): number {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
     return w > 860 ? this.cardWidth : this.cardWidth + 20;
+  }
+
+  carouselReserveParams(): Record<string, string> {
+    const q: Record<string, string> = { startDate: '', endDate: '' };
+    const p = this.promoCode?.trim();
+    if (p) q['promoCode'] = p;
+    return q;
   }
 
   ngOnInit() {

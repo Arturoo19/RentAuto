@@ -140,7 +140,7 @@
           class="btn-rent"
           *ngIf="isDisponible(car.status)"
           [routerLink]="['/reservar', car.id]"
-          [queryParams]="{ startDate: startDate, endDate: endDate }"
+          [queryParams]="reservarQueryParams()"
         >
           Reservar
         </button>

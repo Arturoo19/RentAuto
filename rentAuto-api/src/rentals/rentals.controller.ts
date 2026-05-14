@@ -21,10 +21,16 @@ export class RentalsController {
   @UseGuards(JwtAuthGuard)
   create(
     @Req() req: RequestWithUser,
-    @Body() body: { carId: number; startDate: string; endDate: string },
+    @Body() body: { carId: number; startDate: string; endDate: string; promoCode?: string },
   ) {
     const userId = req.user.id;
-    return this.rentalsService.create(userId, body.carId, body.startDate, body.endDate);
+    return this.rentalsService.create(
+      userId,
+      body.carId,
+      body.startDate,
+      body.endDate,
+      body.promoCode,
+    );
   }
 
   @Get()

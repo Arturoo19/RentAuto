@@ -8,13 +8,12 @@
 
     <!-- RIGHT -->
     <div class="search-box">
-      <label>Recoger en</label>
+      <label>Recoger en <span class="optional-hint">(opcional)</span></label>
       <input
         type="text"
         placeholder="Ciudad o aeropuerto"
         [(ngModel)]="city"
         name="city"
-        required
       />
 
       <div class="dates">
@@ -42,10 +41,16 @@
         />
       </div>
 
-      <button class="search-btn" (click)="buscar()" [disabled]="!city.trim()">Buscar</button>
+      <button
+        class="search-btn"
+        (click)="buscar()"
+        [disabled]="!city.trim() && !promoActive"
+      >
+        Buscar
+      </button>
     </div>
   </div>
 </section>
-<app-cars-carusel></app-cars-carusel>
+<app-cars-carusel [promoCode]="carouselPromoCode"></app-cars-carusel>
 <app-noticias></app-noticias>
 <app-faq></app-faq>

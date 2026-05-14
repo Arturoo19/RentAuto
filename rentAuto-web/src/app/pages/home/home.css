@@ -70,6 +70,12 @@
   margin-top: 10px;
 }
 
+.search-box .optional-hint {
+  font-weight: 500;
+  font-size: 0.82em;
+  opacity: 0.75;
+}
+
 .search-box input {
   width: 100%;
   padding: 10px;

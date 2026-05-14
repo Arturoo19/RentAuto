@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Rental } from './rental.entity';
 import { Repository } from 'typeorm';
 import { Car } from 'src/cars/car.entity';
+import { computeRentalTotalEur } from './rental-pricing';
 
 @Injectable()
 export class RentalsService {
@@ -15,7 +16,13 @@ export class RentalsService {
     private carsRepo: Repository<Car>, // таблиця машин (щоб міняти статус)
   ) {}
 
-  async create(userId: number, carId: number, startDate: string, endDate: string) {
+  async create(
+    userId: number,
+    carId: number,
+    startDate: string,
+    endDate: string,
+    promoCode?: string,
+  ) {
     const coche = await this.carsRepo.findOneBy({ id: carId });
     if (!coche) throw new NotFoundException('Coche no encontrado');
     if (!this.availableStatuses.includes(coche.status)) {
@@ -40,7 +47,13 @@ export class RentalsService {
     const end = new Date(endDate);
     const dias = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
     if (dias <= 0) throw new BadRequestException('Datos incorrectos');
-    const totalPrice = dias * Number(coche.pricePerDay);
+    const totalPrice = computeRentalTotalEur(
+      Number(coche.pricePerDay),
+      startDate,
+      endDate,
+      promoCode,
+    );
+    if (totalPrice <= 0) throw new BadRequestException('Datos incorrectos');
 
     const rental = this.rentalsRepo.create({
       user: { id: userId },

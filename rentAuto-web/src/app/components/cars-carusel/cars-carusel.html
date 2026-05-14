@@ -33,7 +33,7 @@
               <button
                 class="reserve-btn"
                 [routerLink]="['/reservar', car.id]"
-                [queryParams]="{ startDate: '', endDate: '' }"
+                [queryParams]="carouselReserveParams()"
               >
                 Reservar
               </button>
