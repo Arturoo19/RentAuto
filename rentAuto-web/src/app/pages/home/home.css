@@ -82,6 +82,205 @@
   margin-top: 5px;
   border: 1px solid #ddd;
   border-radius: 6px;
+  background: white;
+}
+
+/* City select */
+.city-select-wrap {
+  position: relative;
+  margin-top: 6px;
+  z-index: 20;
+}
+
+.city-select-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 11px 40px 11px 40px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-radius 0.2s ease;
+}
+
+.city-select-icon,
+.city-select-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.city-select-icon {
+  left: 12px;
+  color: #d6001c;
+  opacity: 0.9;
+}
+
+.city-select-arrow {
+  right: 12px;
+  color: #9ca3af;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.city-select-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.city-select-trigger.is-placeholder .city-select-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.city-select-trigger:hover {
+  border-color: #f0b4bc;
+  background: #fff;
+}
+
+.city-select-trigger:focus {
+  outline: none;
+  border-color: #d6001c;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(214, 0, 28, 0.14);
+}
+
+.city-select-wrap.has-value .city-select-trigger {
+  border-color: #d6001c;
+  background: #fff8f9;
+  color: #111827;
+}
+
+.city-select-wrap.is-open .city-select-trigger {
+  border-color: #d6001c;
+  background: #fff;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 0 0 3px rgba(214, 0, 28, 0.1);
+}
+
+.city-select-wrap:hover .city-select-arrow,
+.city-select-trigger:focus .city-select-arrow,
+.city-select-wrap.has-value .city-select-arrow,
+.city-select-wrap.is-open .city-select-arrow {
+  color: #d6001c;
+}
+
+.city-select-wrap.is-open .city-select-arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Dropdown panel */
+.city-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1.5px solid #d6001c;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  box-shadow:
+    0 10px 24px rgba(17, 24, 39, 0.12),
+    0 4px 10px rgba(214, 0, 28, 0.08);
+  animation: cityDropdownIn 0.2s ease;
+  overflow: hidden;
+}
+
+@keyframes cityDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.city-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.city-select-option + .city-select-option {
+  margin-top: 2px;
+}
+
+.city-option-icon {
+  display: flex;
+  align-items: center;
+  color: #d6001c;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+.city-option-text {
+  flex: 1;
+}
+
+.city-option-check {
+  display: flex;
+  align-items: center;
+  color: #d6001c;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.city-select-option:hover {
+  background: #fff1f3;
+  color: #111827;
+}
+
+.city-select-option:hover .city-option-icon {
+  opacity: 1;
+}
+
+.city-select-option.is-selected {
+  background: linear-gradient(90deg, #fff5f6 0%, #ffffff 100%);
+  color: #d6001c;
+  box-shadow: inset 3px 0 0 #d6001c;
+}
+
+.city-select-option.is-selected .city-option-icon,
+.city-select-option.is-selected .city-option-check {
+  opacity: 1;
+}
+
+.city-select-option.is-selected .city-option-check {
+  transform: scale(1);
 }
 
 /* dates */
@@ -244,6 +443,7 @@
   }
 
   .search-box input,
+  .city-select-trigger,
   .search-btn {
     min-height: 44px;
     border-radius: 10px;

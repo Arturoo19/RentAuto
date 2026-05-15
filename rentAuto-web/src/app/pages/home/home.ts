@@ -1,11 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CarsCarusel } from '../../components/cars-carusel/cars-carusel';
 import { Noticias } from '../../components/noticias/noticias';
 import { Faq } from '../../components/faq/faq';
+import {
+  AVAILABLE_CITIES,
+  AvailableCity,
+  isAvailableCity,
+} from '../../utils/available-cities';
 import { getPromoDiscountRate } from '../../utils/rental-pricing';
 
 @Component({
@@ -15,6 +20,8 @@ import { getPromoDiscountRate } from '../../utils/rental-pricing';
   styleUrl: './home.css',
 })
 export class Home {
+  readonly cities = AVAILABLE_CITIES;
+
   promoActive = false;
   promoCode = '';
 
@@ -25,8 +32,30 @@ export class Home {
   startDate = '';
   endDate = '';
   city = '';
+  cityDropdownOpen = false;
 
   constructor(private router: Router) {}
+
+  toggleCityDropdown(event: Event) {
+    event.stopPropagation();
+    this.cityDropdownOpen = !this.cityDropdownOpen;
+  }
+
+  selectCity(city: AvailableCity, event: Event) {
+    event.stopPropagation();
+    this.city = city;
+    this.cityDropdownOpen = false;
+  }
+
+  @HostListener('document:click')
+  closeCityDropdown() {
+    this.cityDropdownOpen = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.cityDropdownOpen = false;
+  }
 
   async buscar() {
     const normalizedCity = this.city.trim();
@@ -36,7 +65,17 @@ export class Home {
       await Swal.fire({
         icon: 'info',
         title: 'Indica ciudad o descuento',
-        text: 'Introduce una ciudad para buscar, o marca el código de descuento para aplicarlo sin fechas ni lugar.',
+        text: 'Selecciona una ciudad para buscar, o marca el código de descuento para aplicarlo sin fechas ni lugar.',
+        confirmButtonColor: '#d6001c',
+      });
+      return;
+    }
+
+    if (normalizedCity && !isAvailableCity(normalizedCity)) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Ciudad no disponible',
+        text: 'Solo puedes buscar en Barcelona o Madrid.',
         confirmButtonColor: '#d6001c',
       });
       return;

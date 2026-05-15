@@ -8,8 +8,94 @@
 
     <!-- RIGHT -->
     <div class="search-box">
-      <label>Recoger en <span class="optional-hint"></span></label>
-      <input type="text" placeholder="Ciudad o aeropuerto" [(ngModel)]="city" name="city" />
+      <label id="pickup-city-label">Recoger en</label>
+      <div
+        class="city-select-wrap"
+        [class.has-value]="!!city"
+        [class.is-open]="cityDropdownOpen"
+      >
+        <button
+          type="button"
+          id="pickup-city"
+          class="city-select-trigger"
+          [class.is-placeholder]="!city"
+          [attr.aria-expanded]="cityDropdownOpen"
+          aria-haspopup="listbox"
+          aria-labelledby="pickup-city-label"
+          (click)="toggleCityDropdown($event)"
+        >
+          <span class="city-select-icon" aria-hidden="true">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+          </span>
+          <span class="city-select-label">{{ city || 'Selecciona una ciudad' }}</span>
+          <span class="city-select-arrow" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        </button>
+
+        <ul
+          *ngIf="cityDropdownOpen"
+          class="city-select-dropdown"
+          role="listbox"
+          aria-labelledby="pickup-city-label"
+          (click)="$event.stopPropagation()"
+        >
+          <li
+            *ngFor="let cityOption of cities"
+            class="city-select-option"
+            role="option"
+            [attr.aria-selected]="city === cityOption"
+            [class.is-selected]="city === cityOption"
+            (click)="selectCity(cityOption, $event)"
+          >
+            <span class="city-option-icon" aria-hidden="true">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+              >
+                <path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+            </span>
+            <span class="city-option-text">{{ cityOption }}</span>
+            <span class="city-option-check" aria-hidden="true">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+          </li>
+        </ul>
+      </div>
 
       <div class="dates">
         <div>
