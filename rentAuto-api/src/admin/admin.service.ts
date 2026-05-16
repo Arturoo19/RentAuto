@@ -86,9 +86,29 @@ export class AdminService {
     const newReservations = rentals.length;
 
     // Вільні для оренди сьогодні — та сама логіка, що на сторінці каталогу
-    const todayStr = formatDateOnlyLocal();
-    const availableCarsToday = await this.carsService.findAvailable(todayStr, todayStr);
-    const carsWithoutBookings = availableCarsToday.length;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const carsWithActiveRentalToday = await this.rentalsRepo
+      .createQueryBuilder('rental')
+      .select('DISTINCT rental.carId')
+      .where('rental.status = :active', { active: 'active' })
+      .andWhere('rental.startDate < :tomorrow', { tomorrow })
+      .andWhere('rental.endDate >= :today', { today })
+      .getRawMany();
+
+    const bookedCarIds = carsWithActiveRentalToday.map((r) => r.carId);
+
+    const carsWithoutBookings =
+      bookedCarIds.length > 0
+        ? await this.carsRepo
+            .createQueryBuilder('car')
+            .where('car.id NOT IN (:...ids)', { ids: bookedCarIds })
+            .getCount()
+        : await this.carsRepo.count();
 
     const cancellations = await this.rentalsRepo
       .createQueryBuilder('rental')
