@@ -97,7 +97,7 @@ export class CarsService {
       .select('rental.carId', 'carId')
       .where('rental.status != :cancelled', { cancelled: 'cancelled' })
       .andWhere('rental.startDate < :endDate', { endDate })
-      .andWhere('rental.endDate > :startDate', { startDate })
+      .andWhere('rental.endDate >= :startDate', { startDate })
       .getRawMany();
 
     type RentedCar = { carId: string };

@@ -6,9 +6,10 @@ import { Rental } from "../rentals/rental.entity";
 import { User } from "../users/user.entity";
 import { Car } from "../cars/car.entity";
 import { RentalsModule } from "../rentals/rentals.module";
+import { CarsModule } from "../cars/cars.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Rental, User, Car]), RentalsModule],
+  imports: [TypeOrmModule.forFeature([Rental, User, Car]), RentalsModule, CarsModule],
   controllers: [AdminController],
   providers: [AdminService],
 })

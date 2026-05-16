@@ -5,8 +5,9 @@ import { Rental } from '../rentals/rental.entity';
 import { User } from '../users/user.entity';
 import { Car } from '../cars/car.entity';
 import { revenuePercentChange } from './revenue-percent-change';
-import { formatDateOnlyLocal, addDaysLocal } from '../common/date-only';
+import { formatDateOnlyLocal } from '../common/date-only';
 import { RentalsService, RENTABLE_CAR_STATUSES } from '../rentals/rentals.service';
+import { CarsService } from '../cars/cars.service';
 
 @Injectable()
 export class AdminService {
@@ -18,6 +19,7 @@ export class AdminService {
     @InjectRepository(Car)
     private carsRepo: Repository<Car>,
     private rentalsService: RentalsService,
+    private carsService: CarsService,
   ) {}
 
   async getStats(period: 'day' | 'week') {
@@ -80,40 +82,13 @@ export class AdminService {
       where: { status: 'active' },
     });
 
-    const newReservations = await this.rentalsRepo
-      .createQueryBuilder('rental')
-      .where('rental.createdAt >= :from', { from })
-      .getCount();
+    // Нові броні сьогодні = ті самі, що дають дохід (не скасовані, createdAt сьогодні)
+    const newReservations = rentals.length;
 
-    // Машини disponibles sin reserva que cubra el día de hoy
+    // Вільні для оренди сьогодні — та сама логіка, що на сторінці каталогу
     const todayStr = formatDateOnlyLocal();
-    const tomorrowStr = formatDateOnlyLocal(addDaysLocal(new Date(), 1));
-
-    const carsWithBookings = await this.rentalsRepo
-      .createQueryBuilder('rental')
-      .select('DISTINCT rental.carId', 'carId')
-      .where('rental.startDate < :tomorrow', { tomorrow: tomorrowStr })
-      .andWhere('rental.endDate >= :today', { today: todayStr })
-      .andWhere('rental.status NOT IN (:...excluded)', {
-        excluded: ['cancelled', 'completed'],
-      })
-      .getRawMany();
-
-    const bookedIds = carsWithBookings
-      .map((r) => Number(r.carId))
-      .filter((id) => Number.isFinite(id));
-
-    const rentableCarsQuery = () =>
-      this.carsRepo
-        .createQueryBuilder('car')
-        .where('car.status IN (:...statuses)', { statuses: RENTABLE_CAR_STATUSES });
-
-    const carsWithoutBookings =
-      bookedIds.length === 0
-        ? await rentableCarsQuery().getCount()
-        : await rentableCarsQuery()
-            .andWhere('car.id NOT IN (:...ids)', { ids: bookedIds })
-            .getCount();
+    const availableCarsToday = await this.carsService.findAvailable(todayStr, todayStr);
+    const carsWithoutBookings = availableCarsToday.length;
 
     const cancellations = await this.rentalsRepo
       .createQueryBuilder('rental')
