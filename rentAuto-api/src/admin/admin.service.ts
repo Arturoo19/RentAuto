@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Rental } from '../rentals/rental.entity';
 import { User } from '../users/user.entity';
 import { Car } from '../cars/car.entity';
+import { revenuePercentChange } from './revenue-percent-change';
 
 @Injectable()
 export class AdminService {
@@ -35,8 +36,8 @@ export class AdminService {
 
     const revenue = rentals.reduce((sum, r) => sum + Number(r.totalPrice), 0);
 
-    //порівняння з вчора
-    let revenueChange = 0;
+    // порівняння з вчора (дохід за createdAt, не скасовані)
+    let revenueChange: number | null = null;
     if (period === 'day') {
       const yesterdayStart = new Date();
       yesterdayStart.setDate(yesterdayStart.getDate() - 1);
@@ -44,9 +45,6 @@ export class AdminService {
 
       const yesterdayEnd = new Date();
       yesterdayEnd.setHours(0, 0, 0, 0);
-
-      const todayStart = new Date();
-      todayStart.setHours(0, 0, 0, 0);
 
       const yesterdayRentals = await this.rentalsRepo
         .createQueryBuilder('rental')
@@ -56,19 +54,7 @@ export class AdminService {
         .getMany();
 
       const yesterdayRevenue = yesterdayRentals.reduce((sum, r) => sum + Number(r.totalPrice), 0);
-
-      console.log('TODAY revenue:', revenue);
-      console.log('YESTERDAY revenue:', yesterdayRevenue);
-      console.log('yesterdayStart:', yesterdayStart);
-      console.log('yesterdayEnd:', yesterdayEnd);
-
-      if (yesterdayRevenue === 0 && revenue === 0) {
-        revenueChange = 0;
-      } else if (yesterdayRevenue === 0) {
-        revenueChange = 100; // вчора нічого, сьогодні є —ріст 100%
-      } else {
-        revenueChange = Math.round(((revenue - yesterdayRevenue) / yesterdayRevenue) * 100);
-      }
+      revenueChange = revenuePercentChange(revenue, yesterdayRevenue);
     }
 
     // Нові юзери
@@ -142,10 +128,7 @@ export class AdminService {
         .getMany();
 
       const prevWeekRevenue = prevWeekRentals.reduce((sum, r) => sum + Number(r.totalPrice), 0);
-      revenueChange =
-        prevWeekRevenue === 0
-          ? 0
-          : Math.round(((revenue - prevWeekRevenue) / prevWeekRevenue) * 100);
+      revenueChange = revenuePercentChange(revenue, prevWeekRevenue);
 
       // Топ 3 машини за тиждень
       const topCars = await this.rentalsRepo
