@@ -4,10 +4,13 @@ import { Rental } from './rental.entity';
 import { Repository } from 'typeorm';
 import { Car } from 'src/cars/car.entity';
 import { computeRentalTotalEur } from './rental-pricing';
+import { formatDateOnlyLocal } from '../common/date-only';
+
+export const RENTABLE_CAR_STATUSES = ['Disponible', 'available', 'availible'];
 
 @Injectable()
 export class RentalsService {
-  private readonly availableStatuses = ['Disponible', 'available', 'availible'];
+  private readonly availableStatuses = RENTABLE_CAR_STATUSES;
 
   constructor(
     @InjectRepository(Rental)
@@ -92,6 +95,21 @@ export class RentalsService {
 
     return { message: 'Alquiler completo' };
   }
+  /** Closes active rentals whose end date is before today (same rule as the web dashboard sync). */
+  async completeExpiredActiveRentals(): Promise<number> {
+    const todayStr = formatDateOnlyLocal();
+    const expired = await this.rentalsRepo
+      .createQueryBuilder('rental')
+      .where('rental.status = :active', { active: 'active' })
+      .andWhere('rental.endDate < :today', { today: todayStr })
+      .getMany();
+
+    for (const rental of expired) {
+      await this.rentalsRepo.update(rental.id, { status: 'completed' });
+    }
+    return expired.length;
+  }
+
   async cancel(id: number, userId: number) {
     const rental = await this.rentalsRepo.findOne({
       where: { id, user: { id: userId } },

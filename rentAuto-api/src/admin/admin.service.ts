@@ -5,6 +5,8 @@ import { Rental } from '../rentals/rental.entity';
 import { User } from '../users/user.entity';
 import { Car } from '../cars/car.entity';
 import { revenuePercentChange } from './revenue-percent-change';
+import { formatDateOnlyLocal, addDaysLocal } from '../common/date-only';
+import { RentalsService, RENTABLE_CAR_STATUSES } from '../rentals/rentals.service';
 
 @Injectable()
 export class AdminService {
@@ -15,9 +17,12 @@ export class AdminService {
     private usersRepo: Repository<User>,
     @InjectRepository(Car)
     private carsRepo: Repository<Car>,
+    private rentalsService: RentalsService,
   ) {}
 
   async getStats(period: 'day' | 'week') {
+    await this.rentalsService.completeExpiredActiveRentals();
+
     const now = new Date();
     const from = new Date();
 
@@ -65,39 +70,49 @@ export class AdminService {
 
     // Машини
     const totalCars = await this.carsRepo.count();
-    const activeCars = await this.carsRepo.count({
-      where: { status: 'available' },
-    });
+    const activeCars = await this.carsRepo
+      .createQueryBuilder('car')
+      .where('car.status IN (:...statuses)', { statuses: RENTABLE_CAR_STATUSES })
+      .getCount();
 
-    // Активні оренди
+    // Усі активні оренди в БД (не «нові сьогодні»)
     const activeRentals = await this.rentalsRepo.count({
       where: { status: 'active' },
     });
-    // Машини без бронювань сьогодні
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const todayStr = today.toISOString().split('T')[0]; // '2026-05-12'
-    const tomorrowStr = tomorrow.toISOString().split('T')[0]; // '2026-05-13'
+    const newReservations = await this.rentalsRepo
+      .createQueryBuilder('rental')
+      .where('rental.createdAt >= :from', { from })
+      .getCount();
+
+    // Машини disponibles sin reserva que cubra el día de hoy
+    const todayStr = formatDateOnlyLocal();
+    const tomorrowStr = formatDateOnlyLocal(addDaysLocal(new Date(), 1));
 
     const carsWithBookings = await this.rentalsRepo
       .createQueryBuilder('rental')
-      .select('rental.carId')
+      .select('DISTINCT rental.carId', 'carId')
       .where('rental.startDate < :tomorrow', { tomorrow: tomorrowStr })
       .andWhere('rental.endDate >= :today', { today: todayStr })
-      .andWhere('rental.status = :active', { active: 'active' })
-      .distinct(true)
+      .andWhere('rental.status NOT IN (:...excluded)', {
+        excluded: ['cancelled', 'completed'],
+      })
       .getRawMany();
 
-    const bookedIds = carsWithBookings.map((r) => r.rental_carId);
+    const bookedIds = carsWithBookings
+      .map((r) => Number(r.carId))
+      .filter((id) => Number.isFinite(id));
+
+    const rentableCarsQuery = () =>
+      this.carsRepo
+        .createQueryBuilder('car')
+        .where('car.status IN (:...statuses)', { statuses: RENTABLE_CAR_STATUSES });
+
     const carsWithoutBookings =
       bookedIds.length === 0
-        ? totalCars
-        : await this.carsRepo
-            .createQueryBuilder('car')
-            .where('car.id NOT IN (:...ids)', { ids: bookedIds })
+        ? await rentableCarsQuery().getCount()
+        : await rentableCarsQuery()
+            .andWhere('car.id NOT IN (:...ids)', { ids: bookedIds })
             .getCount();
 
     const cancellations = await this.rentalsRepo
@@ -171,13 +186,7 @@ export class AdminService {
         .andWhere('rental.status = :cancelled', { cancelled: 'cancelled' })
         .getCount();
 
-      // Нові бронювання
-      const newReservations = await this.rentalsRepo
-        .createQueryBuilder('rental')
-        .where('rental.createdAt >= :from', { from })
-        .getCount();
-
-      weeklyExtras = { topCars, bestDay, cancellations, newReservations };
+      weeklyExtras = { topCars, bestDay, cancellations };
     }
 
     return {
@@ -190,6 +199,7 @@ export class AdminService {
       activeCars,
       activeRentals,
       cancellations,
+      newReservations,
       carsWithoutBookings,
       ...weeklyExtras,
     };
