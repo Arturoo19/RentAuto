@@ -4,7 +4,12 @@
     <div class="left-panel">
       <!-- Фото авто -->
       <div class="car-image-wrap" *ngIf="car">
-        <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" loading="lazy" decoding="async" />
+        <img
+          [src]="car.imageUrl"
+          [alt]="car.brand + ' ' + car.model"
+          loading="lazy"
+          decoding="async"
+        />
         <span class="car-badge">{{ car.year }}</span>
       </div>
 
@@ -35,6 +40,26 @@
         <p *ngIf="dateError" class="error-msg">{{ dateError }}</p>
       </div>
 
+      <!-- Промокод -->
+      <div class="promo-section">
+        <p class="section-label" style="color: #666">Código promocional</p>
+        <div class="promo-input-row">
+          <input
+            type="text"
+            [(ngModel)]="promoCode"
+            (input)="onPromoInput()"
+            class="promo-input"
+            [class.promo-applied]="promoApplied"
+          />
+          <button class="promo-btn" (click)="applyPromo()">Aplicar</button>
+        </div>
+        <div *ngIf="promoApplied" class="promo-success-banner">
+          🎉 ¡Código <strong>{{ promoCode.toUpperCase() }}</strong> aplicado! Tienes un
+          <strong>{{ promoRate * 100 }}% de descuento</strong>
+        </div>
+        <div *ngIf="promoError" class="promo-error-banner">❌ Código no válido o ya expirado</div>
+      </div>
+
       <!-- Total -->
       <div class="total-box" *ngIf="calcTotal() > 0">
         <div>
@@ -50,10 +75,9 @@
             <div *ngIf="getPricingBreakdown().longRentalDiscount > 0">
               Descuento 7+ días (-10%): -{{ getPricingBreakdown().longRentalDiscount }}€
             </div>
-            <div *ngIf="getPricingBreakdown().promoDiscountAmount > 0">
-              Código promo (-{{ getPricingBreakdown().promoDiscountRate * 100 }}%): -{{
-                getPricingBreakdown().promoDiscountAmount
-              }}€
+            <div *ngIf="getPricingBreakdown().promoDiscountAmount > 0" class="promo-line-highlight">
+              🏷️ Código promo (-{{ getPricingBreakdown().promoDiscountRate * 100 }}%):
+              <strong>-{{ getPricingBreakdown().promoDiscountAmount }}€</strong>
             </div>
           </div>
         </div>
@@ -97,14 +121,19 @@
           <p class="stripe-test-hint__title">No se cobra dinero real</p>
           <p class="stripe-test-hint__text">
             Para completar el pago de prueba usa la tarjeta
-            <strong class="stripe-test-hint__card">4242 4242 4242 4242</strong>, cualquier fecha
-            de caducidad futura (p. ej. 12/34), un CVC de 3 dígitos (p. ej. 123) y el nombre del
+            <strong class="stripe-test-hint__card">4242 4242 4242 4242</strong>, cualquier fecha de
+            caducidad futura (p. ej. 12/34), un CVC de 3 dígitos (p. ej. 123) y el nombre del
             titular que prefieras.
           </p>
         </div>
 
         <div
-          *ngIf="car && car.status !== 'Disponible' && car.status !== 'available' && car.status !== 'availible'"
+          *ngIf="
+            car &&
+            car.status !== 'Disponible' &&
+            car.status !== 'available' &&
+            car.status !== 'availible'
+          "
           class="placeholder-msg"
         >
           Este coche está en mantenimiento y no está disponible para reservas.
@@ -115,7 +144,10 @@
           *ngIf="
             !paymentReady &&
             !startDate &&
-            (!car || car.status === 'Disponible' || car.status === 'available' || car.status === 'availible')
+            (!car ||
+              car.status === 'Disponible' ||
+              car.status === 'available' ||
+              car.status === 'availible')
           "
           class="placeholder-msg"
         >
@@ -129,7 +161,10 @@
             startDate &&
             endDate &&
             !dateError &&
-            (!car || car.status === 'Disponible' || car.status === 'available' || car.status === 'availible')
+            (!car ||
+              car.status === 'Disponible' ||
+              car.status === 'available' ||
+              car.status === 'availible')
           "
           class="btn-continue"
           (click)="preparePayment()"

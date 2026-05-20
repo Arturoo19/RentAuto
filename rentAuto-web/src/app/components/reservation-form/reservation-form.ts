@@ -12,6 +12,7 @@ import {
   computeRentalPricingBreakdown,
   type RentalPricingBreakdown,
 } from '../../utils/rental-pricing';
+import { getPromoDiscountRate } from '../../utils/rental-pricing';
 
 @Component({
   selector: 'app-reservation-form',
@@ -43,6 +44,10 @@ export class ReservationForm implements OnInit {
   paying = false;
   paymentReady = false;
 
+  promoApplied = false;
+  promoError = false;
+  promoRate = 0;
+
   private readonly availableStatuses = ['Disponible', 'available', 'availible'];
 
   constructor(
@@ -59,6 +64,10 @@ export class ReservationForm implements OnInit {
     this.startDate = this.route.snapshot.queryParams['startDate'] || '';
     this.endDate = this.route.snapshot.queryParams['endDate'] || '';
     this.promoCode = (this.route.snapshot.queryParams['promoCode'] || '').trim();
+    if (this.promoCode) {
+      this.promoRate = getPromoDiscountRate(this.promoCode);
+      this.promoApplied = this.promoRate > 0;
+    }
 
     this.currentUser = this.authService.getCurrentUser();
 
@@ -85,9 +94,27 @@ export class ReservationForm implements OnInit {
             },
           };
 
-    this.stripe = await loadStripe(environment.stripePublicKey, stripeLoadOptions as Parameters<
-      typeof loadStripe
-    >[1]);
+    this.stripe = await loadStripe(
+      environment.stripePublicKey,
+      stripeLoadOptions as Parameters<typeof loadStripe>[1],
+    );
+  }
+
+  onPromoInput() {
+    this.promoApplied = false;
+    this.promoError = false;
+  }
+
+  applyPromo() {
+    const rate = getPromoDiscountRate(this.promoCode);
+    this.promoRate = rate;
+    if (rate > 0) {
+      this.promoApplied = true;
+      this.promoError = false;
+    } else {
+      this.promoApplied = false;
+      this.promoError = true;
+    }
   }
 
   /** Sandbox (pk_test_): show how to pay without real charges. */
@@ -100,12 +127,7 @@ export class ReservationForm implements OnInit {
 
   getPricingBreakdown(): RentalPricingBreakdown {
     const pricePerDay = Number(this.car?.pricePerDay || 0);
-    return computeRentalPricingBreakdown(
-      pricePerDay,
-      this.startDate,
-      this.endDate,
-      this.promoCode,
-    );
+    return computeRentalPricingBreakdown(pricePerDay, this.startDate, this.endDate, this.promoCode);
   }
 
   calcTotal(): number {
