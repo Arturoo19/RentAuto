@@ -178,6 +178,9 @@ export class ReservationForm implements OnInit {
       .post<{ clientSecret: string }>(`${environment.apiUrl}/payments/create-intent`, {
         amount: total,
         receiptEmail: receiptEmail || undefined,
+        carId: this.carId,
+        carBrand: this.car?.brand,
+        carModel: this.car?.model,
       })
       .subscribe(async ({ clientSecret }) => {
         this.clientSecret = clientSecret;
