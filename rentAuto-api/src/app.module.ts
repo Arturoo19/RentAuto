@@ -24,7 +24,7 @@ import { AdminModule } from './admin/admin.module';
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-      ssl: process.env.DB_HOST?.includes('neon.tech') ? { rejectUnauthorized: false } : false,
+      ssl: { rejectUnauthorized: false },
     }),
     UsersModule,
     ScheduleModule.forRoot(),

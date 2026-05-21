@@ -1,29 +1,17 @@
 services:
-  db:
-    image: postgres:15
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Artur190905
-      POSTGRES_DB: car_rental
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
   backend:
     build: ./rentAuto-api
     ports:
       - "3000:3000"
-    depends_on:
-      - db
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
-      DATABASE_URL: "postgresql://postgres:Artur190905@db:5432/car_rental"
-      DB_HOST: db
+      DB_HOST: db.rhujlydpcdmxgsootmzi.supabase.co
       DB_PORT: 5432
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: car_rental
+      DB_USERNAME: postgres
+      DB_PASSWORD: Tonny@sey19
+      DB_NAME: postgres
 
   frontend:
     build: ./rentAuto-web
@@ -31,6 +19,3 @@ services:
       - "80:80"
     depends_on:
       - backend
-
-volumes:
-  db_data:
