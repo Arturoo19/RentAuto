@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { CarsService } from '../../services/cars';
@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth';
 import { filter, Subscription } from 'rxjs';
 import { Reservas } from '../../services/reservas';
 import Swal from 'sweetalert2';
+import { AVAILABLE_CITIES, AvailableCity, isAvailableCity } from '../../utils/available-cities';
 
 @Component({
   selector: 'app-cars',
@@ -15,12 +16,15 @@ import Swal from 'sweetalert2';
   styleUrl: './cars.css',
 })
 export class Cars implements OnInit, OnDestroy {
+  readonly cities = AVAILABLE_CITIES;
+
   cars: any[] = [];
   esAdmin = false;
   loading = true;
   startDate = '';
   endDate = '';
   city = '';
+  cityDropdownOpen = false;
   promoCode = '';
   private sub!: Subscription;
   selectedCategory = '';
@@ -42,7 +46,8 @@ export class Cars implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       this.startDate = params['startDate'] || '';
       this.endDate = params['endDate'] || '';
-      this.city = params['city'] || '';
+      const cityParam = params['city'] || '';
+      this.city = isAvailableCity(cityParam) ? cityParam : '';
       this.promoCode = (params['promoCode'] || '').trim();
 
       if ((this.startDate && this.endDate) || this.city) {
@@ -64,9 +69,48 @@ export class Cars implements OnInit, OnDestroy {
     this.selectedPrice = (event.target as HTMLSelectElement).value;
   }
 
+  toggleCityDropdown(event: Event) {
+    event.stopPropagation();
+    this.cityDropdownOpen = !this.cityDropdownOpen;
+  }
+
+  selectCity(city: AvailableCity, event: Event) {
+    event.stopPropagation();
+    this.cityDropdownOpen = false;
+    this.updateCityFilter(city);
+  }
+
+  clearCityFilter(event: Event) {
+    event.stopPropagation();
+    this.cityDropdownOpen = false;
+    this.updateCityFilter('');
+  }
+
+  @HostListener('document:click')
+  closeCityDropdown() {
+    this.cityDropdownOpen = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.cityDropdownOpen = false;
+  }
+
   resetFilters() {
     this.selectedCategory = 'todos';
     this.selectedPrice = 'todos';
+    this.updateCityFilter('');
+  }
+
+  private updateCityFilter(city: AvailableCity | '') {
+    const queryParams: Record<string, string> = {};
+
+    if (this.startDate) queryParams['startDate'] = this.startDate;
+    if (this.endDate) queryParams['endDate'] = this.endDate;
+    if (city) queryParams['city'] = city;
+    if (this.promoCode) queryParams['promoCode'] = this.promoCode;
+
+    this.router.navigate(['/cars'], { queryParams });
   }
 
   loadCars() {
@@ -207,6 +251,7 @@ export class Cars implements OnInit, OnDestroy {
     if (this.startDate) q['startDate'] = this.startDate;
     if (this.endDate) q['endDate'] = this.endDate;
     if (this.promoCode) q['promoCode'] = this.promoCode;
+    if (this.city) q['city'] = this.city;
     return q;
   }
 }

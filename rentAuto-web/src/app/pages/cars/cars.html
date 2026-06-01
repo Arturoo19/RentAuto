@@ -5,6 +5,128 @@
     <div class="header-controls">
       <div class="filters-panel">
         <div
+          class="city-filter-wrap"
+          [class.has-value]="!!city"
+          [class.is-open]="cityDropdownOpen"
+        >
+          <button
+            type="button"
+            class="city-filter-trigger"
+            [class.is-placeholder]="!city"
+            [attr.aria-expanded]="cityDropdownOpen"
+            aria-haspopup="listbox"
+            aria-label="Filtrar por ciudad"
+            (click)="toggleCityDropdown($event)"
+          >
+            <span class="city-filter-icon" aria-hidden="true">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+              >
+                <path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+            </span>
+            <span class="city-filter-label">{{ city || 'Ciudad: Todas' }}</span>
+            <span class="city-filter-arrow" aria-hidden="true">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </span>
+          </button>
+
+          <ul
+            *ngIf="cityDropdownOpen"
+            class="city-filter-dropdown"
+            role="listbox"
+            aria-label="Ciudades disponibles"
+            (click)="$event.stopPropagation()"
+          >
+            <li
+              class="city-filter-option"
+              role="option"
+              [attr.aria-selected]="!city"
+              [class.is-selected]="!city"
+              (click)="clearCityFilter($event)"
+            >
+              <span class="city-option-icon" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M8 12h8" />
+                </svg>
+              </span>
+              <span class="city-option-text">Todas las ciudades</span>
+              <span class="city-option-check" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+            </li>
+
+            <li
+              *ngFor="let cityOption of cities"
+              class="city-filter-option"
+              role="option"
+              [attr.aria-selected]="city === cityOption"
+              [class.is-selected]="city === cityOption"
+              (click)="selectCity(cityOption, $event)"
+            >
+              <span class="city-option-icon" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                >
+                  <path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+              </span>
+              <span class="city-option-text">{{ cityOption }}</span>
+              <span class="city-option-check" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
           class="filter-wrapper"
           [class.is-active]="selectedCategory && selectedCategory !== 'todos'"
         >
@@ -87,7 +209,7 @@
           class="btn-reset-filters"
           type="button"
           (click)="resetFilters()"
-          [disabled]="selectedCategory === 'todos' && selectedPrice === 'todos'"
+          [disabled]="selectedCategory === 'todos' && selectedPrice === 'todos' && !city"
           aria-label="Limpiar filtros"
         >
           Limpiar
